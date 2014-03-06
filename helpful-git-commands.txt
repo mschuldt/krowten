@@ -1,0 +1,73 @@
+Helpful Git commands, tips, and tricks. Edit when you find something new!
+============================================================================
+
+Magit
+========================================
+Magit is a git interface for Emacs.
+If you're using Emacs, magit will make your life much  easier.
+ you can download it from here: https://github.com/magit/magit
+ or use the package manager if you're using emacs 24 (use 'M-x emacs-version' to check).
+
+all the letter commands below for magit are done in the status buffer.
+Use M-x magit-status to open it. It's probably worth binding to a key
+
+Online references
+========================================
+setting up git(username, password)
+    https://help.github.com/articles/set-up-git
+into to magit
+    http://www.masteringemacs.org/articles/2013/12/06/introduction-magit-emacs-mode-git/
+
+Git Commands
+========================================
+clone the repository
+    git clone <link to repo>
+
+getting the status of the local repo
+    git status
+get status using magit
+    M-x magit-status
+  
+stage a file
+    git add <filename>
+stage a file using magit
+    's' (with the cursor over the file)
+
+unsage a file using magit
+   'u'
+   
+commit changes
+    git commit -m "short descriptive message"
+commit changes with magit
+    'c' (this may open a commit menu, if it does press 'c' again)
+     a new buffer will open for you to type the commit message in,
+      when done, use C-c C-c to finish (or C-x #)
+
+get new changes from the repo
+    git pull origin master
+
+push changes to the repo
+   git push origin master
+push changes with magit
+   'P' (if that opens the push menu, press 'P' again)
+
+
+undo the last commit
+helpful if you've misspelled a commit message or forgot a file etc
+
+    git commit ...              #the commit you want to undo
+    git reset --soft "HEAD^"    #undo that commit
+    <edit>
+    git add ....                #add the files again
+    git commit -c ORIG_HEAD     #not sure about this one, I usually just commit as normal and never seem to have a problem
+
+
+getting the diff 
+   git diff
+using magit:
+   hit 'TAB' while the cursor is on the name of the changed file in the status buffer
+using the Emacs VC mode (I find this to be the best for large edits)
+  M-x vc-ediff   
+
+
+
