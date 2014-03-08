@@ -1,0 +1,69 @@
+                           __________________
+
+                            PSEUDOCODE-IDEAS
+
+                           __________________
+
+
+Table of Contents
+_________________
+
+1 cluster detection
+2 board representation
+
+
+pseudocode and other Ideas
+
+
+1 cluster detection
+===================
+
+  have separate cluster class that tracks how many pieces are part of
+  members This seems a bit longer but seems like it would be faster
+  ,----
+  | when a piece P is added to the board:
+  |   _piece = null
+  |   for each adjacent peice P2 to P:
+  |     if P2.cluster.size==2: ==> invalid move
+  |     if P2.cluster.size==1:
+  |       if _piece != null:
+  |         return invalid move
+  |       else:
+  |         _piece = P2
+  |   if _piece == null:
+  |     P.cluster = new cluster
+  |   else:
+  |     P.cluster = _piece.cluster
+  |     P.cluster.size += 1
+  | 
+  | when a piece P is removed from a square:
+  |  P.cluster.size -= 1
+  `----
+  OR
+  ,----
+  | when a piece P is added to the board:
+  |   for each adjacent square S to piece P:
+  |     if S contains a piece P2:
+  |       for each adjacent square S2 to P:
+  |         if S2 contains a piece P3 and P3 != P1:
+  |           return invalid move
+  `----
+
+
+2 board representation
+======================
+
+  (Just an idea...)  maintain multiple internal data structures for
+   speed
+  1. simple 2d array of pieces
+  2. hyperlinked matrix of pieces - each piece linked to the 8 pieces it
+     connects to.  Each row/column/diagonal can be viewed as its own
+     doubly linked list if the other 6 references are ignored Empty
+     squares are not included, Each piece links directly to the one it
+     connects to or to null if the rest of the board is empty.
+
+  This will increase the time to add/remove a piece by a little bit but
+  will decrease the time needed to find connecting pieces by a lot
+
+  The board is passed to the board evaluation functions after the move
+  is made, then the move is undone
