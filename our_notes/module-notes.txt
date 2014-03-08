@@ -8,25 +8,25 @@
 Table of Contents
 _________________
 
-1 list of modules
-2 interfaces organized by class
-.. 2.1 Piece
-..... 2.1.1 fields
-.. 2.2 M: Board
-..... 2.2.1 move a piece
-..... 2.2.2 unmove a piece
-..... 2.2.3 get ajacent pieces
-..... 2.2.4 get connected pieces
-..... 2.2.5 does a square contain a piece?
-..... 2.2.6 M: network finder
-.. 2.3 MachinePlayer
-..... 2.3.1 M: performing minimax tree search
-..... 2.3.2 M: generating a list of all valid moves
-..... 2.3.3 M: determining whether a move is valid
-..... 2.3.4 M: determining whether a move will result in the formation of a cluster >= 3
-..... 2.3.5 M: board evaluation function
-..... 2.3.6 move opponents piece
-..... 2.3.7 force a move
+list of modules
+interfaces organized by class
+.. Piece
+..... fields
+.. M: Board
+..... move a piece
+..... unmove a piece
+..... get ajacent pieces
+..... get connected pieces
+..... does a square contain a piece?
+..... M: network finder
+.. MachinePlayer
+..... M: performing minimax tree search
+..... M: generating a list of all valid moves
+..... M: determining whether a move is valid
+..... M: determining whether a move will result in the formation of a cluster >= 3
+..... M: board evaluation function
+..... move opponents piece
+..... force a move
 
 
 method organized by class
@@ -36,8 +36,8 @@ each method that is part of a separate module is marked with 'M:'
 everything in the board is one module except for the network finder
 
 
-1 list of modules
-=================
+list of modules
+===============
 
   1. board representation
   2. performing minimax tree search
@@ -49,98 +49,98 @@ everything in the board is one module except for the network finder
   7. board evaluation function
 
 
-2 interfaces organized by class
-===============================
+interfaces organized by class
+=============================
 
-2.1 Piece
-~~~~~~~~~
+Piece
+~~~~~
 
-2.1.1 fields
-------------
+fields
+------
 
   int color int x int y
 
 
-2.2 M: Board
-~~~~~~~~~~~~
+M: Board
+~~~~~~~~
 
-2.2.1 move a piece
-------------------
+move a piece
+------------
 
   void move(Move M);
 
 
-2.2.2 unmove a piece
---------------------
+unmove a piece
+--------------
 
   void unMove(Move M);
 
 
-2.2.3 get ajacent pieces
-------------------------
+get ajacent pieces
+------------------
 
   Piece[] ajacentPieces(int x, int y); Piece[] ajacentPieces(Piece P);
 
 
-2.2.4 get connected pieces
---------------------------
+get connected pieces
+--------------------
 
   Piece[] connectedPieces(Piece P); Piece[] connectedPieces(int x, int
   y);
 
 
-2.2.5 does a square contain a piece?
-------------------------------------
+does a square contain a piece?
+------------------------------
 
   boolean pieceAt(int x, int y);
 
 
-2.2.6 M: network finder
------------------------
+M: network finder
+-----------------
 
   boolean hasNetwork(Player P);
 
 
-2.3 MachinePlayer
-~~~~~~~~~~~~~~~~~
+MachinePlayer
+~~~~~~~~~~~~~
 
-2.3.1 M: performing minimax tree search
----------------------------------------
+M: performing minimax tree search
+---------------------------------
 
   public Move chooseMove(Player P);
 
 
-2.3.2 M: generating a list of all valid moves
----------------------------------------------
+M: generating a list of all valid moves
+---------------------------------------
 
   Move[] validMoves(Board B, Player P);
 
 
-2.3.3 M: determining whether a move is valid
---------------------------------------------
+M: determining whether a move is valid
+--------------------------------------
 
   Boolean isValidMove(Board B, Move M, Player P);
 
 
-2.3.4 M: determining whether a move will result in the formation of a cluster >= 3
-----------------------------------------------------------------------------------
+M: determining whether a move will result in the formation of a cluster >= 3
+----------------------------------------------------------------------------
 
   boolean formsIllegalCluster(Board M, Move M, Player P);
 
 
-2.3.5 M: board evaluation function
-----------------------------------
+M: board evaluation function
+----------------------------
 
   int scoreBoard(Board B, Player P);
 
 
-2.3.6 move opponents piece
---------------------------
+move opponents piece
+--------------------
 
   public boolean opponentMove(Move m);
 
 
-2.3.7 force a move
-------------------
+force a move
+------------
 
   public boolean forceMove(Move m);

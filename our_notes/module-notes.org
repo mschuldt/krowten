@@ -1,3 +1,4 @@
+#+options: num:nil
 method organized by class
 
 each method that is part of a separate module is marked with 'M:'
