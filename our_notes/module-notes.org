@@ -3,39 +3,48 @@ method organized by class
 each method that is part of a separate module is marked with 'M:'
 
 everything in the board is one module except for the network finder
-* Piece
-** fields
+* list of modules
+ 1. board representation
+ 2. performing minimax tree search 
+ 3. generating a list of all valid moves
+ 4. determining whether a move is valid
+ 5. determining whether a move will result in the formation of a cluster >= 3
+ 6. network finder
+ 7. board evaluation function
+* interfaces organized by class
+** Piece
+*** fields
 int color
 int x
 int y
-* M: Board 
-** move a piece
- void move(Move M);
-** unmove a piece
- void unMove(Move M);
-** get ajacent pieces
- Piece[] ajacentPieces(int x, int y);
- Piece[] ajacentPieces(Piece P);
-** get connected pieces
- Piece[] connectedPieces(Piece P);
- Piece[] connectedPieces(int x, int y);
-** does a square contain a piece?
- boolean pieceAt(int x, int y);
-** M: network finder
- boolean hasNetwork(Player P);
-* MachinePlayer
-** M: performing minimax tree search 
-  public abstract Move chooseMove(Player P);
-** M: generating a list of all valid moves
-  Move[] validMoves(Board B, Player P);
-** M: determining whether a move is valid
-  Boolean isValidMove(Board B, Move M, Player P);
-** M: determining whether a move will result in the formation of a cluster >= 3
-  boolean formsIllegalCluster(Board M, Move M, Player P);
-** M: board evaluation function
-  int scoreBoard(Board B, Player P);
-** move opponents piece
-public boolean opponentMove(Move m);
-** force a move
-public boolean forceMove(Move m);
+** M: Board 
+*** move a piece
+  void move(Move M);
+*** unmove a piece
+  void unMove(Move M);
+*** get ajacent pieces
+  Piece[] ajacentPieces(int x, int y);
+  Piece[] ajacentPieces(Piece P);
+*** get connected pieces
+  Piece[] connectedPieces(Piece P);
+  Piece[] connectedPieces(int x, int y);
+*** does a square contain a piece?
+  boolean pieceAt(int x, int y);
+*** M: network finder
+  boolean hasNetwork(Player P);
+** MachinePlayer
+*** M: performing minimax tree search 
+   public Move chooseMove(Player P);
+*** M: generating a list of all valid moves
+   Move[] validMoves(Board B, Player P);
+*** M: determining whether a move is valid
+   Boolean isValidMove(Board B, Move M, Player P);
+*** M: determining whether a move will result in the formation of a cluster >= 3
+   boolean formsIllegalCluster(Board M, Move M, Player P);
+*** M: board evaluation function
+   int scoreBoard(Board B, Player P);
+*** move opponents piece
+   public boolean opponentMove(Move m);
+*** force a move
+   public boolean forceMove(Move m);
 
