@@ -3,13 +3,13 @@ each method that is part of a separate module is marked with 'M:'
 
 everything in the board is one module except for the network finder
 * list of modules
- 1. board representation
- 2. performing minimax tree search 
- 3. generating a list of all valid moves
- 4. determining whether a move is valid
- 5. determining whether a move will result in the formation of a cluster >= 3
- 6. network finder
- 7. board evaluation function
+ 1. board representation (Michael)
+ 2. performing minimax tree search  (Michelle)
+ 3. generating a list of all valid moves (Hellen)
+ 4. determining whether a move is valid (Hellen)
+ 5. cluster detection (Michelle)
+ 6. network finder (Michael)
+ 7. board evaluation function (Shared..for now)
 * interfaces organized by class
 ** Piece
 *** fields
