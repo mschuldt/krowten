@@ -10,6 +10,9 @@ _________________
 
 1 cluster detection
 2 board representation
+..... 2.0.1 bitboards
+3 multiprocessing
+4 memoization
 
 
 pseudocode and other Ideas
@@ -67,3 +70,41 @@ pseudocode and other Ideas
 
   The board is passed to the board evaluation functions after the move
   is made, then the move is undone
+
+
+2.0.1 bitboards
+---------------
+
+  It would be so awesome
+
+  maybe worth it to maintain a bitboard representation along with the
+  main one?
+
+
+3 multiprocessing
+=================
+
+  We should win this tournament!
+
+  The board representation would have to change to something like
+  bitboard for it to be worth it.  The boards will have to be copied to
+  the new threads, cannot do the move-evaluate-unmove method ==> or
+  maybe just send the moves
+  - each thread has its own board, the main thread generates and sends
+    them moves to be evaluated
+  - the min-max function would have to take the move sequence as an
+    argument instead of the board
+
+  or split up the pieces and have each thread evaluate the moves done by
+    a portion of them ==> but then how to make sure that board
+    evaluations are not repeated ++++> HOW IS THIS NORMALLY DONE? => how
+    often will repeated board setups happen?
+
+
+4 memoization
+=============
+
+  Is this worth it?  If it is, we can maintain a bitboard representation
+   of the board which we can use both as the board hash and to speed up
+   selective computations with bit fiddling magic!! This would be
+   awesome.
