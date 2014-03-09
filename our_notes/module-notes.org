@@ -23,9 +23,9 @@ int y
   void move(Move M);
 *** unmove a piece
   void unMove(Move M);
-*** get ajacent pieces
-  Piece[] ajacentPieces(int x, int y);
-  Piece[] ajacentPieces(Piece P);
+*** get adjacent pieces
+  Piece[] adjacentPieces(int x, int y);
+  Piece[] adjacentPieces(Piece P);
 *** get connected pieces
   Piece[] connectedPieces(Piece P);
   Piece[] connectedPieces(int x, int y);
