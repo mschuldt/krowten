@@ -1,10 +1,31 @@
 Helpful Git commands, tips, and tricks. Edit when you find something new!
 ============================================================================
 
+Basic Git Workflow
+========================================
+pull changes (git pull origin master)
+edit files
+stage files (git add file1.java file2.java ...)
+commit changes (git commit -m "short description")
+repeat the edit-stage-commit cycle
+push changes (git push origin master)
+ IF someone has pushed their changes, git will not let you push yours.
+   first pull the changes again (git pull origin master)
+   Git will try to automatically merge their code with yours
+   If git cannot do that you will have to manually merge the files
+   Then push the merged code (git push origin master)
+Repeat!
+
+
+- remember to pull changes before you start working you your code
+- don't push your code if it can't compile or breaks the program in some way
+- try to commit as often as you can - then if you mess something up you don't have to undo everything, just the bad part.
+
+   
 Magit
 ========================================
 Magit is a git interface for Emacs.
-If you're using Emacs, magit will make your life much  easier.
+If you're using Emacs, magit will make your life much easier.
  you can download it from here: https://github.com/magit/magit
  or use the package manager if you're using emacs 24 (use 'M-x emacs-version' to check).
 
@@ -17,6 +38,8 @@ setting up git(username, password)
     https://help.github.com/articles/set-up-git
 into to magit
     http://www.masteringemacs.org/articles/2013/12/06/introduction-magit-emacs-mode-git/
+
+
 
 Git Commands
 ========================================
@@ -33,7 +56,7 @@ stage a file
 stage a file using magit
     's' (with the cursor over the file)
 
-unsage a file using magit
+unstage a file using magit
    'u'
    
 commit changes
