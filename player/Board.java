@@ -36,17 +36,18 @@ public class Board{
         int toX, toY;
         switch (move.moveKind){
         case Move.ADD :
-            toX = move.x1;
-            toY = move.y1;
+            toX = move.x1 + 1;
+            toY = move.y1 + 1;
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
             pieceArray[toX][toY] = new Piece(color, move.x1, move.y1);
             break;
         case Move.STEP :
-            int fromX = move.x2,
-                fromY = move.y2;
-            toX = move.x1;
-            toY = move.y1;
+            int fromX = move.x2 + 1,
+                fromY = move.y2 + 1;
+            toX = move.x1 + 1;
+            toY = move.y1 + 1;
+
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
