@@ -114,6 +114,11 @@ public class Board{
         return pieceArray[x+1][y+1] != null;
     }
 
+    Piece getPiece(int x, int y){
+        //TODO: bounds checking
+        return pieceArray[x+1][y+1];
+    }
+    
 
 }
 
