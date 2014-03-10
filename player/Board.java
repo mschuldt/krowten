@@ -43,11 +43,16 @@ public class Board{
             break;
         }
     }
-    
+    //seporate methods for moveing our pieces and moving their pieces
+    //so that we don't have to pass the color of the piece we intend
+    //to move every time. (the Move object does not have a color field
+    //but the Piece objects do)
     public void move(Move move){
         move(move, color);
     }
     
-
+    public void opponentMove(Move move){
+        move(move, opponentColor);
+    }
 }
 

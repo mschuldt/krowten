@@ -21,6 +21,8 @@ int y
  public Board(color C);
 *** move a piece
   void move(Move M);
+*** move an opponents piece
+  void opponentMove(Move M);
 *** unmove a piece
   void unMove(Move M);
 *** get adjacent pieces
