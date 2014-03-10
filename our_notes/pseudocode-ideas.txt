@@ -108,3 +108,7 @@ pseudocode and other Ideas
    of the board which we can use both as the board hash and to speed up
    selective computations with bit fiddling magic!! This would be
    awesome.
+
+
+  could we precomputed board positions and load up a full hash table?
+  would that be cheating?

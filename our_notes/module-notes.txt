@@ -13,11 +13,14 @@ interfaces organized by class
 .. Piece
 ..... fields
 .. M: Board
+..... constructor
 ..... move a piece
+..... move an opponents piece
 ..... unmove a piece
-..... get ajacent pieces
+..... get adjacent pieces
 ..... get connected pieces
 ..... does a square contain a piece?
+..... get a the piece at a location
 ..... M: network finder
 .. MachinePlayer
 ..... M: performing minimax tree search
@@ -29,8 +32,6 @@ interfaces organized by class
 ..... force a move
 
 
-method organized by class
-
 each method that is part of a separate module is marked with 'M:'
 
 everything in the board is one module except for the network finder
@@ -39,14 +40,13 @@ everything in the board is one module except for the network finder
 list of modules
 ===============
 
-  1. board representation
-  2. performing minimax tree search
-  3. generating a list of all valid moves
-  4. determining whether a move is valid
-  5. determining whether a move will result in the formation of a
-     cluster >= 3
-  6. network finder
-  7. board evaluation function
+  1. board representation (Michael)
+  2. performing minimax tree search (Michelle)
+  3. generating a list of all valid moves (Hellen)
+  4. determining whether a move is valid (Hellen)
+  5. cluster detection (Michelle)
+  6. network finder (Michael)
+  7. board evaluation function (Shared..for now)
 
 
 interfaces organized by class
@@ -64,10 +64,22 @@ fields
 M: Board
 ~~~~~~~~
 
+constructor
+-----------
+
+  public Board(color C);
+
+
 move a piece
 ------------
 
   void move(Move M);
+
+
+move an opponents piece
+-----------------------
+
+  void opponentMove(Move M);
 
 
 unmove a piece
@@ -76,10 +88,10 @@ unmove a piece
   void unMove(Move M);
 
 
-get ajacent pieces
-------------------
+get adjacent pieces
+-------------------
 
-  Piece[] ajacentPieces(int x, int y); Piece[] ajacentPieces(Piece P);
+  Piece[] adjacentPieces(int x, int y); Piece[] adjacentPieces(Piece P);
 
 
 get connected pieces
@@ -95,6 +107,12 @@ does a square contain a piece?
   boolean pieceAt(int x, int y);
 
 
+get a the piece at a location
+-----------------------------
+
+  Piece getPiece(int x, int y);
+
+
 M: network finder
 -----------------
 
@@ -107,7 +125,7 @@ MachinePlayer
 M: performing minimax tree search
 ---------------------------------
 
-  public Move chooseMove(Player P);
+  public Move chooseMove();
 
 
 M: generating a list of all valid moves
