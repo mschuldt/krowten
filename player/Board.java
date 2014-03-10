@@ -108,6 +108,7 @@ public class Board{
 
         return removeEmptyPieces(pieces);
     }
+    
     Piece[] adjacentPieces(Piece P){
         return adjacentPieces(P.x, P.y);
     }
@@ -123,10 +124,10 @@ public class Board{
         return pieceArray[x+1][y+1];
     }
     
-    Piece[] connectedPieces(Piece P){
+    Piece[] connectedPieces(int x, int y){
         List<Piece> pieces = new ArrayList<Piece>();
-        int startX = P.x + 1;
-        int startY = P.y + 1;
+        int startX = x + 1;
+        int startY = y + 1;
         int currentX = startX, currentY = startY -1;
         Piece current = pieceArray[currentX][currentY];
         //above
@@ -212,6 +213,10 @@ public class Board{
         }
         
         return (Piece[])pieces.toArray();
+    }
+
+    Piece[] connectedPieces(Piece P){
+        return connectedPieces(P.x, P.y);
     }
 }
 
