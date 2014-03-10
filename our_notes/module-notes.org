@@ -29,6 +29,8 @@ int y
   Piece[] connectedPieces(int x, int y);
 *** does a square contain a piece?
   boolean pieceAt(int x, int y);
+*** get a the piece at a location
+  Piece getPiece(int x, int y);
 *** M: network finder
   boolean hasNetwork(Player P);
 ** MachinePlayer
