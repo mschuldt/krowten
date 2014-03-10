@@ -5,8 +5,11 @@ package player; //this with Piece.java don't seem like they belong here...
 public class Board{
     Piece[][] pieceArray;
     int color;
+    int opponentColor;
     public Board(int c){
-        color = c;
+        color = c; //0 for black, 1 for white
+        opponentColor = 1-c;
+        
         pieceArray = new Piece[64][64];
         pieceArray[0][0]   = null;
         pieceArray[63][0]  = null;
@@ -40,6 +43,7 @@ public class Board{
             break;
         }
     }
+
     
 }
 
