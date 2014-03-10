@@ -2,6 +2,9 @@
 
 package player; //this with Piece.java don't seem like they belong here...
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Board{
     Piece[][] pieceArray;
     int color;
@@ -93,7 +96,7 @@ public class Board{
     
     Piece[] adjacentPieces(int x, int y){
         x++; y++;
-        
+        //TODO: use an ArrayList to avoid having to traverse this array twice 
         Piece [] pieces = {pieceArray[x][y-1],	 //top
                            pieceArray[x+1][y-1],  //top right
                            pieceArray[x+1][y],	 //right
@@ -105,5 +108,12 @@ public class Board{
 
         return removeEmptyPieces(pieces);
     }
+
+    boolean pieceAt(int x, int y){
+        //TODO: bounds checking
+        return pieceArray[x+1][y+1] != null;
+    }
+
+
 }
 
