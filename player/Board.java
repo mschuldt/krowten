@@ -120,7 +120,7 @@ public class Board{
         return ret;
     }
 
-    Piece[] adjacentPieces(int x, int y){
+    public Piece[] adjacentPieces(int x, int y){
         x++; y++;
         //TODO: use an ArrayList to avoid having to traverse this array twice
         Piece [] pieces = {pieceArray[x][y-1],   //top
@@ -135,22 +135,22 @@ public class Board{
         return removeEmptyPieces(pieces);
     }
 
-    Piece[] adjacentPieces(Piece P){
+    public Piece[] adjacentPieces(Piece P){
         return adjacentPieces(P.x, P.y);
     }
 
 
-    boolean pieceAt(int x, int y){
+    public boolean pieceAt(int x, int y){
         //TODO: bounds checking
         return pieceArray[x+1][y+1] != null;
     }
 
-    Piece getPiece(int x, int y){
+    public Piece getPiece(int x, int y){
         //TODO: bounds checking
         return pieceArray[x+1][y+1];
     }
 
-    Piece[] connectedPieces(int x, int y){
+    public Piece[] connectedPieces(int x, int y){
         List<Piece> pieces = new ArrayList<Piece>();
         int startX = x + 1;
         int startY = y + 1;
@@ -173,6 +173,7 @@ public class Board{
             currentX = startX + xInc;
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
+
             while (current == null){
                 currentX += xInc;
                 currentY += yInc;
@@ -185,7 +186,7 @@ public class Board{
         return (Piece[])pieces.toArray();
     }
 
-    Piece[] connectedPieces(Piece P){
+    public Piece[] connectedPieces(Piece P){
         return connectedPieces(P.x, P.y);
     }
 }
