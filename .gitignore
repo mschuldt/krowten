@@ -1,3 +1,6 @@
 _*
 player/Piece.class
 player/Board.class
+player/Move.class
+player/Player.class
+player/MachinePlayer.class
