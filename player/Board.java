@@ -16,23 +16,23 @@ public class Board{
         opponentColor = 1-c;
         edge = new Piece(0,0,0);
         pieceArray = new Piece[66][66];
-        
+
         for (int x = 0; x < 66; x++){
             pieceArray[x][0] = edge;
             pieceArray[x][65] = edge;
         }
-        
+
         for (int y = 0; y < 66; y++){
             pieceArray[0][y] = edge;
             pieceArray[65][y] = edge;
         }
-        
+
         pieceArray[1][1] = edge;
         pieceArray[64][1] = edge;
         pieceArray[64][64] = edge;
         pieceArray[1][64] = edge;
     }
-        
+
     //? public/protected?
     //This assumes that MOVE is valid
     private void move(Move move, int color){
@@ -68,51 +68,51 @@ public class Board{
     public void move(Move move){
         move(move, color);
     }
-    
+
     public void opponentMove(Move move){
         move(move, opponentColor);
     }
 
     private int countBorderPieces (Piece[] pieces){
-	int c = 0;
-	for (Piece p : pieces){
-	    if (p == edge) {
-		c+=1;
-	    }
-	}
-	return c;
+        int c = 0;
+        for (Piece p : pieces){
+            if (p == edge) {
+                c+=1;
+            }
+        }
+        return c;
     }
 
     private Piece[] removeEmptyPieces(Piece[] pieces){
-	Piece [] ret = new Piece[countBorderPieces(pieces)];
-	int i=0;
-	for (Piece p : pieces){
-	    if (!( p == edge)){
-		ret[i++] = p;
-	    }
-	}
-	return ret;
+        Piece [] ret = new Piece[countBorderPieces(pieces)];
+        int i=0;
+        for (Piece p : pieces){
+            if (!( p == edge)){
+                ret[i++] = p;
+            }
+        }
+        return ret;
     }
-    
+
     Piece[] adjacentPieces(int x, int y){
         x++; y++;
-        //TODO: use an ArrayList to avoid having to traverse this array twice 
-        Piece [] pieces = {pieceArray[x][y-1],	 //top
+        //TODO: use an ArrayList to avoid having to traverse this array twice
+        Piece [] pieces = {pieceArray[x][y-1],   //top
                            pieceArray[x+1][y-1],  //top right
-                           pieceArray[x+1][y],	 //right
+                           pieceArray[x+1][y],   //right
                            pieceArray[x+1][y+1],  //bottom right
-                           pieceArray[x][y+1],	 //bottom
+                           pieceArray[x][y+1],   //bottom
                            pieceArray[x-1][y+1],  //bottom left
-                           pieceArray[x-1][y],	 //left
+                           pieceArray[x-1][y],   //left
                            pieceArray[x-1][y-1]}; //top left
 
         return removeEmptyPieces(pieces);
     }
-    
+
     Piece[] adjacentPieces(Piece P){
         return adjacentPieces(P.x, P.y);
     }
-        
+
 
     boolean pieceAt(int x, int y){
         //TODO: bounds checking
@@ -123,7 +123,7 @@ public class Board{
         //TODO: bounds checking
         return pieceArray[x+1][y+1];
     }
-    
+
     Piece[] connectedPieces(int x, int y){
         List<Piece> pieces = new ArrayList<Piece>();
         int startX = x + 1;
@@ -199,7 +199,7 @@ public class Board{
         if (current != edge){
             pieces.add(current);
         }
-        
+
         //left lower diagonal
         currentX = startX - 1;
         currentY = startY + 1;
@@ -211,7 +211,7 @@ public class Board{
         if (current != edge){
             pieces.add(current);
         }
-        
+
         return (Piece[])pieces.toArray();
     }
 
@@ -219,4 +219,3 @@ public class Board{
         return connectedPieces(P.x, P.y);
     }
 }
-
