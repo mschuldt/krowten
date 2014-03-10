@@ -14,16 +14,23 @@ public class Board{
     //? public/protected?
     //This assumes that MOVE is valid
     public void move(Move move, int color){
+        int toX, toY;
         switch (move.moveKind){
         case Move.ADD :
-            assert pieceArray[move.x1][move.y1] == null : "square is already full";
-            pieceArray[move.x1][move.y1] = new Piece(color, move.x1, move.y1);
+            toX = move.x1;
+            toY = move.y1;
+            assert pieceArray[toX][toY] == null : "square is already full";
+            pieceArray[toX][toY] = new Piece(color, move.x1, move.y1);
             break;
         case Move.STEP :
-            assert pieceArray[move.x1][move.y1] == null : "square is already full";
-            assert pieceArray[move.x2][move.y2] != null : "square is empty";
-            pieceArray[move.x1][move.x1] = pieceArray[move.x2][move.x2];
-            pieceArray[move.x2][move.x2] = null;
+            int fromX = move.x2,
+                fromY = move.y2;
+            toX = move.x1;
+            toY = move.y1;
+            assert pieceArray[toX][toY] == null : "square is already full";
+            assert pieceArray[fromX][fromY] != null : "square is empty";
+            pieceArray[toX][toY] = pieceArray[fromX][fromY];
+            pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :
             //TODO
