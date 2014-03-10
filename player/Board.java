@@ -6,25 +6,28 @@ public class Board{
     Piece[][] pieceArray;
     int color;
     int opponentColor;
+    private Piece edge;
+
     public Board(int c){
         color = c; //0 for black, 1 for white
         opponentColor = 1-c;
+        edge = new Piece(0,0,0);
         pieceArray = new Piece[66][66];
         
         for (int x = 0; x < 66; x++){
-            pixArray[x][0].isEdge = true;
-            pixArray[x][65].isEdge = true;
+            pieceArray[x][0] = edge;
+            pieceArray[x][65] = edge;
         }
         
         for (int y = 0; y < 66; y++){
-            pixArray[0][y].isEdge = true;
-            pixArray[65][y].isEdge = true;
+            pieceArray[0][y] = edge;
+            pieceArray[65][y] = edge;
         }
         
-        pixArray[1][1].isEdge = true;
-        pixArray[64][1].isEdge = true;
-        pixArray[64][64].isEdge = true;
-        pixArray[1][64].isEdge = true;
+        pieceArray[1][1] = edge;
+        pieceArray[64][1] = edge;
+        pieceArray[64][64] = edge;
+        pieceArray[1][64] = edge;
     }
         
     //? public/protected?
