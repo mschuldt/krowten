@@ -169,7 +169,7 @@ public class Board{
 
         for (int[] inc : increments){
             xInc = inc[0];
-            yInc = inc[0];
+            yInc = inc[1];
             currentX = startX + xInc;
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
