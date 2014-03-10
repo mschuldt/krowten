@@ -173,7 +173,7 @@ public class Board{
             currentX = startX + xInc;
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
-            while (current != edge && current == null){
+            while (current == null){
                 currentX += xInc;
                 currentY += yInc;
                 current = pieceArray[currentX][currentY];
