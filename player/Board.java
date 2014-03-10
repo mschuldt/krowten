@@ -108,6 +108,10 @@ public class Board{
 
         return removeEmptyPieces(pieces);
     }
+    Piece[] adjacentPieces(Piece P){
+        return adjacentPieces(P.x, P.y);
+    }
+        
 
     boolean pieceAt(int x, int y){
         //TODO: bounds checking
