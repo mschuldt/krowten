@@ -17,6 +17,8 @@ int color
 int x
 int y
 ** M: Board 
+*** constructor
+ public Board(color C);
 *** move a piece
   void move(Move M);
 *** unmove a piece
