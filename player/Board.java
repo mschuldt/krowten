@@ -70,8 +70,40 @@ public class Board{
         move(move, opponentColor);
     }
 
+    private int countBorderPieces (Piece[] pieces){
+	int c = 0;
+	for (Piece p : pieces){
+	    if (p == edge) {
+		c+=1;
+	    }
+	}
+	return c;
+    }
+
+    private Piece[] removeEmptyPieces(Piece[] pieces){
+	Piece [] ret = new Piece[countBorderPieces(pieces)];
+	int i=0;
+	for (Piece p : pieces){
+	    if (!( p == edge)){
+		ret[i++] = p;
+	    }
+	}
+	return ret;
+    }
     
-    
-    
+    Piece[] adjacentPieces(int x, int y){
+        x++; y++;
+        
+        Piece [] pieces = {pieceArray[x][y-1],	 //top
+                           pieceArray[x+1][y-1],  //top right
+                           pieceArray[x+1][y],	 //right
+                           pieceArray[x+1][y+1],  //bottom right
+                           pieceArray[x][y+1],	 //bottom
+                           pieceArray[x-1][y+1],  //bottom left
+                           pieceArray[x-1][y],	 //left
+                           pieceArray[x-1][y-1]}; //top left
+
+        return removeEmptyPieces(pieces);
+    }
 }
 
