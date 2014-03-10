@@ -39,7 +39,7 @@ int y
   boolean hasNetwork(Player P);
 ** MachinePlayer
 *** M: performing minimax tree search 
-   public Move chooseMove(Player P);
+   public Move chooseMove();
 *** M: generating a list of all valid moves
    Move[] validMoves(Board B, Player P);
 *** M: determining whether a move is valid
