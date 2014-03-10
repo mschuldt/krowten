@@ -43,7 +43,11 @@ public class Board{
             break;
         }
     }
-
     
+    public void move(Move move){
+        move(move, color);
+    }
+    
+
 }
 
