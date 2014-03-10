@@ -119,6 +119,95 @@ public class Board{
         return pieceArray[x+1][y+1];
     }
     
-
+    Piece[] connectedPieces(Piece P){
+        List<Piece> pieces = new ArrayList<Piece>();
+        int startX = P.x + 1;
+        int startY = P.y + 1;
+        int currentX = startX, currentY = startY -1;
+        Piece current = pieceArray[currentX][currentY];
+        //above
+        while (current != edge && current == null){
+            currentY--;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        //below
+        currentY = startY +1;
+        while (current != edge && current == null){
+            currentY++;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        //left
+        currentY = startY;
+        currentX = startX -1;
+        while (current != edge && current == null){
+            currentX--;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        //right
+        currentX = startX + 1;
+        while (current != edge && current == null){
+            currentX++;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        //right upper diagonal
+        currentX = startX + 1;
+        currentY = startY - 1;
+        while (current != edge && current == null){
+            currentX++;
+            currentY--;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        //right lower diagonal
+        currentX = startX + 1;
+        currentY = startY + 1;
+        while (current != edge && current == null){
+            currentX++;
+            currentY++;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        //left upper diagonal
+        currentX = startX - 1;
+        currentY = startY - 1;
+        while (current != edge && current == null){
+            currentX--;
+            currentY--;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        
+        //left lower diagonal
+        currentX = startX - 1;
+        currentY = startY + 1;
+        while (current != edge && current == null){
+            currentX--;
+            currentY++;
+            current = pieceArray[currentX][currentY];
+        }
+        if (current != edge){
+            pieces.add(current);
+        }
+        
+        return (Piece[])pieces.toArray();
+    }
 }
 
