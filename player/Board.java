@@ -9,13 +9,24 @@ public class Board{
     public Board(int c){
         color = c; //0 for black, 1 for white
         opponentColor = 1-c;
+        pieceArray = new Piece[66][66];
         
-        pieceArray = new Piece[64][64];
-        pieceArray[0][0]   = null;
-        pieceArray[63][0]  = null;
-        pieceArray[0][63]  = null;
-        pieceArray[63][63] = null;
+        for (int x = 0; x < 66; x++){
+            pixArray[x][0].isEdge = true;
+            pixArray[x][65].isEdge = true;
+        }
+        
+        for (int y = 0; y < 66; y++){
+            pixArray[0][y].isEdge = true;
+            pixArray[65][y].isEdge = true;
+        }
+        
+        pixArray[1][1].isEdge = true;
+        pixArray[64][1].isEdge = true;
+        pixArray[64][64].isEdge = true;
+        pixArray[1][64].isEdge = true;
     }
+        
     //? public/protected?
     //This assumes that MOVE is valid
     private void move(Move move, int color){
@@ -54,5 +65,9 @@ public class Board{
     public void opponentMove(Move move){
         move(move, opponentColor);
     }
+
+    
+    
+    
 }
 
