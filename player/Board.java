@@ -4,7 +4,9 @@ package player; //this with Piece.java don't seem like they belong here...
 
 public class Board{
     Piece[][] pieceArray;
-    public Board(){
+    int color;
+    public Board(int c){
+        color = c;
         pieceArray = new Piece[64][64];
         pieceArray[0][0]   = null;
         pieceArray[63][0]  = null;
@@ -13,12 +15,13 @@ public class Board{
     }
     //? public/protected?
     //This assumes that MOVE is valid
-    public void move(Move move, int color){
+    private void move(Move move, int color){
         int toX, toY;
         switch (move.moveKind){
         case Move.ADD :
             toX = move.x1;
             toY = move.y1;
+            //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
             pieceArray[toX][toY] = new Piece(color, move.x1, move.y1);
             break;
@@ -37,5 +40,6 @@ public class Board{
             break;
         }
     }
+    
 }
 
