@@ -73,6 +73,32 @@ public class Board{
         move(move, opponentColor);
     }
 
+    void unMove(Move move){
+        switch (move.moveKind){
+        case Move.ADD :
+            int x = move.x1 + 1,
+                y = move.y1 + 1;
+            //TODO: asserts to check index validity
+            assert pieceArray[x][x] != null : "square should not be empty";
+            pieceArray[x][y] = null;
+            break;
+        case Move.STEP :
+            int toX = move.x2 + 1,
+                toY = move.y2 + 1,
+                fromX = move.x1 + 1,
+                fromY = move.y1 + 1;
+            
+            assert pieceArray[toX][toY] == null : "square is already full";
+            assert pieceArray[fromX][fromY] != null : "square is empty";
+            pieceArray[toX][toY] = pieceArray[fromX][fromY];
+            pieceArray[fromX][fromY] = null;
+            break;
+        case Move.QUIT :
+            //TODO
+            break;
+        }
+    }
+    
     private int countBorderPieces (Piece[] pieces){
         int c = 0;
         for (Piece p : pieces){
@@ -219,3 +245,4 @@ public class Board{
         return connectedPieces(P.x, P.y);
     }
 }
+
