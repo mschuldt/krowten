@@ -99,7 +99,7 @@ public class Board{
         }
     }
     
-    private int countBorderPieces (Piece[] pieces){
+    private int countEdgePieces (Piece[] pieces){
         int c = 0;
         for (Piece p : pieces){
             if (p == edge) {
@@ -109,8 +109,8 @@ public class Board{
         return c;
     }
 
-    private Piece[] removeEmptyPieces(Piece[] pieces){
-        Piece [] ret = new Piece[countBorderPieces(pieces)];
+    private Piece[] removeEdgePieces(Piece[] pieces){
+        Piece [] ret = new Piece[countEdgePieces(pieces)];
         int i=0;
         for (Piece p : pieces){
             if (!( p == edge)){
@@ -132,7 +132,7 @@ public class Board{
                            pieceArray[x-1][y],   //left
                            pieceArray[x-1][y-1]}; //top left
 
-        return removeEmptyPieces(pieces);
+        return removeEdgePieces(pieces);
     }
 
     public Piece[] adjacentPieces(Piece P){
