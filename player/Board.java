@@ -67,9 +67,20 @@ public class Board{
     //four invalid corner squares
     private Piece edge;
 
-    public Board(int c){
-        ourColor = c; //0 for black, 1 for white
-        opponentColor = 1-c;
+    /** Board.Board(int) constructs a new board for player with color COLOR
+     *  The board is initially empty
+     *
+     *  COLOR must be white or black (1 or 0)
+     *  
+     *  @param color an integer representing the color of the player
+     *         who 'owns' this board. 1 for white and 0 for black.n
+     */
+    public Board(int color){
+        if (color != 1 && color != 0){
+            System.out.println("Board.Board(int) -- Error: invalid color");
+        }
+        ourColor = color; //0 for black, 1 for white
+        opponentColor = 1-color;
         //TODO: assign goal masks
         edge = new Piece(0,0,0,0);
         pieceArray = new Piece[10][10];
@@ -95,9 +106,21 @@ public class Board{
         return bitReps[x*8 + y];
     }
 
-    //? public/protected?
+    
     //This assumes that MOVE is valid
-    private void move(Move move, int color){
+
+    /** Board.move(Move,int) moves a piece on the board as described
+     *  by MOVE. COLOR is the color of the piece to be moved.
+     *
+     *  Unusual conditions:
+     *    * If MOVE is not an illegal move, the behavior of this method
+     *      is not defined.
+     *    * If COLOR is not a valid color, the behavior is not defined.
+     *
+     * @param move describes the type of move to make
+     * @param color color of the piece to be moved (1 for white, 0 for black)
+     */
+    private void move(Move move, int color){ //? public/protected?
         int toX, toY;
         long bitRep;
         switch (move.moveKind){
@@ -150,16 +173,48 @@ public class Board{
     //so that we don't have to pass the color of the piece we intend
     //to move every time. (the Move object does not have a color field
     //but the Piece objects do)
+    /** Board.move() moves a piece on the board as described
+     *  by MOVE. The piece moved belongs to the owner of this board,
+     *  that is, the player whose color is Board.color
+     *
+     *  Unusual conditions:
+     *    * If MOVE is not an illegal move, the behavior of this method
+     *      is not defined.
+     *
+     * @param move describes the type of move to make
+     */
     public void move(Move move){
         move(move, ourColor);
     }
-
+    
+    /** Board.opponentMove() moves a piece on the board as described
+     *  by MOVE. The piece moved belongs to the opponent of the owner
+     *  of this board, that is, the player whose color is Board.opponentColor
+     *
+     *  Unusual conditions:
+     *    * If MOVE is not an illegal move, the behavior of this method
+     *      is not defined.
+     *
+     * @param move describes the type of move to make
+     */
     public void opponentMove(Move move){
         move(move, opponentColor);
     }
 
+    
     //This assumes that the move we are undoing was our move.
     //(the bitboards will get messed up if this was not the case)
+    /** Board.unMove(Move) reverses the effects of the move MOVE.
+     *  MOVE must have been a move for the pieces of the player
+     *  who owns this board, that is, the player whose color
+     *  was passed to the initializer.
+     *
+     *  Unusual conditions:
+     *  The behaviour of this method is not defined for the case
+     *  in which MOVE is invalid or is intended for the opponent.
+     *  
+     *  @param move the move to reverse. 
+     */
     void unMove(Move move){
         switch (move.moveKind){
         case Move.ADD :
@@ -213,6 +268,28 @@ public class Board{
         return ret;
     }
 
+    /** Board.adjacentPieces(int,int) returns an array of pieces
+     * that are adjacent to the pieces at coordinates (X,Y) on
+     * the board.
+     * 
+     * The x,y coordinates are indexed from the top left with x
+     * increasing to the right and y increasing down.
+     *
+     *  If there is no piece at (x,y) but (x,y) is still a valid
+     *  board location, then this method works as expected.
+     *  
+     * Unusual conditions:
+     *  if (x,y) is not a valid location on the, then this
+     *  method will likely cause the program to crash.
+     *  The behavior in this case is undefined (but the corner
+     *  pieces are ok).
+     *
+     *  @param x the x-coordinate location of the square
+     *  @param y the y-coordinate location of the square
+     *  
+     *  @returns an array of pieces adjacent to location (x,y) on the board
+     * 
+     */
     public Piece[] adjacentPieces(int x, int y){
         x++; y++;
         //TODO: use an ArrayList to avoid having to traverse this array twice
@@ -227,21 +304,70 @@ public class Board{
 
         return removeEdgePieces(pieces);
     }
-
-    public Piece[] adjacentPieces(Piece P){
-        return adjacentPieces(P.x, P.y);
+    
+    /** Board.adjacentPieces(Piece) returns an array of pieces
+     * that are adjacent to PIECE on the board
+     * 
+     * Unusual conditions:
+     *  The behavior of this method is undefined if piece is not
+     *  actually on the board.
+     *
+     *  @param piece a piece on the board whose adjacent pieces will be returned
+     *  
+     *  @returns an array of pieces adjacent to PIECE on the board
+     */
+    public Piece[] adjacentPieces(Piece piece){
+        return adjacentPieces(piece.x, piece.y);
     }
-
+    /** Board.pieceAt(int,int) returns true if a piece is located
+     * at square (X,Y) on this board, else false.
+     *
+     *  if (x,y) is not a valid coordinate on this board, return false
+     *  
+     * @param x the x-coordinate of the square to check
+     * @param y the y-coordinate of the square to check
+     *
+     * @returns boolean; true if a piece is located at (X,Y), elsefalse
+     */
     public boolean pieceAt(int x, int y){
         //TODO: bounds checking
         return pieceArray[x+1][y+1] != null;
     }
 
+    /** Board.getPiece(int,int) returns the piece located at (X,Y)
+     *  on this board.
+     *
+     *  Unusual conditions:
+     *   If (x,y) is not a valid coordinate on board, then the
+     *   behavior of this method is undefined (and may likely
+     *   crash the program)
+     *   
+     * @param x the x-coordinate of the piece to be returned
+     * @param y the y-coordinate of the piece to be returned
+     * 
+     * @returns the piece located at (X,Y) on this board.
+     */ 
     public Piece getPiece(int x, int y){
         //TODO: bounds checking
         return pieceArray[x+1][y+1];
     }
-
+    /** Board.connectedPieces(int, int) returns a list of all the pieces
+     *   'connected' the the piece located at square (X,Y) on this board.
+     *   The exact rules for connectedness are as defined in this projects
+     *   readme file.
+     *
+     *   If there is no piece at (X,Y) return null
+     *
+     *   Unusual conditions:
+     *    -If (X,Y) does not describe a valid location on the board, the
+     *     behavior of this program is undefined. It may return a list
+     *     of pieces or it may crash the program.
+     *     
+     * @param x the x-coordinate of the piece on the board
+     * @param y the y-coordinate of the piece on the board
+     *     
+     * @returns an array of pieces that are 'connected' to the one at (X,Y)
+     */
     public Piece[] connectedPieces(int x, int y){
         List<Piece> pieces = new ArrayList<Piece>();
         int startX = x + 1;
@@ -278,6 +404,21 @@ public class Board{
         return (Piece[])pieces.toArray();
     }
 
+    /** Board.connectedPieces(Piece) returns a list of all the pieces
+     *   'connected' the piece PIECE. 
+     *
+     *   Unusual conditions:
+     *    If PIECE is not on this board then the behavior of this method
+     *    is undefined.
+     *     
+     * @param piece the piece on whose connected pieces will be returned
+
+     * @returns an array of pieces that are 'connected' to PIECE
+     */    
+    public Piece[] connectedPieces(Piece piece){
+        return connectedPieces(piece.x, piece.y);
+    }
+    
     //returns a piece from goalA
     private Piece getGoalPiece(){
         //TODO:
@@ -285,10 +426,6 @@ public class Board{
         //?? what is the orientation of the board during play
         //are we or a color always centered up-down or can it vary?
         return new Piece(0,0,0,0);
-    }
-
-    public Piece[] connectedPieces(Piece P){
-        return connectedPieces(P.x, P.y);
     }
 
     // looks for a network from goalA -> goalB
@@ -314,8 +451,26 @@ public class Board{
         return false;
     }
 
-    // TODO: can we just assume that we are checking if we have a network?
-    //       when would we have to check for our opponent?
+    /**
+     *  Board.hasNetwork() determines whether "this" Board has a valid
+     *  network for player whose color is Board.color.
+     *
+     *  Unusual conditions:
+     *  If the board contain illegal squares, the behavior of this
+     *        method is undefined.
+     *
+     *  @return true if player whose color is 'this.color' has a winning network
+     *          on 'this' GameBoard; false otherwise.
+     *          
+     **/
+    public boolean hasNetwork(){
+        if (((ourBitBoard & ourGoalMaskA) != 0)
+            && ((ourBitBoard & ourGoalMaskB) != 0)){
+            return hasNetwork(getGoalPiece(), ourColor, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+        }
+        return false; //does not have at least one piece in each goal
+    }
+    
     public boolean hasNetwork(int color){
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
@@ -340,18 +495,18 @@ public class Board{
         for (int y = 1; y < 9; y++){
             //cell size is 7 across
 
-            row = "|";
+            row = "|"; 
             for (int x = 1; x < 9; x++){
                 piece = pieceArray[x][y];
                 if (piece == null){
-                    row +=  "       |";
+                    row += "       |";
                 }else if (piece == edge){
-                    row +=  ".......|";
+                    row += ".......|";
 
                 }else if (piece.color == black){
-                    row +=  "XXXXXXX|";
+                    row += "XXXXXXX|";
                 }else {
-                    row +=  "ooooooo|";
+                    row += "ooooooo|";
                 }
             }
             for (int _ = 0; _ < 3; _++){
