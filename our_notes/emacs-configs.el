@@ -1,3 +1,15 @@
+;; defaults that I think are good for this project
+;; and some emacs comands I've written that may be helpful
+;;=============================================================================
+
+;;Insert spaces only when indenting.
+;;This matters because different editors indent spaces differently
+;;making code indented in one editor messed up in another.
+;;then commits are dominated by whitespace changes and that sucks.
+(setq-default indent-tabs-mode nil)
+
+;; with the indent-tabs-mode disabled I still had tabs inserted for some reason
+;; I use this to fix that and other whitespace issues.
 (defun fix-whitespace ()
   (interactive)
   (save-excursion
@@ -11,3 +23,9 @@
       (goto-char 1))
     ;; fix indent
     (indent-region (point-min) (point-max))))
+
+
+
+
+
+  
