@@ -36,7 +36,7 @@ int y
 *** get a the piece at a location
   Piece getPiece(int x, int y);
 *** M: network finder
-  boolean hasNetwork(Player P);
+  boolean hasNetwork(color C);
 ** MachinePlayer
 *** M: performing minimax tree search 
    public Move chooseMove();
