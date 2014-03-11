@@ -20,47 +20,48 @@ public class Board{
     // The `bitReps' array was generated with this python code:
     // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
     long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
-		      0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
-		      0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
-		      0x100000L, 0x200000L, 0x400000L, 0x800000L,
-		      0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
-		      0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
-		      0x100000000L, 0x200000000L, 0x400000000L,
-		      0x800000000L, 0x1000000000L, 0x2000000000L,
-		      0x4000000000L, 0x8000000000L, 0x10000000000L,
-		      0x20000000000L, 0x40000000000L, 0x80000000000L,
-		      0x100000000000L, 0x200000000000L, 0x400000000000L,
-		      0x800000000000L, 0x1000000000000L, 0x2000000000000L,
-		      0x4000000000000L, 0x8000000000000L, 0x10000000000000L,
-		      0x20000000000000L, 0x40000000000000L,
-		      0x80000000000000L, 0x100000000000000L,
-		      0x200000000000000L, 0x400000000000000L,
-		      0x800000000000000L, 0x1000000000000000L,
-		      0x2000000000000000L, 0x4000000000000000L,
-		      0x8000000000000000L};
+                      0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
+                      0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
+                      0x100000L, 0x200000L, 0x400000L, 0x800000L,
+                      0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
+                      0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
+                      0x100000000L, 0x200000000L, 0x400000000L,
+                      0x800000000L, 0x1000000000L, 0x2000000000L,
+                      0x4000000000L, 0x8000000000L, 0x10000000000L,
+                      0x20000000000L, 0x40000000000L, 0x80000000000L,
+                      0x100000000000L, 0x200000000000L, 0x400000000000L,
+                      0x800000000000L, 0x1000000000000L, 0x2000000000000L,
+                      0x4000000000000L, 0x8000000000000L, 0x10000000000000L,
+                      0x20000000000000L, 0x40000000000000L,
+                      0x80000000000000L, 0x100000000000000L,
+                      0x200000000000000L, 0x400000000000000L,
+                      0x800000000000000L, 0x1000000000000000L,
+                      0x2000000000000000L, 0x4000000000000000L,
+                      0x8000000000000000L};
+
     /* Python code template used for generating bitmasks
-      hex(int("""
-      00000000
-      00000000
-      00000000
-      00000000
-      00000000
-      00000000
-      00000000
-      00000000""".replace("\n",""), 2))
+       hex(int("""
+       00000000
+       00000000
+       00000000
+       00000000
+       00000000
+       00000000
+       00000000
+       00000000""".replace("\n",""), 2))
     */
     long cornersMask = 0x4081000000000081L,
 
-	upperGoalMask = 0x7e00000000000000L,
-	lowerGoalMask = 0x7e,
-	rightGoalMask = 0x1010101010100L,
-	leftGoalMask = 0x80808080808000L,
-	ourGoalMaskA,
-	ourGoalMaskB,
-	ourGoalMask,
-	opponentGoalMaskA,
-	opponentGoalMaskB,
-	opponentGoalMask;
+        upperGoalMask = 0x7e00000000000000L,
+        lowerGoalMask = 0x7e,
+        rightGoalMask = 0x1010101010100L,
+        leftGoalMask = 0x80808080808000L,
+        ourGoalMaskA,
+        ourGoalMaskB,
+        ourGoalMask,
+        opponentGoalMaskA,
+        opponentGoalMaskB,
+        opponentGoalMask;
 
     //this piece is used to mark the edge of the board and the
     //four invalid corner squares
@@ -69,7 +70,7 @@ public class Board{
     public Board(int c){
         ourColor = c; //0 for black, 1 for white
         opponentColor = 1-c;
-	//TODO: assign goal masks
+        //TODO: assign goal masks
         edge = new Piece(0,0,0,0);
         pieceArray = new Piece[10][10];
 
@@ -91,29 +92,29 @@ public class Board{
 
     //returns the binary representation of the piece at (X, Y)
     private long getBitRep(int x,int y){
-	return bitReps[x*8 + y];
+        return bitReps[x*8 + y];
     }
 
     //? public/protected?
     //This assumes that MOVE is valid
     private void move(Move move, int color){
         int toX, toY;
-	long bitRep;
+        long bitRep;
         switch (move.moveKind){
         case Move.ADD :
             toX = move.x1 + 1;
             toY = move.y1 + 1;
-	    bitRep = getBitRep(toX,toY);
+            bitRep = getBitRep(toX,toY);
 
-	    //TODO: asserts to check index validity
+            //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
 
-	    //does lefthand ternary operator work in java??
-	    if (color == ourColor){
-		ourBitBoard &= bitRep;
-	    }else{
-		opponentBitBoard &= bitRep;
-	    }
+            //does lefthand ternary operator work in java??
+            if (color == ourColor){
+                ourBitBoard &= bitRep;
+            }else{
+                opponentBitBoard &= bitRep;
+            }
             pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
             break;
         case Move.STEP :
@@ -121,22 +122,22 @@ public class Board{
                 fromY = move.y2 + 1;
             toX = move.x1 + 1;
             toY = move.y1 + 1;
-	    bitRep = getBitRep(toX, toY);
-	    assert pieceArray[toX][toY] == null : "square is already full";
+            bitRep = getBitRep(toX, toY);
+            assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
 
-	    if (color == ourColor){
-		//remove old location
-		ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-		//add new location
-		ourBitBoard &= bitRep;
+            if (color == ourColor){
+                //remove old location
+                ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
+                //add new location
+                ourBitBoard &= bitRep;
 
-	    }else{
-		opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
-		opponentBitBoard &= bitRep;
-	    }
+            }else{
+                opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
+                opponentBitBoard &= bitRep;
+            }
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
-	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
+            pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
 
             break;
@@ -166,7 +167,7 @@ public class Board{
                 y = move.y1 + 1;
             //TODO: asserts to check index validity
             assert pieceArray[x][x] != null : "square should not be empty";
-	    ourBitBoard ^= pieceArray[x][y].bitRep;
+            ourBitBoard ^= pieceArray[x][y].bitRep;
             pieceArray[x][y] = null;
             break;
         case Move.STEP :
@@ -178,11 +179,11 @@ public class Board{
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
 
-	    ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-	    ourBitBoard &= pieceArray[toX][toY].bitRep;
+            ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
+            ourBitBoard &= pieceArray[toX][toY].bitRep;
 
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
-	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
+            pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :
@@ -230,7 +231,6 @@ public class Board{
     public Piece[] adjacentPieces(Piece P){
         return adjacentPieces(P.x, P.y);
     }
-
 
     public boolean pieceAt(int x, int y){
         //TODO: bounds checking
@@ -280,11 +280,11 @@ public class Board{
 
     //returns a piece from goalA
     private Piece getGoalPiece(){
-	//TODO:
+        //TODO:
 
-	//?? what is the orientation of the board during play
-	//are we or a color always centered up-down or can it vary?
-	return new Piece(0,0,0,0);
+        //?? what is the orientation of the board during play
+        //are we or a color always centered up-down or can it vary?
+        return new Piece(0,0,0,0);
     }
 
     public Piece[] connectedPieces(Piece P){
@@ -293,86 +293,85 @@ public class Board{
 
     // looks for a network from goalA -> goalB
     private boolean hasNetwork(Piece currentPiece, int color, long memberPieces, int m, int b){
- 	long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
-	int newM, newB;
-	for (Piece piece : connectedPieces(currentPiece)){
-	    if ((piece.bitRep & ourGoalMaskB) != 0){
-		return true;
-	    }
-	    if ((piece.bitRep & memberPieces) != 0){
-		return false; // we have already visited this piece
-	    }
-	    newM = (piece.y - currentPiece.y)/(piece.x == currentPiece.x ? 10 : (piece.x - currentPiece.x));
-	    newB = piece.y - newM*piece.x;
-	    if ((newM == m) && (newB == b)){
-		return false; //on the same line
-	    }
-	    if (hasNetwork(piece, color, memberPieces & piece.bitRep, newM, newB)){
-		return true;
-	    }
-	}
-	return false;
+        long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
+        int newM, newB;
+        for (Piece piece : connectedPieces(currentPiece)){
+            if ((piece.bitRep & ourGoalMaskB) != 0){
+                return true;
+            }
+            if ((piece.bitRep & memberPieces) != 0){
+                return false; // we have already visited this piece
+            }
+            newM = (piece.y - currentPiece.y)/(piece.x == currentPiece.x ? 10 : (piece.x - currentPiece.x));
+            newB = piece.y - newM*piece.x;
+            if ((newM == m) && (newB == b)){
+                return false; //on the same line
+            }
+            if (hasNetwork(piece, color, memberPieces & piece.bitRep, newM, newB)){
+                return true;
+            }
+        }
+        return false;
     }
 
     // TODO: can we just assume that we are checking if we have a network?
     //       when would we have to check for our opponent?
     public boolean hasNetwork(int color){
-	long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
-	long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
-	long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
-	if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
-	    return hasNetwork(getGoalPiece(), color, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
-	}
-	return false; //does not have at lease one piece in each goal
+        long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
+        long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
+        long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
+        if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
+            return hasNetwork(getGoalPiece(), color, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+        }
+        return false; //does not have at lease one piece in each goal
     }
-
 
     //==========================================================================
     // Verification and testing code ===========================================
-    
+
     public char[][] toCharArray(){
-	Piece piece;
-	char[][] rows = new char[33][];
-	String sep = "-----------------------------------------------------------------";
-	rows[0] = sep.toCharArray();
-	int rowNum = 1;
-	String row = "";
-	for (int y = 1; y < 9; y++){
-	    //cell size is 7 across
+        Piece piece;
+        char[][] rows = new char[33][];
+        String sep = "-----------------------------------------------------------------";
+        rows[0] = sep.toCharArray();
+        int rowNum = 1;
+        String row = "";
+        for (int y = 1; y < 9; y++){
+            //cell size is 7 across
 
-	    row = "|";
-	    for (int x = 1; x < 9; x++){
- 		piece = pieceArray[x][y];
-		if (piece == null){
-		    row +=  "       |";
-		}else if (piece == edge){
-		    row +=  ".......|";
+            row = "|";
+            for (int x = 1; x < 9; x++){
+                piece = pieceArray[x][y];
+                if (piece == null){
+                    row +=  "       |";
+                }else if (piece == edge){
+                    row +=  ".......|";
 
-		}else if (piece.color == black){
-		    row +=  "XXXXXXX|";
-		}else {
-		    row +=  "ooooooo|";
-		}
-	    }
-	    for (int _ = 0; _ < 3; _++){
-		rows[rowNum] = row.toCharArray();
-		rowNum ++;
-	    }
-	    rows[rowNum] = sep.toCharArray();
-	    rowNum++;
-	}
-	return rows;
+                }else if (piece.color == black){
+                    row +=  "XXXXXXX|";
+                }else {
+                    row +=  "ooooooo|";
+                }
+            }
+            for (int _ = 0; _ < 3; _++){
+                rows[rowNum] = row.toCharArray();
+                rowNum ++;
+            }
+            rows[rowNum] = sep.toCharArray();
+            rowNum++;
+        }
+        return rows;
     }
 
     public String toString(){
-	String ret = "";
-	for (char[] row : toCharArray()){
-	    for (char c : row){
-		ret += c;
-	    }
-	    ret += "\n";
-	}
-	return ret;
+        String ret = "";
+        for (char[] row : toCharArray()){
+            for (char c : row){
+                ret += c;
+            }
+            ret += "\n";
+        }
+        return ret;
     }
 
     //construct a board from a string representation of it.
@@ -413,7 +412,7 @@ public class Board{
                         move(m);
                     }else{
                         opponentMove(m);
-                    }                    
+                    }
                     continue;
                 default:
                     System.out.println("Error - Board.Board(int, String)- invalid char");
