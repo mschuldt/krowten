@@ -49,7 +49,7 @@ public class Board{
       00000000""".replace("\n",""), 2))
     */
     long cornersMask = 0x4081000000000081L,
-	
+
 	upperGoalMask = 0x7e00000000000000L,
 	lowerGoalMask = 0x7e,
 	rightGoalMask = 0x1010101010100L,
@@ -277,10 +277,10 @@ public class Board{
         return (Piece[])pieces.toArray();
     }
 
-    //returns a piece from goalA 
+    //returns a piece from goalA
     private Piece getGoalPiece(){
 	//TODO:
-	
+
 	//?? what is the orientation of the board during play
 	//are we or a color always centered up-down or can it vary?
 	return new Piece(0,0,0,0);
@@ -296,7 +296,7 @@ public class Board{
 	int newM, newB;
 	for (Piece piece : connectedPieces(currentPiece)){
 	    if ((piece.bitRep & ourGoalMaskB) != 0){
-		return true; 
+		return true;
 	    }
 	    if ((piece.bitRep & memberPieces) != 0){
 		return false; // we have already visited this piece
@@ -325,29 +325,40 @@ public class Board{
 	return false; //does not have at lease one piece in each goal
     }
 
-    //returns an array of charters representing the state of the board
     public char[][] toCharArray(){
-	char[][] ret = new char[66][66];
 	Piece piece;
-	char c;
-	for (int x = 0; x < 65; x++){
-	    for (int y = 0; y < 65; y++){
-		piece = pieceArray[x][y];
+	char[][] rows = new char[33][];
+	String sep = "-----------------------------------------------------------------";
+	rows[0] = sep.toCharArray();
+	int rowNum = 1;
+	String row = "";
+	for (int y = 1; y < 9; y++){
+	    //cell size is 7 across
+
+	    row = "|";
+	    for (int x = 1; x < 9; x++){
+ 		piece = pieceArray[x][y];
 		if (piece == null){
-		    c = ' ';
+		    row +=  "       |";
 		}else if (piece == edge){
-		    c = '#';
+		    row +=  ".......|";
+
 		}else if (piece.color == ourColor){
-		    c = 'X';
-		}else{
-		    c = 'O';
+		    row +=  "XXXXXXX|";
+		}else {
+		    row +=  "ooooooo|";
 		}
-		ret[x][y] = c;
 	    }
+	    for (int _ = 0; _ < 3; _++){
+		rows[rowNum] = row.toCharArray();
+		rowNum ++;
+	    }
+	    rows[rowNum] = sep.toCharArray();
+	    rowNum++;
 	}
-	return ret;
+	return rows;
     }
-    
+
     public String toString(){
 	String ret = "";
 	char[][] charArray = toCharArray();
@@ -359,5 +370,5 @@ public class Board{
 	}
 	return ret;
     }
-	    
+
 }
