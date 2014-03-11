@@ -324,4 +324,28 @@ public class Board{
 	}
 	return false; //does not have at lease one piece in each goal
     }
+
+    //returns an array of charters representing the state of the board
+    public char[][] toCharArray(){
+	char[][] ret = new char[66][66];
+	Piece piece;
+	char c;
+	for (int x = 0; x < 65; x++){
+	    for (int y = 0; y < 65; y++){
+		piece = pieceArray[x][y];
+		if (piece == null){
+		    c = ' ';
+		}else if (piece == edge){
+		    c = '#';
+		}else if (piece.color == ourColor){
+		    c = 'X';
+		}else{
+		    c = 'O';
+		}
+		ret[x][y] = c;
+	    }
+	}
+	return ret;
+    }
+
 }
