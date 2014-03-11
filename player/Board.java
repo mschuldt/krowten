@@ -10,12 +10,11 @@ public class Board{
     int ourColor;
     int opponentColor;
 
-
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
-    // because the corners of the gameboard cannot be used, we the last bit is
-    // not needed (actually last two). This is lucky because java has no
-    // equivalent of an unsigned long int
+    // because the corners of the gameboard cannot be used, the last bit is
+    // not needed (actually the last two). This is lucky because java has no
+    // equivalent of an unsigned long integer
     //
     // The `bitReps' array was generated with this python code:
     // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
@@ -44,7 +43,7 @@ public class Board{
     private Piece edge;
 
     public Board(int c){
-        color = c; //0 for black, 1 for white
+        ourColor = c; //0 for black, 1 for white
         opponentColor = 1-c;
         edge = new Piece(0,0,0,0);
         pieceArray = new Piece[66][66];
@@ -73,7 +72,8 @@ public class Board{
     //? public/protected?
     //This assumes that MOVE is valid
     private void move(Move move, int color){
-        int toX, toY, bitrep;
+        int toX, toY;
+	long bitRep;
         switch (move.moveKind){
         case Move.ADD :
             toX = move.x1 + 1;
@@ -125,13 +125,15 @@ public class Board{
     //to move every time. (the Move object does not have a color field
     //but the Piece objects do)
     public void move(Move move){
-        move(move, color);
+        move(move, ourColor);
     }
 
     public void opponentMove(Move move){
         move(move, opponentColor);
     }
 
+    //This assumes that the move we are undoing was our move.
+    //(the bitboards will get messed up if this was not the case)
     void unMove(Move move){
         switch (move.moveKind){
         case Move.ADD :
@@ -139,11 +141,7 @@ public class Board{
                 y = move.y1 + 1;
             //TODO: asserts to check index validity
             assert pieceArray[x][x] != null : "square should not be empty";
-	    if (color == ourColor){
-		ourBitBoard ^= pieceArray[x][y].bitRep;
-	    }else{
-		opponentBitBoard ^= pieceArray[x][y].bitRep;
-	    }
+	    ourBitBoard ^= pieceArray[x][y].bitRep;
             pieceArray[x][y] = null;
             break;
         case Move.STEP :
@@ -155,14 +153,9 @@ public class Board{
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
 
-	    if (color == ourColor){
-		ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-		ourBitBoard &= pieceArray[toX][toY].bitRep;
+	    ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
+	    ourBitBoard &= pieceArray[toX][toY].bitRep;
 
-	    }else{
-		opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
-		opponentBitBoard &= pieceArray[toX][toY].bitRep;
-	    }
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
 	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
