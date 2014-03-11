@@ -71,22 +71,22 @@ public class Board{
         opponentColor = 1-c;
 	//TODO: assign goal masks
         edge = new Piece(0,0,0,0);
-        pieceArray = new Piece[66][66];
+        pieceArray = new Piece[10][10];
 
-        for (int x = 0; x < 66; x++){
+        for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
-            pieceArray[x][65] = edge;
+            pieceArray[x][9] = edge;
         }
 
-        for (int y = 0; y < 66; y++){
+        for (int y = 0; y < 10; y++){
             pieceArray[0][y] = edge;
-            pieceArray[65][y] = edge;
+            pieceArray[9][y] = edge;
         }
 
         pieceArray[1][1] = edge;
-        pieceArray[64][1] = edge;
-        pieceArray[64][64] = edge;
-        pieceArray[1][64] = edge;
+        pieceArray[8][1] = edge;
+        pieceArray[8][1] = edge;
+        pieceArray[1][8] = edge;
     }
 
     //returns the binary representation of the piece at (X, Y)
