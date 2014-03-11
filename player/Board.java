@@ -371,4 +371,42 @@ public class Board{
 	return ret;
     }
 
+    //construct a board from a string representation of it.
+    //'x' for our pieces, 'o' for opponents piece (case does not matter).
+    //example:
+    // Board(color,
+    //       "    x   " +
+    //       "      o " +
+    //       " xx  o  " +
+    //       "        " +
+    //       " o   x  " +
+    //       " x      " +
+    //       " x      " +
+    //       "        ")
+    //       
+    public Board (int color, String boardString){
+        this(color);
+        Move m;
+        boardString = boardString.toLowerCase();
+        if (boardString.length() != 64){
+            System.out.println("Error --Board.Board(int, String)-- invalid board string");
+        }
+        char[] chars = boardString.toCharArray();
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+                switch (boardString.charAt(y*8 + x)){
+                case 'x' :
+                    m = new Move(x, y);
+                    move(m);
+                    continue;
+                case 'o' :
+                    m = new Move(x,y);
+                    opponentMove(m);
+                    continue;
+                default:
+                    System.out.println("Error - Board.Board(int,String)- invalid char");
+                }
+            }
+        }
+    }
 }
