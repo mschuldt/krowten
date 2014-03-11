@@ -9,7 +9,8 @@ public class Board{
     Piece[][] pieceArray;
     int ourColor;
     int opponentColor;
-
+    public static final int white = 1;
+    public static final int black = 0;
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
     // because the corners of the gameboard cannot be used, the last bit is
@@ -325,6 +326,9 @@ public class Board{
 	return false; //does not have at lease one piece in each goal
     }
 
+
+    //==========================================================================
+    // Verification and testing code ===========================================
     
     public char[][] toCharArray(){
 	Piece piece;
@@ -344,7 +348,7 @@ public class Board{
 		}else if (piece == edge){
 		    row +=  ".......|";
 
-		}else if (piece.color == ourColor){
+		}else if (piece.color == black){
 		    row +=  "XXXXXXX|";
 		}else {
 		    row +=  "ooooooo|";
@@ -372,7 +376,7 @@ public class Board{
     }
 
     //construct a board from a string representation of it.
-    //'x' for our pieces, 'o' for opponents piece (case does not matter).
+    //'x' for black pieces, 'o' for white piece (case does not matter).
     //example:
     // Board(color,
     //       "    x   " +
@@ -383,7 +387,7 @@ public class Board{
     //       " x      " +
     //       " x      " +
     //       "        ")
-    //       
+    //
     public Board (int color, String boardString){
         this(color);
         Move m;
@@ -397,14 +401,22 @@ public class Board{
                 switch (boardString.charAt(y*8 + x)){
                 case 'x' :
                     m = new Move(x, y);
-                    move(m);
+                    if (ourColor == black){
+                        move(m);
+                    }else{
+                        opponentMove(m);
+                    }
                     continue;
                 case 'o' :
                     m = new Move(x,y);
-                    opponentMove(m);
+                    if (ourColor == white){
+                        move(m);
+                    }else{
+                        opponentMove(m);
+                    }                    
                     continue;
                 default:
-                    System.out.println("Error - Board.Board(int,String)- invalid char");
+                    System.out.println("Error - Board.Board(int, String)- invalid char");
                 }
             }
         }
