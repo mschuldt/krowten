@@ -7,17 +7,25 @@ import java.util.ArrayList;
 
 public class Board{
     Piece[][] pieceArray;
-    int color;
+    int ourColor;
     int opponentColor;
 
+
+    long ourBitBoard = 0;
+    long opponentBitBoard = 0;
+    // because the corners of the gameboard cannot be used, we the last bit is
+    // not needed (actually last two). This is lucky because java has no
+    // equivalent of an unsigned long int
+    //
+    // The `bitReps' array was generated with this python code:
     // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
-    long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L, 
-		      0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L, 
+    long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
+		      0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
 		      0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
 		      0x100000L, 0x200000L, 0x400000L, 0x800000L,
 		      0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
 		      0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
-		      0x100000000L, 0x200000000L, 0x400000000L, 
+		      0x100000000L, 0x200000000L, 0x400000000L,
 		      0x800000000L, 0x1000000000L, 0x2000000000L,
 		      0x4000000000L, 0x8000000000L, 0x10000000000L,
 		      0x20000000000L, 0x40000000000L, 0x80000000000L,
@@ -30,7 +38,9 @@ public class Board{
 		      0x800000000000000L, 0x1000000000000000L,
 		      0x2000000000000000L, 0x4000000000000000L,
 		      0x8000000000000000L};
-    
+
+    //this piece is used to mark the edge of the board and the
+    //four invalid corner squares
     private Piece edge;
 
     public Board(int c){
@@ -63,27 +73,47 @@ public class Board{
     //? public/protected?
     //This assumes that MOVE is valid
     private void move(Move move, int color){
-        int toX, toY;
+        int toX, toY, bitrep;
         switch (move.moveKind){
         case Move.ADD :
             toX = move.x1 + 1;
             toY = move.y1 + 1;
-            //TODO: asserts to check index validity
+	    bitRep = getBitRep(toX,toY);
+
+	    //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
-            pieceArray[toX][toY] = new Piece(color, getBitRep(toX,toY), move.x1, move.y1); //FIX
+
+	    //does lefthand ternary operator work in java??
+	    if (color == ourColor){
+		ourBitBoard &= bitRep;
+	    }else{
+		opponentBitBoard &= bitRep;
+	    }
+            pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
             break;
         case Move.STEP :
             int fromX = move.x2 + 1,
                 fromY = move.y2 + 1;
             toX = move.x1 + 1;
             toY = move.y1 + 1;
-
-            assert pieceArray[toX][toY] == null : "square is already full";
+	    bitRep = getBitRep(toX, toY);
+	    assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
+
+	    if (color == ourColor){
+		//remove old location
+		ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
+		//add new location
+		ourBitBoard &= bitRep;
+
+	    }else{
+		opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
+		opponentBitBoard &= bitRep;
+	    }
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
 	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
-	    
+
             break;
         case Move.QUIT :
             //TODO
@@ -109,6 +139,11 @@ public class Board{
                 y = move.y1 + 1;
             //TODO: asserts to check index validity
             assert pieceArray[x][x] != null : "square should not be empty";
+	    if (color == ourColor){
+		ourBitBoard ^= pieceArray[x][y].bitRep;
+	    }else{
+		opponentBitBoard ^= pieceArray[x][y].bitRep;
+	    }
             pieceArray[x][y] = null;
             break;
         case Move.STEP :
@@ -116,9 +151,18 @@ public class Board{
                 toY = move.y2 + 1,
                 fromX = move.x1 + 1,
                 fromY = move.y1 + 1;
-            
+
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
+
+	    if (color == ourColor){
+		ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
+		ourBitBoard &= pieceArray[toX][toY].bitRep;
+
+	    }else{
+		opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
+		opponentBitBoard &= pieceArray[toX][toY].bitRep;
+	    }
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
 	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
@@ -128,7 +172,7 @@ public class Board{
             break;
         }
     }
-    
+
     private int countEdgePieces (Piece[] pieces){
         int c = 0;
         for (Piece p : pieces){
@@ -187,7 +231,7 @@ public class Board{
         int currentX = startX, currentY = startY -1;
         Piece current = pieceArray[currentX][currentY];
         int xInc, yInc;
-        
+
         int[][] increments = {{0,-1}, //above
                               {0, 1}, //below
                               {-1,0}, //left
@@ -220,4 +264,3 @@ public class Board{
         return connectedPieces(P.x, P.y);
     }
 }
-
