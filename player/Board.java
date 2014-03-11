@@ -1,6 +1,6 @@
 // player/Board.java
 
-package player; //this with Piece.java don't seem like they belong here...
+package player;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -9,12 +9,34 @@ public class Board{
     Piece[][] pieceArray;
     int color;
     int opponentColor;
+
+    // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
+    long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L, 
+		      0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L, 
+		      0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
+		      0x100000L, 0x200000L, 0x400000L, 0x800000L,
+		      0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
+		      0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
+		      0x100000000L, 0x200000000L, 0x400000000L, 
+		      0x800000000L, 0x1000000000L, 0x2000000000L,
+		      0x4000000000L, 0x8000000000L, 0x10000000000L,
+		      0x20000000000L, 0x40000000000L, 0x80000000000L,
+		      0x100000000000L, 0x200000000000L, 0x400000000000L,
+		      0x800000000000L, 0x1000000000000L, 0x2000000000000L,
+		      0x4000000000000L, 0x8000000000000L, 0x10000000000000L,
+		      0x20000000000000L, 0x40000000000000L,
+		      0x80000000000000L, 0x100000000000000L,
+		      0x200000000000000L, 0x400000000000000L,
+		      0x800000000000000L, 0x1000000000000000L,
+		      0x2000000000000000L, 0x4000000000000000L,
+		      0x8000000000000000L};
+    
     private Piece edge;
 
     public Board(int c){
         color = c; //0 for black, 1 for white
         opponentColor = 1-c;
-        edge = new Piece(0,0,0);
+        edge = new Piece(0,0,0,0);
         pieceArray = new Piece[66][66];
 
         for (int x = 0; x < 66; x++){
@@ -33,6 +55,11 @@ public class Board{
         pieceArray[1][64] = edge;
     }
 
+    //returns the binary representation of the piece at (X, Y)
+    private long getBitRep(int x,int y){
+	return bitReps[x*8 + y];
+    }
+
     //? public/protected?
     //This assumes that MOVE is valid
     private void move(Move move, int color){
@@ -43,7 +70,7 @@ public class Board{
             toY = move.y1 + 1;
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
-            pieceArray[toX][toY] = new Piece(color, move.x1, move.y1);
+            pieceArray[toX][toY] = new Piece(color, getBitRep(toX,toY), move.x1, move.y1); //FIX
             break;
         case Move.STEP :
             int fromX = move.x2 + 1,
@@ -54,7 +81,9 @@ public class Board{
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
+	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
+	    
             break;
         case Move.QUIT :
             //TODO
@@ -91,6 +120,7 @@ public class Board{
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
+	    pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
             pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :

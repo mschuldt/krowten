@@ -1,11 +1,11 @@
-package player; // Better place to put this??
+package player;
 
 public class Piece{
-    public int color;
-    public int x;
-    public int y;
-    public Piece (int _color, int _x, int _y){
+    public int color, x, y;
+    public long bitRep; //binary representation
+    public Piece (int _color, long _bitRep, int _x, int _y){
         color = _color;
+	bitRep = _bitRep;
         x = _x;
         y = _y;
     }
