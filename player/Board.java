@@ -37,19 +37,27 @@ public class Board{
 		      0x800000000000000L, 0x1000000000000000L,
 		      0x2000000000000000L, 0x4000000000000000L,
 		      0x8000000000000000L};
-
+    /* Python code template used for generating bitmasks
+      hex(int("""
+      00000000
+      00000000
+      00000000
+      00000000
+      00000000
+      00000000
+      00000000
+      00000000""".replace("\n",""), 2))
+    */
     long upperGoalMask = 0x7e00000000000000L,
 	lowerGoalMask = 0x7e,
 	rightGoalMask = 0x1010101010100L,
-	leftGoalMask = 0x80808080808000,
-	ourUpperGoalMask,
-	ourLowerGoalMask,
-	ourRightGoalMask,
-	ourLeftGoalMask,
-	OpponentUpperGoalMask,
-	OpponentLowerGoalMask,
-	OpponentRightGoalMask,
-	OpponentLeftGoalMask;
+	leftGoalMask = 0x80808080808000L,
+	ourGoalMaskA,
+	ourGoalMaskB,
+	ourGoalMask,
+	opponentGoalMaskA,
+	opponentGoalMaskB,
+	opponentGoalMask;
 
     //this piece is used to mark the edge of the board and the
     //four invalid corner squares
@@ -267,8 +275,51 @@ public class Board{
         return (Piece[])pieces.toArray();
     }
 
+    //returns a piece from goalA 
+    private Piece getGoalPiece(){
+	//TODO:
+	
+	//?? what is the orientation of the board during play
+	//are we or a color always centered up-down or can it vary?
+	return new Piece(0,0,0,0);
+    }
+
     public Piece[] connectedPieces(Piece P){
         return connectedPieces(P.x, P.y);
     }
 
+    // looks for a network from goalA -> goalB
+    private boolean hasNetwork(Piece currentPiece, int color, long memberPieces, int m, int b){
+ 	long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
+	int newM, newB;
+	for (Piece piece : connectedPieces(currentPiece)){
+	    if ((piece.bitRep & ourGoalMaskB) != 0){
+		return true; 
+	    }
+	    if ((piece.bitRep & memberPieces) != 0){
+		return false; // we have already visited this piece
+	    }
+	    newM = (piece.y - currentPiece.y)/(piece.x == currentPiece.x ? 10 : (piece.x - currentPiece.x));
+	    newB = piece.y - newM*piece.x;
+	    if ((newM == m) && (newB == b)){
+		return false; //on the same line
+	    }
+	    if (hasNetwork(piece, color, memberPieces & piece.bitRep, newM, newB)){
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    // TODO: can we just assume that we are checking if we have a network?
+    //       when would we have to check for our opponent?
+    boolean hasNetwork(int color){
+	long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
+	long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
+	long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
+	if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
+	    return hasNetwork(getGoalPiece(), color, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+	}
+	return false; //does not have at lease one piece in each goal
+    }
 }
