@@ -247,7 +247,6 @@ public class Board{
         }
     }
 
-    
     private int countPieces (Piece[] pieces){
         int c = 0;
         for (Piece p : pieces){
@@ -257,6 +256,7 @@ public class Board{
         }
         return c;
     }
+
     //this should be fixed to prevent the double traversal
     private Piece[] removeNonPieces(Piece[] pieces){
         Piece [] ret = new Piece[countPieces(pieces)];
@@ -332,7 +332,11 @@ public class Board{
      */
     public boolean pieceAt(int x, int y){
         //TODO: bounds checking
-        return pieceArray[x+1][y+1] != null;
+        if (x < 0 || y < 0 || y > 7 || x > 7){
+            return false;
+        }
+        Piece p = pieceArray[x+1][y+1];
+        return  (p != null && p != edge);
     }
 
     /** Board.getPiece(int,int) returns the piece located at (X,Y)
