@@ -347,5 +347,17 @@ public class Board{
 	}
 	return ret;
     }
-
+    
+    public String toString(){
+	String ret = "";
+	char[][] charArray = toCharArray();
+	for (int x = 0; x < 65; x++){
+	    for (int y = 0; y < 65; y++){
+		ret += charArray[x][y];
+	    }
+	    ret += "\n";
+	}
+	return ret;
+    }
+	    
 }
