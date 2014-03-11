@@ -86,8 +86,8 @@ public class Board{
 
         pieceArray[1][1] = edge;
         pieceArray[8][1] = edge;
-        pieceArray[8][1] = edge;
         pieceArray[1][8] = edge;
+        pieceArray[8][8] = edge;
     }
 
     //returns the binary representation of the piece at (X, Y)
