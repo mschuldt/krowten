@@ -398,6 +398,8 @@ public class Board{
         for (int x = 0; x < 8; x++){
             for (int y = 0; y < 8; y++){
                 switch (boardString.charAt(y*8 + x)){
+                case ' ' :
+                    continue;
                 case 'x' :
                     m = new Move(x, y);
                     if (ourColor == black){
