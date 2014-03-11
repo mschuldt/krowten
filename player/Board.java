@@ -247,21 +247,22 @@ public class Board{
         }
     }
 
-    private int countEdgePieces (Piece[] pieces){
+    
+    private int countPieces (Piece[] pieces){
         int c = 0;
         for (Piece p : pieces){
-            if (p == edge) {
+            if ((p != edge) && (p != null)) {
                 c+=1;
             }
         }
         return c;
     }
-
-    private Piece[] removeEdgePieces(Piece[] pieces){
-        Piece [] ret = new Piece[countEdgePieces(pieces)];
+    //this should be fixed to prevent the double traversal
+    private Piece[] removeNonPieces(Piece[] pieces){
+        Piece [] ret = new Piece[countPieces(pieces)];
         int i=0;
         for (Piece p : pieces){
-            if (!( p == edge)){
+            if ((p != edge) && (p != null)){
                 ret[i++] = p;
             }
         }
@@ -302,7 +303,7 @@ public class Board{
                            pieceArray[x-1][y],   //left
                            pieceArray[x-1][y-1]}; //top left
 
-        return removeEdgePieces(pieces);
+        return removeNonPieces(pieces);
     }
     
     /** Board.adjacentPieces(Piece) returns an array of pieces
