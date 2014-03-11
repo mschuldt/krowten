@@ -48,7 +48,9 @@ public class Board{
       00000000
       00000000""".replace("\n",""), 2))
     */
-    long upperGoalMask = 0x7e00000000000000L,
+    long cornersMask = 0x4081000000000081L,
+	
+	upperGoalMask = 0x7e00000000000000L,
 	lowerGoalMask = 0x7e,
 	rightGoalMask = 0x1010101010100L,
 	leftGoalMask = 0x80808080808000L,
