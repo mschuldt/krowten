@@ -420,4 +420,17 @@ public class Board{
             }
         }
     }
+    public static void main(String[] args){
+        Board b = new Board(white,
+                            "    x   " +
+                            "      o " +
+                            " xx  o  " +
+                            "        " +
+                            " o   x  " +
+                            " x      " +
+                            " x      " +
+                            "        ");
+
+        System.out.println(b.toString());
+    }
 }
