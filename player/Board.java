@@ -315,7 +315,7 @@ public class Board{
 
     // TODO: can we just assume that we are checking if we have a network?
     //       when would we have to check for our opponent?
-    boolean hasNetwork(int color){
+    public boolean hasNetwork(int color){
 	long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
 	long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
 	long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
