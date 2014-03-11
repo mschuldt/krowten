@@ -38,6 +38,19 @@ public class Board{
 		      0x2000000000000000L, 0x4000000000000000L,
 		      0x8000000000000000L};
 
+    long upperGoalMask = 0x7e00000000000000L,
+	lowerGoalMask = 0x7e,
+	rightGoalMask = 0x1010101010100L,
+	leftGoalMask = 0x80808080808000,
+	ourUpperGoalMask,
+	ourLowerGoalMask,
+	ourRightGoalMask,
+	ourLeftGoalMask,
+	OpponentUpperGoalMask,
+	OpponentLowerGoalMask,
+	OpponentRightGoalMask,
+	OpponentLeftGoalMask;
+
     //this piece is used to mark the edge of the board and the
     //four invalid corner squares
     private Piece edge;
@@ -45,6 +58,7 @@ public class Board{
     public Board(int c){
         ourColor = c; //0 for black, 1 for white
         opponentColor = 1-c;
+	//TODO: assign goal masks
         edge = new Piece(0,0,0,0);
         pieceArray = new Piece[66][66];
 
@@ -256,4 +270,5 @@ public class Board{
     public Piece[] connectedPieces(Piece P){
         return connectedPieces(P.x, P.y);
     }
+
 }
