@@ -325,6 +325,7 @@ public class Board{
 	return false; //does not have at lease one piece in each goal
     }
 
+    
     public char[][] toCharArray(){
 	Piece piece;
 	char[][] rows = new char[33][];
@@ -361,10 +362,9 @@ public class Board{
 
     public String toString(){
 	String ret = "";
-	char[][] charArray = toCharArray();
-	for (int x = 0; x < 65; x++){
-	    for (int y = 0; y < 65; y++){
-		ret += charArray[x][y];
+	for (char[] row : toCharArray()){
+	    for (char c : row){
+		ret += c;
 	    }
 	    ret += "\n";
 	}
