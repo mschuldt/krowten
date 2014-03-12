@@ -487,41 +487,7 @@ public class Board{
 
     //==========================================================================
     // Verification and testing code ===========================================
-
-    public Cell[][] toCellArray(){
-        Piece piece;
-        Cell[][] cells = new Cell[8][8];
-
-        Cell cell;
-        for (int x = 0; x < 8; x++){
-            for (int y = 0; y < 8; y++){
-
-                piece = pieceArray[x+1][y+1];
-                cell = new Cell(x, y);
-                cells[x][y] = cell;
-                if (piece == null){
-                    cell.defaultChar = " ";
-                }else if (piece == edge){
-                    cell.defaultChar = ".";
-                }else if (piece.color == black){
-                    cell.defaultChar = "X";
-                }else {
-                    cell.defaultChar = "o";
-                }
-            }
-        }
-        return cells;
-    }
-
-    public PrintBoard toPrintBoard(){
-        return new PrintBoard(this);
-    }
-
-    public String toString(){
-        //return charArrayToString(toCharArray());
-        return toPrintBoard().toString();
-
-    }
+    //==========================================================================
 
     //construct a board from a string representation of it.
     //'x' for black pieces, 'o' for white piece (case does not matter).
@@ -572,6 +538,41 @@ public class Board{
         }
     }
 
+    public Cell[][] toCellArray(){
+        Piece piece;
+        Cell[][] cells = new Cell[8][8];
+
+        Cell cell;
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+
+                piece = pieceArray[x+1][y+1];
+                cell = new Cell(x, y);
+                cells[x][y] = cell;
+                if (piece == null){
+                    cell.defaultChar = " ";
+                }else if (piece == edge){
+                    cell.isEdge = true;
+                }else if (piece.color == black){
+                    cell.defaultChar = "X";
+                }else {
+                    cell.defaultChar = "o";
+                }
+            }
+        }
+        return cells;
+    }
+
+    public PrintBoard toPrintBoard(){
+        return new PrintBoard(this);
+    }
+
+    public String toString(){
+        //return charArrayToString(toCharArray());
+        return toPrintBoard().toString();
+
+    }
+
     public static void main(String[] args){
         Board b = new Board(white,
                             "    x   " +
@@ -588,5 +589,6 @@ public class Board{
         pb.markAll();
         //System.out.println(b.toString());
         System.out.println(pb.toString());
+
     }
 }
