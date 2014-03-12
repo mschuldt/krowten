@@ -40,7 +40,7 @@ public class Cell{
         }else{
             row2 = row3;
         }
-        row1 = (showIndex ? x +","+ y + buildStr(4,defaultChar) : row3);
+        row1 = (showIndex ? x +""+ y + buildStr(5,defaultChar) : row3);
 
         assert row1.length() == 7 : "Error - Cell.write: invalid row1 length. row1 = '" + row1 + "'";
         assert row2.length() == 7 : "Error - Cell.write: invalid row2 length. row1 = '" + row2 + "'";
