@@ -10,6 +10,7 @@ public class Cell{
     boolean mark = false, showIndex = false;
     String markChar = "~";
     String emptyMarkChar = "$";
+    boolean isEdge = false;
 
     public Cell(int x, int y, String c){
         assert c.length() == 1 : "Error - Cell.Cell: invalid init string length";
@@ -31,8 +32,12 @@ public class Cell{
 
         assert x >= 0 && xInd < 65 : "Error - Cell.write: invalid x index: " + xInd;
         assert y >= 0 && yInd < 33 : "Error - Cell.write: invalid x index: " + yInd;
-
+        if (isEdge){
+            mark = showIndex = false;
+        }
+        
         row3 = buildStr(7, defaultChar);
+        
         if (mark){
             String s = defaultChar + defaultChar;
             String m = (defaultChar==" " ? emptyMarkChar : markChar);
