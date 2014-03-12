@@ -5,8 +5,8 @@ everything in the board is one module except for the network finder
 * list of modules
  1. board representation (Michael)
  2. performing minimax tree search  (Michelle)
- 3. generating a list of all valid moves (Hellen)
- 4. determining whether a move is valid (Hellen)
+ 3. generating a list of all valid moves (Helen)
+ 4. determining whether a move is valid (Helen)
  5. cluster detection (Michelle)
  6. network finder (Michael)
  7. board evaluation function (Shared..for now)
