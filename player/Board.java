@@ -4,6 +4,7 @@ package player;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.*;
 
 public class Board{
     Piece[][] pieceArray;
@@ -71,7 +72,7 @@ public class Board{
      *  The board is initially empty
      *
      *  COLOR must be white or black (1 or 0)
-     *  
+     *
      *  @param color an integer representing the color of the player
      *         who 'owns' this board. 1 for white and 0 for black.n
      */
@@ -106,7 +107,6 @@ public class Board{
         return bitReps[x*8 + y];
     }
 
-    
     //This assumes that MOVE is valid
 
     /** Board.move(Move,int) moves a piece on the board as described
@@ -186,7 +186,7 @@ public class Board{
     public void move(Move move){
         move(move, ourColor);
     }
-    
+
     /** Board.opponentMove() moves a piece on the board as described
      *  by MOVE. The piece moved belongs to the opponent of the owner
      *  of this board, that is, the player whose color is Board.opponentColor
@@ -201,7 +201,6 @@ public class Board{
         move(move, opponentColor);
     }
 
-    
     //This assumes that the move we are undoing was our move.
     //(the bitboards will get messed up if this was not the case)
     /** Board.unMove(Move) reverses the effects of the move MOVE.
@@ -212,8 +211,8 @@ public class Board{
      *  Unusual conditions:
      *  The behaviour of this method is not defined for the case
      *  in which MOVE is invalid or is intended for the opponent.
-     *  
-     *  @param move the move to reverse. 
+     *
+     *  @param move the move to reverse.
      */
     void unMove(Move move){
         switch (move.moveKind){
@@ -272,13 +271,13 @@ public class Board{
     /** Board.adjacentPieces(int,int) returns an array of pieces
      * that are adjacent to the pieces at coordinates (X,Y) on
      * the board.
-     * 
+     *
      * The x,y coordinates are indexed from the top left with x
      * increasing to the right and y increasing down.
      *
      *  If there is no piece at (x,y) but (x,y) is still a valid
      *  board location, then this method works as expected.
-     *  
+     *
      * Unusual conditions:
      *  if (x,y) is not a valid location on the, then this
      *  method will likely cause the program to crash.
@@ -287,9 +286,9 @@ public class Board{
      *
      *  @param x the x-coordinate location of the square
      *  @param y the y-coordinate location of the square
-     *  
+     *
      *  @returns an array of pieces adjacent to location (x,y) on the board
-     * 
+     *
      */
     public Piece[] adjacentPieces(int x, int y){
         x++; y++;
@@ -305,16 +304,16 @@ public class Board{
 
         return removeNonPieces(pieces);
     }
-    
+
     /** Board.adjacentPieces(Piece) returns an array of pieces
      * that are adjacent to PIECE on the board
-     * 
+     *
      * Unusual conditions:
      *  The behavior of this method is undefined if piece is not
      *  actually on the board.
      *
      *  @param piece a piece on the board whose adjacent pieces will be returned
-     *  
+     *
      *  @returns an array of pieces adjacent to PIECE on the board
      */
     public Piece[] adjacentPieces(Piece piece){
@@ -324,7 +323,7 @@ public class Board{
      * at square (X,Y) on this board, else false.
      *
      *  if (x,y) is not a valid coordinate on this board, return false
-     *  
+     *
      * @param x the x-coordinate of the square to check
      * @param y the y-coordinate of the square to check
      *
@@ -336,7 +335,7 @@ public class Board{
             return false;
         }
         Piece p = pieceArray[x+1][y+1];
-        return  (p != null && p != edge);
+        return (p != null && p != edge);
     }
 
     /** Board.getPiece(int,int) returns the piece located at (X,Y)
@@ -346,12 +345,12 @@ public class Board{
      *   If (x,y) is not a valid coordinate on board, then the
      *   behavior of this method is undefined (and may likely
      *   crash the program)
-     *   
+     *
      * @param x the x-coordinate of the piece to be returned
      * @param y the y-coordinate of the piece to be returned
-     * 
+     *
      * @returns the piece located at (X,Y) on this board.
-     */ 
+     */
     public Piece getPiece(int x, int y){
         //TODO: bounds checking
         return pieceArray[x+1][y+1];
@@ -367,10 +366,10 @@ public class Board{
      *    -If (X,Y) does not describe a valid location on the board, the
      *     behavior of this program is undefined. It may return a list
      *     of pieces or it may crash the program.
-     *     
+     *
      * @param x the x-coordinate of the piece on the board
      * @param y the y-coordinate of the piece on the board
-     *     
+     *
      * @returns an array of pieces that are 'connected' to the one at (X,Y)
      */
     public Piece[] connectedPieces(int x, int y){
@@ -380,7 +379,6 @@ public class Board{
         int currentX = startX, currentY = startY -1;
         Piece current = pieceArray[currentX][currentY];
         int xInc, yInc;
-
         int[][] increments = {{0,-1}, //above
                               {0, 1}, //below
                               {-1,0}, //left
@@ -410,20 +408,20 @@ public class Board{
     }
 
     /** Board.connectedPieces(Piece) returns a list of all the pieces
-     *   'connected' the piece PIECE. 
+     *   'connected' the piece PIECE.
      *
      *   Unusual conditions:
      *    If PIECE is not on this board then the behavior of this method
      *    is undefined.
-     *     
+     *
      * @param piece the piece on whose connected pieces will be returned
 
      * @returns an array of pieces that are 'connected' to PIECE
-     */    
+     */
     public Piece[] connectedPieces(Piece piece){
         return connectedPieces(piece.x, piece.y);
     }
-    
+
     //returns a piece from goalA
     private Piece getGoalPiece(){
         //TODO:
@@ -466,7 +464,7 @@ public class Board{
      *
      *  @return true if player whose color is 'this.color' has a winning network
      *          on 'this' GameBoard; false otherwise.
-     *          
+     *
      **/
     public boolean hasNetwork(){
         if (((ourBitBoard & ourGoalMaskA) != 0)
@@ -475,7 +473,7 @@ public class Board{
         }
         return false; //does not have at least one piece in each goal
     }
-    
+
     public boolean hasNetwork(int color){
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
@@ -500,7 +498,7 @@ public class Board{
         for (int y = 1; y < 9; y++){
             //cell size is 7 across
 
-            row = "|"; 
+            row = "|";
             for (int x = 1; x < 9; x++){
                 piece = pieceArray[x][y];
                 if (piece == null){
@@ -523,6 +521,65 @@ public class Board{
         }
         return rows;
     }
+    private char[][] blankCharArray(){
+        Piece piece;
+        char[][] rows = new char[33][];
+        String sep = "-----------------------------------------------------------------";
+        rows[0] = sep.toCharArray();
+        int rowNum = 1;
+        String row = "";
+        for (int y = 1; y < 9; y++){
+            //cell size is 7 across
+
+            row = "|";
+            for (int x = 1; x < 9; x++){
+                row += "       |";
+            }
+            for (int _ = 0; _ < 3; _++){
+                rows[rowNum] = row.toCharArray();
+                rowNum ++;
+            }
+            rows[rowNum] = sep.toCharArray();
+            rowNum++;
+        }
+        return rows;
+    }
+
+    public Cell[][] toCellArray(){
+        Piece piece;
+        Cell[][] cells = new Cell[8][8];
+
+        Cell cell;
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+
+                piece = pieceArray[x+1][y+1];
+                cell = new Cell(x, y);
+                cells[x][y] = cell;
+                if (piece == null){
+                    cell.defaultChar = " ";
+                }else if (piece == edge){
+                    cell.defaultChar = ".";
+                }else if (piece.color == black){
+                    cell.defaultChar = "X";
+                }else {
+                    cell.defaultChar = "o";
+                }
+            }
+        }
+        return cells;
+    }
+
+    private String cellArrayToString(Cell[][] cellArray){
+        char[][] charArray = blankCharArray();
+        String ret = "";
+        for (Cell[] row : cellArray){
+            for (Cell c : row){
+                c.write(charArray);
+            }
+        }
+        return charArrayToString(charArray);
+    }
 
     private String charArrayToString(char[][] array){
         String ret = "";
@@ -536,7 +593,9 @@ public class Board{
     }
 
     public String toString(){
-        return charArrayToString(toCharArray());
+        //return charArrayToString(toCharArray());
+        return cellArrayToString(toCellArray());
+
     }
 
     //construct a board from a string representation of it.
