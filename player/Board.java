@@ -104,6 +104,8 @@ public class Board{
 
     //returns the binary representation of the piece at (X, Y)
     private long getBitRep(int x,int y){
+        //NOTE: (x,y) is the ACTUAL position of the piece on the board. Not the 1+ thing
+        assert x >= 0 && y >= 0 && (x*8 + y) < 64 : "invalid index (Board.getBitRep)";
         return bitReps[x*8 + y];
     }
 
@@ -127,7 +129,7 @@ public class Board{
         case Move.ADD :
             toX = move.x1 + 1;
             toY = move.y1 + 1;
-            bitRep = getBitRep(toX,toY);
+            bitRep = getBitRep(toX-1, toY-1);
 
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
@@ -143,9 +145,11 @@ public class Board{
         case Move.STEP :
             int fromX = move.x2 + 1,
                 fromY = move.y2 + 1;
+            
             toX = move.x1 + 1;
             toY = move.y1 + 1;
-            bitRep = getBitRep(toX, toY);
+
+            bitRep = getBitRep(toX-1, toY-1);
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
 
@@ -160,7 +164,7 @@ public class Board{
                 opponentBitBoard &= bitRep;
             }
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
-            pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
+            pieceArray[toX][toY].bitRep = getBitRep(toX-1, toY-1);
             pieceArray[fromX][fromY] = null;
 
             break;
@@ -237,7 +241,7 @@ public class Board{
             ourBitBoard &= pieceArray[toX][toY].bitRep;
 
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
-            pieceArray[toX][toY].bitRep = getBitRep(toX, toY);
+            pieceArray[toX][toY].bitRep = getBitRep(toX-1, toY-1);
             pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :
