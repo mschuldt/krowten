@@ -52,6 +52,11 @@ public class PrintBoard{
     public void mark(int x, int y){
         cells[x][y].mark = true;
     }
+    public void mark(Piece[] pieces){
+        for (Piece p : pieces){
+            mark(p.x, p.y);
+        }
+    }
 
     private void writeLines(char[][] charArray){
         //TODO
