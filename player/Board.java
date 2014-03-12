@@ -573,6 +573,96 @@ public class Board{
 
     }
 
+    public void interactiveDebug(){
+        //TODO:
+        BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
+        List<Move> history = new ArrayList<Move>();
+        String input = "";
+        int color = ourColor;
+        PrintBoard pb;
+        //TODO: history of moves
+        boolean showNumbers = true;
+        boolean loop = true;
+
+        //TODO: ::Q split up a string
+        //      ::Q string to number
+        while (loop){
+            pb = toPrintBoard();
+            try{
+                input = keybd.readLine();
+            }catch (IOException err){
+                System.out.println("Error reading input");
+            }
+            start:
+            switch(input.toLowerCase()){
+
+            case "help": case "h":
+                System.out.println("read the source");
+                break;
+            case "white": case "w":
+                color = white;
+                break;
+            case "black": case "b":
+                color = black;
+                break;
+            case "mark":
+                //mark a piece
+                break;
+            case "us":
+                //highlight our pieces
+                break;
+            case "them":
+                // highlight their pieces
+                break;
+            case "number":
+                //toggle box numberings;
+
+            case "print": case "show": case "display": case "":
+                System.out.println(pb.toString());
+            break;
+            case "add": case "a":
+                //add a piece
+                break;
+            case "move": case "mov": case "m":
+                //move a piece
+                break;
+            case "remove": case "rem": case "r":
+            case "delete": case "del": case "d":
+                //remove a piece
+                break;
+            case "undo": case "u":
+                //undo the last move
+                break;
+            case "connected": case "connect": case "c":
+                //show the pieces connected to another
+                break;
+            case "around": case "surround": case "s":
+                //show the pieces surrounding another
+                break;
+            case "valid": case "v": //valid moves
+                //highlight all the valid squares to move to
+                break;
+            case "invalid": case "illegal": case "i": //invalid moves
+                //highlight all the squares that can't be moved to
+                break;
+            case "network": case "net": case "n":
+                // visually show the detected network
+                break;
+
+            case "refresh": case "reset":
+                pb = toPrintBoard();
+                input = "print";
+                break start;
+            case "exit": case "quit": case "done":
+                loop = false;
+                break;
+            }
+
+        }
+
+        System.out.println("done");
+    }
+    
     public static void main(String[] args){
         Board b = new Board(white,
                             "    x   " +
@@ -585,9 +675,9 @@ public class Board{
                             "        ");
 
         PrintBoard pb = b.toPrintBoard();
-        pb.hideNumbers();
-        pb.markAll();
-        //System.out.println(b.toString());
+        //pb.hideNumbers();
+        //pb.markAll();
+        
         System.out.println(pb.toString());
 
     }
