@@ -488,64 +488,6 @@ public class Board{
     //==========================================================================
     // Verification and testing code ===========================================
 
-    public char[][] toCharArray(){
-        Piece piece;
-        char[][] rows = new char[33][];
-        String sep = "-----------------------------------------------------------------";
-        rows[0] = sep.toCharArray();
-        int rowNum = 1;
-        String row = "";
-        for (int y = 1; y < 9; y++){
-            //cell size is 7 across
-
-            row = "|";
-            for (int x = 1; x < 9; x++){
-                piece = pieceArray[x][y];
-                if (piece == null){
-                    row += "       |";
-                }else if (piece == edge){
-                    row += ".......|";
-
-                }else if (piece.color == black){
-                    row += "XXXXXXX|";
-                }else {
-                    row += "ooooooo|";
-                }
-            }
-            for (int _ = 0; _ < 3; _++){
-                rows[rowNum] = row.toCharArray();
-                rowNum ++;
-            }
-            rows[rowNum] = sep.toCharArray();
-            rowNum++;
-        }
-        return rows;
-    }
-    
-    private char[][] blankCharArray(){
-        Piece piece;
-        char[][] rows = new char[33][];
-        String sep = "-----------------------------------------------------------------";
-        rows[0] = sep.toCharArray();
-        int rowNum = 1;
-        String row = "";
-        for (int y = 1; y < 9; y++){
-            //cell size is 7 across
-
-            row = "|";
-            for (int x = 1; x < 9; x++){
-                row += "       |";
-            }
-            for (int _ = 0; _ < 3; _++){
-                rows[rowNum] = row.toCharArray();
-                rowNum ++;
-            }
-            rows[rowNum] = sep.toCharArray();
-            rowNum++;
-        }
-        return rows;
-    }
-
     public Cell[][] toCellArray(){
         Piece piece;
         Cell[][] cells = new Cell[8][8];
@@ -571,31 +513,13 @@ public class Board{
         return cells;
     }
 
-    private String cellArrayToString(Cell[][] cellArray){
-        char[][] charArray = blankCharArray();
-        String ret = "";
-        for (Cell[] row : cellArray){
-            for (Cell c : row){
-                c.write(charArray);
-            }
-        }
-        return charArrayToString(charArray);
-    }
-
-    private String charArrayToString(char[][] array){
-        String ret = "";
-        for (char[] row : array){
-            for (char c : row){
-                ret += c;
-            }
-            ret += "\n";
-        }
-        return ret;
+    public PrintBoard toPrintBoard(){
+        return new PrintBoard(this);
     }
 
     public String toString(){
         //return charArrayToString(toCharArray());
-        return cellArrayToString(toCellArray());
+        return toPrintBoard().toString();
 
     }
 
@@ -647,20 +571,6 @@ public class Board{
             }
         }
     }
-    private void showIndexing(Cell[][] cArray){
-        for (Cell[] row: cArray){
-            for (Cell cell : row){
-                cell.showIndex = true;
-            }
-        }
-    }
-    private void markAll(Cell[][] cArray){
-        for (Cell[] row: cArray){
-            for (Cell cell : row){
-                cell.mark = true;
-            }
-        }
-    }
 
     public static void main(String[] args){
         Board b = new Board(white,
@@ -673,10 +583,10 @@ public class Board{
                             " x      " +
                             "        ");
 
-        Cell[][] c = b.toCellArray();
-        b.showIndexing(c);
-        b.markAll(c);
+        PrintBoard pb = b.toPrintBoard();
+        pb.hideNumbers();
+        pb.markAll();
         //System.out.println(b.toString());
-        System.out.println(b.cellArrayToString(c));
+        System.out.println(pb.toString());
     }
 }
