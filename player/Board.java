@@ -712,8 +712,10 @@ public class Board{
             switch(command.toLowerCase()){
 
             case "help": case "h":
-                messages.add("read the source");
+                interactiveHelp(messages);
+                //inhibitBoardPrint = true;
                 break;
+
             case "white": case "w":
                 color = white;
                 break;
@@ -827,17 +829,32 @@ public class Board{
                 messages.add("Invalid Command");
             }
 
-            System.out.println("\n\n\n\n\n");
             if (!inhibitBoardPrint){
+                System.out.println("\n\n\n\n\n");
                 System.out.println(pb.toString());
-            }
-            System.out.print("you are color " + colorStr(color).toUpperCase());
-            System.out.println(color == ourColor ? "" : " (your opponent)");
-            while (messages.size() != 0){
-                System.out.println(messages.remove());
+
+                System.out.print("you are color " + colorStr(color).toUpperCase());
+                System.out.println(color == ourColor ? "" : " (your opponent)");
+                while (messages.size() != 0){
+                    System.out.println(messages.remove());
+                }
             }
         }
         System.out.println("done");
+    }
+
+    private void interactiveHelp(Deque<String> messages){
+        String [] lines = {
+            "\n\nAvailable commands -----------------------",
+            "'add' <num>  ",
+            "'move' <from> <to> ",
+            "'undo'",
+            "'black'     run commands as the black player",
+            "'white'     run commands as the white player"};
+
+        for (String line: lines){
+            messages.add(line);
+        }
     }
 
     public static void main(String[] args){
