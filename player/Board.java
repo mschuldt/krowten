@@ -224,7 +224,7 @@ public class Board{
             int x = move.x1 + 1,
                 y = move.y1 + 1;
             //TODO: asserts to check index validity
-            assert pieceArray[x][x] != null : "square should not be empty";
+            assert pieceArray[x][y] != null : "square should not be empty";
             ourBitBoard ^= pieceArray[x][y].bitRep;
             pieceArray[x][y] = null;
             break;
@@ -233,15 +233,16 @@ public class Board{
                 toY = move.y2 + 1,
                 fromX = move.x1 + 1,
                 fromY = move.y1 + 1;
+            long toBitRep = getBitRep(toX-1, toY-1);
 
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
 
             ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-            ourBitBoard &= pieceArray[toX][toY].bitRep;
+            ourBitBoard &= toBitRep;
 
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
-            pieceArray[toX][toY].bitRep = getBitRep(toX-1, toY-1);
+            pieceArray[toX][toY].bitRep = toBitRep;
             pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :
