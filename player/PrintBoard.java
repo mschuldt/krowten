@@ -69,27 +69,62 @@ public class PrintBoard{
         return ret;
     }
 
-    private char[][] blankCharArray(){
-        Piece piece;
-        char[][] rows = new char[33][];
-        String sep = "-----------------------------------------------------------------";
-        rows[0] = sep.toCharArray();
-        int rowNum = 1;
-        String row = "";
-        for (int y = 1; y < 9; y++){
-            //cell size is 7 across
+    // private char[][] blankCharArray(){
+    //     Piece piece;
+    //     char[][] rows = new char[33][];
+    //     String sep = "-----------------------------------------------------------------";
+    //     String bars = "|       |       |       |       |       |       |       |       |";
+    //     rows[0] = sep.toCharArray();
+    //     int rowNum = 1;
+    //     String row = "";
+    //     for (int y = 1; y < 9; y++){
+    //         //cell size is 7 across
+    //         for (int _ = 0; _ < 3; _++){
+    //             rows[rowNum] = bars.toCharArray();
+    //             rowNum ++;
+    //         }
+    //         rows[rowNum] = sep.toCharArray();
+    //         rowNum++;
+    //     }
+    //     return rows;
+    // }
 
-            row = "|";
-            for (int x = 1; x < 9; x++){
-                row += "       |";
-            }
-            for (int _ = 0; _ < 3; _++){
-                rows[rowNum] = row.toCharArray();
-                rowNum ++;
-            }
-            rows[rowNum] = sep.toCharArray();
-            rowNum++;
-        }
-        return rows;
+    public char[][] blankCharArray(){
+        char[][] board = {  // Oh, glorious Emacs keyboard macros!
+            "        -------------------------------------------------        ".toCharArray(),
+            "        |       |       |       |       |       |       |        ".toCharArray(),
+            "        |       |       |       |       |       |       |        ".toCharArray(),
+            "        |       |       |       |       |       |       |        ".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "|       |       |       |       |       |       |       |       |".toCharArray(),
+            "-----------------------------------------------------------------".toCharArray(),
+            "        |       |       |       |       |       |       |        ".toCharArray(),
+            "        |       |       |       |       |       |       |        ".toCharArray(),
+            "        |       |       |       |       |       |       |        ".toCharArray(),
+            "        -------------------------------------------------        ".toCharArray()};
+        return board;
     }
 }
+
