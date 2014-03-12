@@ -8,7 +8,7 @@ public class Cell{
     String row1, row2, row3;
     String defaultChar = " ";
     boolean mark = false, showIndex = false;
-    String markChar = "~";
+    String markChar = "+";
     String emptyMarkChar = "$";
     boolean isEdge = false;
 
