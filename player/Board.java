@@ -320,6 +320,7 @@ public class Board{
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
         long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
+
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
             return hasNetwork(getGoalPiece(), color, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
         }
@@ -363,15 +364,19 @@ public class Board{
         return rows;
     }
 
-    public String toString(){
+    private String charArrayToString(char[][] array){
         String ret = "";
-        for (char[] row : toCharArray()){
+        for (char[] row : array){
             for (char c : row){
                 ret += c;
             }
             ret += "\n";
         }
         return ret;
+    }
+
+    public String toString(){
+        return charArrayToString(toCharArray());
     }
 
     //construct a board from a string representation of it.
@@ -422,6 +427,7 @@ public class Board{
             }
         }
     }
+
     public static void main(String[] args){
         Board b = new Board(white,
                             "    x   " +
