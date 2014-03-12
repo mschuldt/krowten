@@ -521,6 +521,7 @@ public class Board{
         }
         return rows;
     }
+    
     private char[][] blankCharArray(){
         Piece piece;
         char[][] rows = new char[33][];
@@ -646,6 +647,20 @@ public class Board{
             }
         }
     }
+    private void showIndexing(Cell[][] cArray){
+        for (Cell[] row: cArray){
+            for (Cell cell : row){
+                cell.showIndex = true;
+            }
+        }
+    }
+    private void markAll(Cell[][] cArray){
+        for (Cell[] row: cArray){
+            for (Cell cell : row){
+                cell.mark = true;
+            }
+        }
+    }
 
     public static void main(String[] args){
         Board b = new Board(white,
@@ -658,6 +673,10 @@ public class Board{
                             " x      " +
                             "        ");
 
-        System.out.println(b.toString());
+        Cell[][] c = b.toCellArray();
+        b.showIndexing(c);
+        b.markAll(c);
+        //System.out.println(b.toString());
+        System.out.println(b.cellArrayToString(c));
     }
 }
