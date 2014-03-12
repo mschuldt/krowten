@@ -5,3 +5,4 @@ player/Move.class
 player/Player.class
 player/MachinePlayer.class
 player/Cell.class
+player/PrintBoard.class
