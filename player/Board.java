@@ -4,6 +4,10 @@ package player;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
+
 import java.io.*;
 
 public class Board{
@@ -145,7 +149,7 @@ public class Board{
         case Move.STEP :
             int fromX = move.x2 + 1,
                 fromY = move.y2 + 1;
-            
+
             toX = move.x1 + 1;
             toY = move.y1 + 1;
 
@@ -561,7 +565,7 @@ public class Board{
                 }else if (piece.color == black){
                     cell.defaultChar = "X";
                 }else {
-                    cell.defaultChar = "o";
+                    cell.defaultChar = "-";
                 }
             }
         }
@@ -578,31 +582,137 @@ public class Board{
 
     }
 
+    //check if N is a valid number for referencing squares
+    private boolean isValidSquareRef(String n, boolean printMessages){
+        int i,x,y;
+
+        try{
+            i = Integer.parseInt(n);
+        }catch(NumberFormatException err){
+            if (printMessages){
+                System.out.println("Invalid number: '"+ n +"'");
+            }
+            return false;
+        }
+        x = i / 10;
+        y = i % 10;
+        if (i < 0 || i > 76 || x > 7 || y > 7
+            || (x == 0 && y == 0)
+            || (x == 7 && y == 0)
+            || (x == 0 && y == 7)
+            || (x == 7 && y == 7)){
+            if (printMessages){
+                System.out.println("Invalid Index: ("+ x +"," +y+")");
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidSquareRef(String n){
+        return isValidSquareRef(n, true);
+    }
+
+    private int[] unpackIndexes(String n){
+        if (! isValidSquareRef(n)){
+            System.out.println("Error - Board.unpackIndexes: Invalid number");
+        }
+        int[] ret = new int[2];
+        int i = Integer.parseInt(n);
+        ret[0] = i / 10;
+        ret[1] = i % 10;
+        return ret;
+    }
+
+    private String colorStr(int color){
+        switch (color){
+        case 0: return "black";
+        case 1: return "white";
+        default: return "rainbow";
+        }
+    }
+
     public void interactiveDebug(){
         //TODO:
         BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
-        List<Move> history = new ArrayList<Move>();
+        Stack<Move> history = new Stack<Move>();
         String input = "";
+        String[] splitInput = null;
+        int nArgs = 0;
+        String command = "";
         int color = ourColor;
-        PrintBoard pb;
-        //TODO: history of moves
+        PrintBoard pb = toPrintBoard();
+
         boolean showNumbers = true;
         boolean loop = true;
+        //set to true when the single arg is a valid index
+        boolean arg1isRef = false,
+            arg2isRef = false;
+        int[] tmp = null;
+        int argX1 = 0, argY1 = 0,
+            argX2 = 0, argY2 = 0;
+        String arg1 = "", arg2 = "";
+        boolean inhibitBoardPrint = false;
+        boolean fakeInput = false;
+        Move m = null;
+        //keeping track of messages this way is allows us to print the board before the
+        //messages
+        Deque<String> messages = new ArrayDeque<String>();
 
         //TODO: ::Q split up a string
         //      ::Q string to number
+
+        System.out.println(pb.toString());
+        System.out.print("you are color " + colorStr(color).toUpperCase());
+        System.out.print(color == ourColor ? "" : " (your opponent)");
+        System.out.println(". (Use commands 'white' & 'black' to switch)");
         while (loop){
             pb = toPrintBoard();
-            try{
-                input = keybd.readLine();
-            }catch (IOException err){
-                System.out.println("Error reading input");
+
+            System.out.print(">>> ");
+
+            if (!fakeInput){
+                try{
+                    input = keybd.readLine();
+                }catch (IOException err){
+                    System.out.println("Error reading input");
+                }
+                if (input.equals("")){
+                    System.out.println(pb.toString());
+                    continue;
+                }
             }
-            start:
-            switch(input.toLowerCase()){
+            fakeInput = false;
+            inhibitBoardPrint = false;
+            splitInput = input.split("[ ]+");
+            nArgs = splitInput.length -1;
+            command = splitInput[0];
+            arg1isRef = false;
+            arg2isRef = false;
+            arg1 = arg2 = "<none>";
+            if (nArgs >= 1){
+                if (isValidSquareRef(splitInput[1], false)){
+                    arg1isRef = true;
+                    tmp = unpackIndexes(splitInput[1]);
+                    argX1 = tmp[0];
+                    argY1 = tmp[1];
+                }
+                arg1 = splitInput[1];
+            }
+            if (nArgs >= 2){
+                if (isValidSquareRef(splitInput[2], false)){
+                    arg2isRef = true;
+                    tmp = unpackIndexes(splitInput[2]);
+                    argX2 = tmp[0];
+                    argY2 = tmp[1];
+                }
+                arg2 = splitInput[2];
+            }
+
+            switch(command.toLowerCase()){
 
             case "help": case "h":
-                System.out.println("read the source");
+                messages.add("read the source");
                 break;
             case "white": case "w":
                 color = white;
@@ -611,63 +721,125 @@ public class Board{
                 color = black;
                 break;
             case "mark":
-                //mark a piece
-                break;
+                if (arg1isRef){
+                    pb.mark(argX1, argY1);
+                } break;
             case "us":
                 //highlight our pieces
                 break;
             case "them":
                 // highlight their pieces
                 break;
-            case "number":
+            case "shownums":
                 //toggle box numberings;
+                pb.showNumbers();
+                break;
 
-            case "print": case "show": case "display": case "":
-                System.out.println(pb.toString());
-            break;
-            case "add": case "a":
-                //add a piece
+            case "add": case "a": //ok
+                //g&t 9.24
+                if (arg1isRef){
+                    m = new Move(argX1, argY1);
+                    input = "_applyMove";
+                    fakeInput = true;
+                }else{
+                    messages.add("Invalid arg: " + arg1);
+                }
                 break;
-            case "move": case "mov": case "m":
-                //move a piece
+
+            case "move": case "mov": case "mv": case "m": //ok
+                //move <from> <to>
+                if (arg1isRef && arg2isRef){
+                    m = new Move(argX2, argY2, argX1, argY1);
+                    input = "_applyMove";
+                    fakeInput = true;
+                }else{
+                    messages.add("Invalid arg(s): " + arg1 + "," + arg2);
+                }
                 break;
+
+                //from lecture: transposition tables
             case "remove": case "rem": case "r":
             case "delete": case "del": case "d":
-                //remove a piece
+                messages.add("Not Implemented");
                 break;
-            case "undo": case "u":
-                //undo the last move
+
+            case "_applymove": //ok
+                System.out.println("applying move...");
+                if (m != null){
+                    if (color == ourColor){
+                        move(m);
+                        history.push(m);
+                    }else {
+                        opponentMove(m);
+                    }
+                    pb = toPrintBoard(); //update board
+                    messages.add("Made move: " + m.toString());
+                }else{
+                    System.out.println("Error: invalid move");
+                }
                 break;
+
+            case "undo": case "u": //ok
+                if (color != ourColor){
+                    messages.add("Cannot undo opponents moves");
+                    break;
+                }
+                if (history.empty()){
+                    messages.add("No history to undo");
+                    break;
+                }
+                Move mv = history.pop();
+                unMove(mv);
+                pb = toPrintBoard(); //update board
+                messages.add("Undid move: " + mv);
+                break;
+
             case "connected": case "connect": case "c":
-                //show the pieces connected to another
+                if (arg1isRef){
+                    pb.mark(connectedPieces(argX1, argY1));
+                }
                 break;
-            case "around": case "surround": case "s":
-                //show the pieces surrounding another
+
+            case "adjacent": case "around": case "surround": case "s":
+                if (arg1isRef){
+                    pb.mark(adjacentPieces(argX1, argY1));
+                }
                 break;
+
+                //idea: use transposition table from last move to help order the moves
             case "valid": case "v": //valid moves
-                //highlight all the valid squares to move to
+                messages.add("Not Implemented");
                 break;
             case "invalid": case "illegal": case "i": //invalid moves
-                //highlight all the squares that can't be moved to
+                messages.add("Not Implemented");
                 break;
             case "network": case "net": case "n":
                 // visually show the detected network
+                messages.add("Not Implemented");
                 break;
-
-            case "refresh": case "reset":
-                pb = toPrintBoard();
-                input = "print";
-                break start;
+            case "network?": case "net?": case "n?":
+                System.out.println((hasNetwork(color) ? "YES": "NO"));
+                break;
             case "exit": case "quit": case "done":
                 loop = false;
                 break;
+            default:
+                messages.add("Invalid Command");
             }
 
+            System.out.println("\n\n\n\n\n");
+            if (!inhibitBoardPrint){
+                System.out.println(pb.toString());
+            }
+            System.out.print("you are color " + colorStr(color).toUpperCase());
+            System.out.println(color == ourColor ? "" : " (your opponent)");
+            while (messages.size() != 0){
+                System.out.println(messages.remove());
+            }
         }
-
         System.out.println("done");
     }
-    
+
     public static void main(String[] args){
         Board b = new Board(white,
                             "    x   " +
@@ -682,8 +854,24 @@ public class Board{
         PrintBoard pb = b.toPrintBoard();
         //pb.hideNumbers();
         //pb.markAll();
-        
-        System.out.println(pb.toString());
 
+        //System.out.println(pb.toString());
+        b.interactiveDebug();
+
+        // String[] invalidNums = {"df", "99", "-12","00", "07","7","77", "100"};
+        // String[] validNums = {"23", "34", "04", "1","01", "066", "001"};
+
+        // System.out.println("Invalid nums:");
+        // for (String s :invalidNums){
+        //     System.out.print(s);
+        //     System.out.println(b.isValidSquareRef(s) ? "   yes" : "   no");
+        // }
+        // System.out.println("valid nums:");
+        // for (String s :validNums){
+        //     System.out.print(s);
+        //     System.out.println(b.isValidSquareRef(s) ? "   yes" : "   no");
+        // }
     }
+
 }
+
