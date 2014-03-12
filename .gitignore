@@ -4,3 +4,4 @@ player/Board.class
 player/Move.class
 player/Player.class
 player/MachinePlayer.class
+player/Cell.class
