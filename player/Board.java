@@ -668,6 +668,7 @@ public class Board{
         String arg1 = "", arg2 = "";
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
+        boolean showBitBoards = false;
         Move m = null;
         //keeping track of messages this way is allows us to print the board before the
         //messages
@@ -749,6 +750,16 @@ public class Board{
             case "shownums":
                 //toggle box numberings;
                 pb.showNumbers();
+                break;
+                
+            case "showbitboards": case "showbb": //ok
+                showBitBoards = true;
+                messages.add("Displaying bit boards");
+                break;
+                
+            case "hidebitboards": case "hidebb": //ok
+                showBitBoards = false;
+                messages.add("Hiding bit boards");
                 break;
 
             case "add": case "a": //ok
@@ -845,7 +856,12 @@ public class Board{
 
             if (!inhibitBoardPrint){
                 System.out.println("\n\n\n\n\n");
-                System.out.println(pb.toString());
+                if (showBitBoards){
+                    System.out.println(pb.toString(bitBoardToString(ourBitBoard),
+                                                   bitBoardToString(opponentBitBoard)));
+                }else{
+                    System.out.println(pb.toString());
+                }
 
                 System.out.print("you are color " + colorStr(color).toUpperCase());
                 System.out.println(color == ourColor ? "" : " (your opponent)");
@@ -859,17 +875,20 @@ public class Board{
 
     private void interactiveHelp(Deque<String> messages){
         String [] lines = {
-            "\n\nAvailable commands -----------------------",
+            "\nAvailable commands -----------------------",
             "'add' <num>  ",
             "'move' <from> <to> ",
             "'undo'",
             "'black'     run commands as the black player",
-            "'white'     run commands as the white player"};
+            "'white'     run commands as the white player",
+            "'hidebb'    hide the bitboards",
+            "'showbb'    display the bitboards"};
 
         for (String line: lines){
             messages.add(line);
         }
     }
+    
     private boolean miscTests(){
         boolean pass = true;
         //tests for isValidSquareRef ===================================

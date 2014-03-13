@@ -21,8 +21,8 @@ public class PrintBoard{
         }
         lines.add(new int[] {x1, y1, x2, y2});
     }
-    
-    public String toString(){
+
+    private char[][] toCharArray(){
         char[][] charArray = blankCharArray();
         String ret = "";
         for (Cell[] row : cells){
@@ -32,7 +32,15 @@ public class PrintBoard{
             }
         }
         writeLines(charArray);
-        return charArrayToString(charArray);
+        return charArray;
+    }
+    
+    public String toString(){
+        return charArrayToString(toCharArray());
+    }
+    
+    public String toString(String ourBB, String oppBB){
+        return charArrayToString(toCharArray(),ourBB, oppBB);
     }
     
     public void showNumbers(){
@@ -68,6 +76,31 @@ public class PrintBoard{
         for (char[] row : array){
             for (char c : row){
                 ret += c;
+            }
+            ret += "\n";
+        }
+        return ret;
+    }
+    private String charArrayToString(char[][] array,String ourBB, String opponentBB){
+        String ret = "";
+        int count = 0;
+        int nrows = array.length;
+
+        String[] ourRows = ourBB.split("\n");
+        String[] oppRows = opponentBB.split("\n");
+        
+        for (char[] row : array){
+            for (char c : row){
+                ret += c;
+            }
+            count++;
+            ret += (count == 11 ? " ours" : "");
+            ret += (count == 22 ? " Opponents" : "");
+            if (count > 11 && count < 20){
+                ret += " " + ourRows[count-12];
+            }
+            if (count > 22 && count < 31){
+                ret += " " + oppRows[count-23];
             }
             ret += "\n";
         }
