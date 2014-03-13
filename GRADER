@@ -62,3 +62,230 @@ You will probably need to change some of your design decisions as you go; be
 sure to modify this file to reflect these changes before you submit your
 project.  Your design of classes and interfaces will be worth 10% of your
 grade.
+
+
+
+/** Board.Board(int) constructs a new board for player with color COLOR
+*  The board is initially empty
+*
+*  COLOR must be white or black (1 or 0)
+*
+*  @param color an integer representing the color of the player
+*         who 'owns' this board. 1 for white and 0 for black.
+*/
+public Board(int color)
+
+
+
+/** Board.move() moves a piece on the board as described
+*  by MOVE. The piece moved belongs to the owner of this board,
+*  that is, the player whose color is Board.color
+*
+*  Unusual conditions:
+*    * If MOVE is not an illegal move, the behavior of this method
+*      is not defined.
+*
+* @param move describes the type of move to make
+*/
+public void move(Move move)
+
+
+
+/** Board.opponentMove() moves a piece on the board as described
+*  by MOVE. The piece moved belongs to the opponent of the owner
+*  of this board, that is, the player whose color is Board.opponentColor
+*
+*  Unusual conditions:
+*    * If MOVE is not an illegal move, the behavior of this method
+*      is not defined.
+*
+* @param move describes the type of move to make
+*/
+public void opponentMove(Move move)
+
+
+
+/** Board.unMove(Move) reverses the effects of the move MOVE.
+*  MOVE must have been a move for the pieces of the player
+*  who owns this board, that is, the player whose color
+*  was passed to the initializer.
+*
+*  Unusual conditions:
+*  The behaviour of this method is not defined for the case
+*  in which MOVE is invalid or is intended for the opponent.
+*
+*  @param move the move to reverse.
+*/
+void unMove(Move move)
+
+
+
+/** Board.adjacentPieces(int,int) returns an array of pieces
+* that are adjacent to the pieces at coordinates (X,Y) on
+* the board.
+*
+* The x,y coordinates are indexed from the top left with x
+* increasing to the right and y increasing down.
+*
+*  If there is no piece at (x,y) but (x,y) is still a valid
+*  board location, then this method works as expected.
+*
+* Unusual conditions:
+*  if (x,y) is not a valid location on the board, then this
+*  method will likely cause the program to crash.
+*  The behavior in this case is undefined (but the corner
+*  pieces are ok).
+*
+*  @param x the x-coordinate location of the square
+*  @param y the y-coordinate location of the square
+*
+*  @returns an array of pieces adjacent to location (x,y) on the board
+*/
+public Piece[] adjacentPieces(int x, int y)
+
+
+
+/** Board.adjacentPieces(Piece) returns an array of pieces
+* that are adjacent to PIECE on the board
+*
+* Unusual conditions:
+*  The behavior of this method is undefined if piece is not
+*  actually on the board.
+*
+*  @param piece a piece on the board whose adjacent pieces will be returned
+*
+*  @returns an array of pieces adjacent to PIECE on the board
+*/
+public Piece[] adjacentPieces(Piece piece)
+
+
+
+/** Board.pieceAt(int,int) returns true if a piece is located
+* at square (X,Y) on this board, else false.
+*
+*  if (x,y) is not a valid coordinate on this board, return false
+*
+* @param x the x-coordinate of the square to check
+* @param y the y-coordinate of the square to check
+*
+* @returns boolean; true if a piece is located at (X,Y), elsefalse
+*/
+public boolean pieceAt(int x, int y)
+
+
+
+/** Board.getPiece(int,int) returns the piece located at (X,Y)
+*  on this board.
+*
+*  Unusual conditions:
+*   If (x,y) is not a valid coordinate on board, then the
+*   behavior of this method is undefined (and may likely
+*   crash the program)
+*
+* @param x the x-coordinate of the piece to be returned
+* @param y the y-coordinate of the piece to be returned
+*
+* @returns the piece located at (X,Y) on this board.
+*/
+public Piece getPiece(int x, int y)
+
+
+
+/** Board.connectedPieces(int, int) returns a list of all the pieces
+*   'connected' the the piece located at square (X,Y) on this board.
+*   The exact rules for connectedness are as defined in this projects
+*   readme file.
+*
+*   If there is no piece at (X,Y) return null
+*
+*   Unusual conditions:
+*    -If (X,Y) does not describe a valid location on the board, the
+*     behavior of this program is undefined. It may return a list
+*     of pieces or it may crash the program.
+*
+* @param x the x-coordinate of the piece on the board
+* @param y the y-coordinate of the piece on the board
+*
+* @returns an array of pieces that are 'connected' to the one at (X,Y)
+*/
+public Piece[] connectedPieces(int x, int y)
+
+
+
+/** Board.connectedPieces(Piece) returns a list of all the pieces
+*   'connected' the piece PIECE.
+*
+*   Unusual conditions:
+*    If PIECE is not on this board then the behavior of this method
+*    is undefined.
+*
+* @param piece the piece on whose connected pieces will be returned
+
+* @returns an array of pieces that are 'connected' to PIECE
+*/
+public Piece[] connectedPieces(Piece piece){
+
+
+
+/**
+*  Board.hasNetwork() determines whether "this" Board has a valid
+*  network for player whose color is Board.color.
+*
+*  Unusual conditions:
+*  If the board contain illegal squares, the behavior of this
+*        method is undefined.
+*
+*  @return true if player whose color is 'this.color' has a winning network
+*          on 'this' GameBoard; false otherwise.
+**/
+public boolean hasNetwork()
+
+
+
+/*
+* of all valid Moves, preform a minimax tree search and return the Move
+* which gives the Player the highest chance of winning.
+*/
+  public Move chooseMove();
+
+
+/*
+* for current Board B, returns an array of all valid Moves available to Player P.
+*/
+  Move[] validMoves(Board B, Player P);
+
+
+/*
+* returns true if and only if Player P can legally make Move M on Board B, meaning
+* 1) P is placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+* 2) the location where the piece will be placed is a valid and legal location on the board 
+* (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+* and is not currently occupied by any piece including itself.
+* 3) there will not be any clusters >= 3 on the board after making the Move.
+*/
+  boolean isValidMove(Board B, Move M, Player P);
+
+
+/*
+* returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
+*/
+  boolean formsIllegalCluster(Board B, Move M, Player P);
+
+
+/*
+* evaluates Player P's pieces the current board and returns an estimated score based 
+*on current networks and goals, a higher score denoting a larger chance of winning the game.
+*/
+  int scoreBoard(Board B, Player P);
+
+
+/*
+* makes Move m on this board for the opponent's piece, and returns true if successful.
+*/
+  public boolean opponentMove(Move m);
+
+
+/*
+* makes Move m on this board and returns true if successful.
+*/
+  public boolean forceMove(Move m);
