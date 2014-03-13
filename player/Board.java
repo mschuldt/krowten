@@ -110,10 +110,9 @@ public class Board{
     private long getBitRep(int x,int y){
         //NOTE: (x,y) is the ACTUAL position of the piece on the board. Not the 1+ thing
         assert x >= 0 && y >= 0 && (x*8 + y) < 64 : "invalid index (Board.getBitRep)";
-        return bitReps[x*8 + y];
+        return bitReps[y*8 + x];
     }
 
-    //This assumes that MOVE is valid
 
     /** Board.move(Move,int) moves a piece on the board as described
      *  by MOVE. COLOR is the color of the piece to be moved.
@@ -288,7 +287,7 @@ public class Board{
      *  board location, then this method works as expected.
      *
      * Unusual conditions:
-     *  if (x,y) is not a valid location on the, then this
+     *  if (x,y) is not a valid location on the board, then this
      *  method will likely cause the program to crash.
      *  The behavior in this case is undefined (but the corner
      *  pieces are ok).
@@ -297,7 +296,6 @@ public class Board{
      *  @param y the y-coordinate location of the square
      *
      *  @returns an array of pieces adjacent to location (x,y) on the board
-     *
      */
     public Piece[] adjacentPieces(int x, int y){
         x++; y++;
@@ -473,7 +471,6 @@ public class Board{
      *
      *  @return true if player whose color is 'this.color' has a winning network
      *          on 'this' GameBoard; false otherwise.
-     *
      **/
     public boolean hasNetwork(){
         if (((ourBitBoard & ourGoalMaskA) != 0)
@@ -498,6 +495,13 @@ public class Board{
     // Verification and testing code ===========================================
     //==========================================================================
 
+    //verify that all internal state is valid
+    public boolean verify(){
+        //check that the bitboards and pieceArray are synced
+        
+
+        return false;
+    }
     //construct a board from a string representation of it.
     //'x' for black pieces, 'o' for white piece (case does not matter).
     //example:
@@ -581,12 +585,13 @@ public class Board{
         return toPrintBoard().toString();
 
     }
-
     //convert a bitboard/mask to a string representation
     private String bitBoardToString(long bitBoard){
         char[][] chars = new char[8][8];
         
         String str = "";
+        //have to iterate throught each row first because of the way
+        // the `bitReps' array is indexed in `getBitRep()'
         for (int y = 0; y<8; y++){
             for (int x = 0; x <8; x++){
                 str += ((getBitRep(x,y) & bitBoard) != 0) ? "X" : "_";
@@ -681,9 +686,9 @@ public class Board{
         System.out.print("you are color " + colorStr(color).toUpperCase());
         System.out.print(color == ourColor ? "" : " (your opponent)");
         System.out.println(". (Use commands 'white' & 'black' to switch)");
+        System.out.println("Use command 'help' to print options");
         while (loop){
             pb = toPrintBoard();
-
             System.out.print(">>> ");
 
             if (!fakeInput){
@@ -693,8 +698,7 @@ public class Board{
                     System.out.println("Error reading input");
                 }
                 if (input.equals("")){
-                    System.out.println(pb.toString());
-                    continue;
+                    input = "print";
                 }
             }
             fakeInput = false;
@@ -747,9 +751,16 @@ public class Board{
             case "them":
                 // highlight their pieces
                 break;
-            case "shownums":
+            case "shownumbers": case "shownums": case "shown":
                 //toggle box numberings;
                 pb.showNumbers();
+                showNumbers = true;
+                messages.add("Showing numbers");
+                break;
+            case "hidenumbers": case "hidenums": case "hiden":
+                pb.hideNumbers();
+                showNumbers = false;
+                messages.add("Hiding numbers");
                 break;
                 
             case "showbitboards": case "showbb": //ok
@@ -847,15 +858,21 @@ public class Board{
             case "network?": case "net?": case "n?":
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
                 break;
+            case "print":
+                break;                
             case "exit": case "quit": case "done":
                 loop = false;
                 break;
+
             default:
                 messages.add("Invalid Command");
             }
 
             if (!inhibitBoardPrint){
                 System.out.println("\n\n\n\n\n");
+                if (!showNumbers){
+                    pb.hideNumbers();
+                }
                 if (showBitBoards){
                     System.out.println(pb.toString(bitBoardToString(ourBitBoard),
                                                    bitBoardToString(opponentBitBoard)));
@@ -876,13 +893,16 @@ public class Board{
     private void interactiveHelp(Deque<String> messages){
         String [] lines = {
             "\nAvailable commands -----------------------",
+            "(Case does not matter)",
             "'add' <num>  ",
             "'move' <from> <to> ",
-            "'undo'",
+            "'undo'      undo the last move",
             "'black'     run commands as the black player",
             "'white'     run commands as the white player",
-            "'hidebb'    hide the bitboards",
-            "'showbb'    display the bitboards"};
+            "'hideBB'    hide the bitboards",
+            "'showBB'    display the bitboards",
+            "'hideNums'  hide square numbers",
+            "'showNums'  display the square numbers"};
 
         for (String line: lines){
             messages.add(line);
@@ -913,21 +933,23 @@ public class Board{
         }
         return pass;
     }
+    
 
     public static void main(String[] args){
         Board b = new Board(white,
-                            "    x   " +
-                            "      o " +
-                            " xx  o  " +
+                            " oo   x " +
+                            "      x " +
                             "        " +
-                            " o   x  " +
-                            " x      " +
-                            " x      " +
-                            "        ");
+                            "x      o" +
+                            "        " +
+                            "        " +
+                            " o      " +
+                            " o   xx ");
 
         PrintBoard pb = b.toPrintBoard();
 
-        //System.out.println(pb.toString());
+        System.out.println(pb.toString());
+        //b.test();
         b.interactiveDebug();
     }
 }
