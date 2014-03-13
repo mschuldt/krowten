@@ -66,9 +66,89 @@ public class PrintBoard{
         }
     }
 
+    private int toCharXIndex(int x){
+        return 4+8*x;
+    }
+    private int toCharYIndex(int y){
+        return 2+4*y;
+    }
+    //board char array is 64x33
+    private boolean isValidCharIndex(int x,int y){
+        boolean is = x>=0 && y>= 0 && x < 64 && y < 33;
+        if (is){
+            return true;
+        }
+        System.out.println("Invalid Char Index");
+        return false;
+    }
+    
     private void writeLines(char[][] charArray){
-        //TODO
-        return;
+        int n = lines.size();
+        int[] line;
+        int yInc = 0,xInc=0,startX=0, startY=0, endX=0, endY=0,tmp=0;
+        boolean vert,horiz;
+        double y;
+        double m;
+        for (int i = 0; i < n; i++){
+            line = lines.get(i);
+            startX = toCharXIndex(line[0]);
+            startY = toCharYIndex(line[1]);
+            endX = toCharXIndex(line[2]);
+            endY = toCharYIndex(line[3]);
+            
+            //TODO: 'line 23 55' fails
+            
+            if ((startY > endY) || (startX > endX)){ //shitty bug fix
+                tmp = startY;
+                startY = endY;
+                endY = tmp;
+                tmp = startX;
+                startX = endX;
+                endX = tmp;
+
+            }
+            // System.out.println("startX = "+startX);
+            // System.out.println("startY = "+startY);
+            // System.out.println("endX = "+endX);
+            // System.out.println("endY = "+endY);
+
+            horiz = startY == endY;
+            vert = startX == endX;
+            yInc = (startY > endY ? -1 : 1);
+            if (vert){
+                //                System.out.println("yInc= " + yInc);
+                while (startY != endY){
+                    charArray[startY][startX] = '*';
+                    startY += yInc;
+                }
+                charArray[startY][startX] = '*';
+                continue;
+            }
+            xInc = (startX > endX ? -1 : 1);
+            //            System.out.println("xInc= " + xInc);
+            if (horiz){
+                while (startX != endX){
+                    charArray[startY][startX] = '*';
+                    startX += xInc;
+                }
+                charArray[startY][startX] = '*';
+                continue;
+            }
+            
+            m = (endY - startY)/((double)(endX - startX));
+            y = startY;
+            //            System.out.println("m = "+m);
+            //doing: 
+            while (startX != endX && y != endY
+                   && isValidCharIndex(startX, (int)y)){
+                // System.out.print("("+ startX +", " + (int)y + ")") ;
+                charArray[(int)Math.ceil(y)][startX] = '*';
+                startX += xInc;
+                y += m;
+            }
+            //charArray[(int)Math.ceil(y)][startX] = '*';
+            
+        }
     }
     
     private String charArrayToString(char[][] array){
@@ -165,4 +245,3 @@ public class PrintBoard{
         return board;
     }
 }
-

@@ -841,6 +841,15 @@ public class Board{
                     pb.mark(adjacentPieces(argX1, argY1));
                 }
                 break;
+                
+            case "line": //line <from> <to>
+                if (arg1isRef && arg2isRef){
+                    pb.drawLine(argX1, argY1, argX2, argY2);
+                    messages.add("Added new line: ("+ argX1+","+ argY1+") -> ("+ argX2 +","+ argY2+")");
+                }else{
+                    messages.add("Invalid arg(s): " + arg1 + "," + arg2);
+                }
+                break;
 
                 //idea: use transposition table from last move to help order the moves
             case "valid": case "v": //valid moves
