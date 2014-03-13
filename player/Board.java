@@ -856,6 +856,30 @@ public class Board{
             messages.add(line);
         }
     }
+    private boolean miscTests(){
+        boolean pass = true;
+        //tests for isValidSquareRef ===================================
+        String[] invalidNums = {"df", "99", "-12","00", "07","7","77", "100"};
+        String[] validNums = {"23", "34", "04", "1","01", "066", "001"};
+        System.out.println("Invalid nums:");
+        
+        for (String s :invalidNums){
+            System.out.print(s);
+            if (isValidSquareRef(s)){
+                System.out.println("Error: isValidSquareRef(" + s + ") should be false");
+                pass = false;
+            }
+        }
+        System.out.println("valid nums:");
+        for (String s :validNums){
+            if (! isValidSquareRef(s)){
+                System.out.println("Error: isValidSquareRef(" + s + ") should be true");
+                pass = false;
+            }
+            
+        }
+        return pass;
+    }
 
     public static void main(String[] args){
         Board b = new Board(white,
@@ -869,26 +893,9 @@ public class Board{
                             "        ");
 
         PrintBoard pb = b.toPrintBoard();
-        //pb.hideNumbers();
-        //pb.markAll();
 
         //System.out.println(pb.toString());
         b.interactiveDebug();
-
-        // String[] invalidNums = {"df", "99", "-12","00", "07","7","77", "100"};
-        // String[] validNums = {"23", "34", "04", "1","01", "066", "001"};
-
-        // System.out.println("Invalid nums:");
-        // for (String s :invalidNums){
-        //     System.out.print(s);
-        //     System.out.println(b.isValidSquareRef(s) ? "   yes" : "   no");
-        // }
-        // System.out.println("valid nums:");
-        // for (String s :validNums){
-        //     System.out.print(s);
-        //     System.out.println(b.isValidSquareRef(s) ? "   yes" : "   no");
-        // }
     }
-
 }
 
