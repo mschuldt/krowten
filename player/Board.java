@@ -422,7 +422,7 @@ public class Board{
                 pieces.add(current);
             }
         }
-        return pieces.toArray();
+        return (Piece[])pieces.toArray();
     }
 
     /** Board.connectedPieces(Piece) returns a list of all the pieces
