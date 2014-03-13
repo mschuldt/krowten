@@ -582,6 +582,20 @@ public class Board{
 
     }
 
+    //convert a bitboard/mask to a string representation
+    private String bitBoardToString(long bitBoard){
+        char[][] chars = new char[8][8];
+        
+        String str = "";
+        for (int y = 0; y<8; y++){
+            for (int x = 0; x <8; x++){
+                str += ((getBitRep(x,y) & bitBoard) != 0) ? "X" : "_";
+            }
+            str += "\n";
+        }
+        return str;
+    }
+
     //check if N is a valid number for referencing squares
     private boolean isValidSquareRef(String n, boolean printMessages){
         int i,x,y;
