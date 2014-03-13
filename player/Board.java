@@ -113,7 +113,6 @@ public class Board{
         return bitReps[y*8 + x];
     }
 
-
     /** Board.move(Move,int) moves a piece on the board as described
      *  by MOVE. COLOR is the color of the piece to be moved.
      *
@@ -498,7 +497,6 @@ public class Board{
     //verify that all internal state is valid
     public boolean verify(){
         //check that the bitboards and pieceArray are synced
-        
 
         return false;
     }
@@ -588,7 +586,7 @@ public class Board{
     //convert a bitboard/mask to a string representation
     private String bitBoardToString(long bitBoard){
         char[][] chars = new char[8][8];
-        
+
         String str = "";
         //have to iterate throught each row first because of the way
         // the `bitReps' array is indexed in `getBitRep()'
@@ -762,12 +760,12 @@ public class Board{
                 showNumbers = false;
                 messages.add("Hiding numbers");
                 break;
-                
+
             case "showbitboards": case "showbb": //ok
                 showBitBoards = true;
                 messages.add("Displaying bit boards");
                 break;
-                
+
             case "hidebitboards": case "hidebb": //ok
                 showBitBoards = false;
                 messages.add("Hiding bit boards");
@@ -859,7 +857,7 @@ public class Board{
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
                 break;
             case "print":
-                break;                
+                break;
             case "exit": case "quit": case "done":
                 loop = false;
                 break;
@@ -908,14 +906,14 @@ public class Board{
             messages.add(line);
         }
     }
-    
+
     private boolean miscTests(){
         boolean pass = true;
         //tests for isValidSquareRef ===================================
         String[] invalidNums = {"df", "99", "-12","00", "07","7","77", "100"};
         String[] validNums = {"23", "34", "04", "1","01", "066", "001"};
         System.out.println("Invalid nums:");
-        
+
         for (String s :invalidNums){
             System.out.print(s);
             if (isValidSquareRef(s)){
@@ -929,11 +927,10 @@ public class Board{
                 System.out.println("Error: isValidSquareRef(" + s + ") should be true");
                 pass = false;
             }
-            
+
         }
         return pass;
     }
-    
 
     public static void main(String[] args){
         Board b = new Board(white,
