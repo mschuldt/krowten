@@ -140,9 +140,9 @@ public class Board{
 
             //does lefthand ternary operator work in java??
             if (color == ourColor){
-                ourBitBoard &= bitRep;
+                ourBitBoard |= bitRep;
             }else{
-                opponentBitBoard &= bitRep;
+                opponentBitBoard |= bitRep;
             }
             pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
             break;
@@ -161,11 +161,11 @@ public class Board{
                 //remove old location
                 ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 //add new location
-                ourBitBoard &= bitRep;
+                ourBitBoard |= bitRep;
 
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
-                opponentBitBoard &= bitRep;
+                opponentBitBoard |= bitRep;
             }
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
             pieceArray[toX][toY].bitRep = getBitRep(toX-1, toY-1);
