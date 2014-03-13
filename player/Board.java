@@ -56,7 +56,6 @@ public class Board{
        00000000""".replace("\n",""), 2))
     */
     long cornersMask = 0x4081000000000081L,
-
         upperGoalMask = 0x7e00000000000000L,
         lowerGoalMask = 0x7e,
         rightGoalMask = 0x1010101010100L,
@@ -308,8 +307,15 @@ public class Board{
                            pieceArray[x-1][y],   //left
                            pieceArray[x-1][y-1]}; //top left
 
+        System.out.println("num Pieces = " + removeNonPieces(pieces).length);
         return removeNonPieces(pieces);
     }
+
+    //TODO: interface docs
+    public Piece[] adjacentPieces(int x, int y, int color){
+        return adjacentPieces(x, y); //TODO
+    }
+
 
     /** Board.adjacentPieces(Piece) returns an array of pieces
      * that are adjacent to PIECE on the board
@@ -325,6 +331,12 @@ public class Board{
     public Piece[] adjacentPieces(Piece piece){
         return adjacentPieces(piece.x, piece.y);
     }
+
+    //TODO: interface docs
+    public Piece[] adjacentPieces(Piece piece, int color){
+        return adjacentPieces(piece.x, piece.y, color);
+    }
+
     /** Board.pieceAt(int,int) returns true if a piece is located
      * at square (X,Y) on this board, else false.
      *
@@ -379,7 +391,7 @@ public class Board{
      * @returns an array of pieces that are 'connected' to the one at (X,Y)
      */
     public Piece[] connectedPieces(int x, int y){
-        List<Piece> pieces = new ArrayList<Piece>();
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
         int startX = x + 1;
         int startY = y + 1;
         int currentX = startX, currentY = startY -1;
@@ -410,7 +422,7 @@ public class Board{
                 pieces.add(current);
             }
         }
-        return (Piece[])pieces.toArray();
+        return pieces.toArray();
     }
 
     /** Board.connectedPieces(Piece) returns a list of all the pieces
@@ -836,7 +848,7 @@ public class Board{
                 }
                 break;
 
-            case "adjacent": case "around": case "surround": case "s":
+            case "adjacent": case "around": case "surround": case "s": //ok
                 if (arg1isRef){
                     pb.mark(adjacentPieces(argX1, argY1));
                 }
@@ -909,7 +921,8 @@ public class Board{
             "'hideBB'    hide the bitboards",
             "'showBB'    display the bitboards",
             "'hideNums'  hide square numbers",
-            "'showNums'  display the square numbers"};
+            "'showNums'  display the square numbers",
+            "'around' <num>    mark pieces that surround <num>"};
 
         for (String line: lines){
             messages.add(line);
@@ -944,13 +957,13 @@ public class Board{
     public static void main(String[] args){
         Board b = new Board(white,
                             " oo   x " +
-                            "      x " +
-                            "        " +
+                            "     ox " +
+                            "  o     " +
                             "x      o" +
-                            "        " +
-                            "        " +
+                            "   x    " +
+                            "     o  " +
                             " o      " +
-                            " o   xx ");
+                            " o o xx ");
 
         PrintBoard pb = b.toPrintBoard();
 
