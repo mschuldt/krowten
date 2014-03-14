@@ -252,6 +252,11 @@ public class Board{
         }
     }
 
+    //return the hash of the current board
+    public long hash(){
+        return ((ourBitBoard % 1073741789) << 31) & (opponentBitBoard % 1073741789);
+    }
+
     private int countPieces (Piece[] pieces){
         int c = 0;
         for (Piece p : pieces){
