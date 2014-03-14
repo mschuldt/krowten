@@ -281,8 +281,11 @@ public class Board{
      * The x,y coordinates are indexed from the top left with x
      * increasing to the right and y increasing down.
      *
+     *  If there is a piece at (x,y) then only adjacent pieces of the
+     *  same color as it will be returned.
      *  If there is no piece at (x,y) but (x,y) is still a valid
-     *  board location, then this method works as expected.
+     *  board location, then all the pieces surrounding (x,y)
+     *  of any color will be returned.
      *
      * The list returned does not include PIECE, just the ones around it,
      * so the returned list ranges in length from 0 to 8.
@@ -300,19 +303,24 @@ public class Board{
      */
     public PieceList adjacentPieces(int x, int y){
         x++; y++;
-        //TODO: use an ArrayList to avoid having to traverse this array twice
-        Piece [] pieces = {pieceArray[x][y-1],   //top
+        //TODO: index bounds checking
+        Piece p = pieceArray[x][y];
+        Piece [] pieces = {pieceArray[x][y-1],    //top
                            pieceArray[x+1][y-1],  //top right
-                           pieceArray[x+1][y],   //right
+                           pieceArray[x+1][y],    //right
                            pieceArray[x+1][y+1],  //bottom right
-                           pieceArray[x][y+1],   //bottom
+                           pieceArray[x][y+1],    //bottom
                            pieceArray[x-1][y+1],  //bottom left
-                           pieceArray[x-1][y],   //left
+                           pieceArray[x-1][y],    //left
                            pieceArray[x-1][y-1]}; //top left
 
-        System.out.println("num Pieces = " + removeNonPieces(pieces).length);
         PieceList lst = new PieceList();
-        lst.addIfPiece(pieces);
+        if (p == null){
+            lst.addIfPiece(pieces);
+        }else{
+            lst.addIfColor(pieces, p.color);
+        }
+
         return lst;
     }
 
