@@ -2,6 +2,13 @@
 ;; and some emacs comands I've written that may be helpful
 ;;=============================================================================
 
+;;delete trailing whitespace and convert tabs to spaces before every save
+(add-hook 'before-save-hook
+          (lambda ()
+            (when (memq major-mode '(java-mode jde-mode))
+              (delete-trailing-whitespace (point-min) (point-max))
+              (untabify (point-min) (point-max)))))
+
 ;;Insert spaces only when indenting.
 ;;This matters because different editors indent spaces differently
 ;;making code indented in one editor messed up in another.
@@ -23,9 +30,3 @@
       (goto-char 1))
     ;; fix indent
     (indent-region (point-min) (point-max))))
-
-
-
-
-
-  
