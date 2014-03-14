@@ -69,7 +69,7 @@ public class Board{
 
     //this piece is used to mark the edge of the board and the
     //four invalid corner squares
-    private Piece edge;
+    public static final Piece edge = new Piece(0,0,0,0);
 
     /** Board.Board(int) constructs a new board for player with color COLOR
      *  The board is initially empty
@@ -86,7 +86,6 @@ public class Board{
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
         //TODO: assign goal masks
-        edge = new Piece(0,0,0,0);
         pieceArray = new Piece[10][10];
 
         for (int x = 0; x < 10; x++){
@@ -853,7 +852,7 @@ public class Board{
                     pb.mark(adjacentPieces(argX1, argY1));
                 }
                 break;
-                
+
             case "line": //line <from> <to>
                 if (arg1isRef && arg2isRef){
                     pb.drawLine(argX1, argY1, argX2, argY2);
