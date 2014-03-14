@@ -1,0 +1,36 @@
+Examples of using the PieceList that is returned from
+Board.adjacentPieces and Board.connectedPieces
+
+Here are some ways of iterating through the PieceList ojbects
+They are all equivalent in function but the second one will be much slower
+
+
+PieceList pieces = board.connectedPieces(somePiece);
+int len = pieces.length();
+Piece p;
+for (int i = 0; i < len; i++){
+    p = pieces.get(i);
+    //do stuff with p
+}
+
+//OR =====================================================
+
+Piece p;
+for (Object obj : board.connectedPieces(somePiece)){
+    p = (Piece) obj;
+    //do stuff with p
+}
+
+//OR =====================================================
+
+PieceList pieces = board.connectedPieces(somePiece);
+Piece p;
+while (! pieces.isEmpty()){
+      p = pieces.pop();
+      //do stuff with p
+}
+
+
+
+
+
