@@ -589,7 +589,7 @@ public class Board{
                 }else if (piece.color == black){
                     cell.defaultChar = "X";
                 }else {
-                    cell.defaultChar = "-";
+                    cell.defaultChar = "~";
                 }
             }
         }
