@@ -398,8 +398,8 @@ public class Board{
      *
      * @returns an array of pieces that are 'connected' to the one at (X,Y)
      */
-    public Piece[] connectedPieces(int x, int y){
-        ArrayList<Piece> pieces = new ArrayList<Piece>();
+    public PieceList connectedPieces(int x, int y){
+        PieceList pieces = new PieceList();
         int startX = x + 1;
         int startY = y + 1;
         int currentX = startX, currentY = startY -1;
@@ -427,10 +427,10 @@ public class Board{
                 current = pieceArray[currentX][currentY];
             }
             if (current != edge){
-                pieces.add(current);
+                pieces.push(current);
             }
         }
-        return (Piece[])pieces.toArray();
+        return pieces;
     }
 
     /** Board.connectedPieces(Piece) returns a list of all the pieces
@@ -444,7 +444,7 @@ public class Board{
 
      * @returns an array of pieces that are 'connected' to PIECE
      */
-    public Piece[] connectedPieces(Piece piece){
+    public PieceList connectedPieces(Piece piece){
         return connectedPieces(piece.x, piece.y);
     }
 
@@ -461,7 +461,9 @@ public class Board{
     private boolean hasNetwork(Piece currentPiece, int color, long memberPieces, int m, int b){
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         int newM, newB;
-        for (Piece piece : connectedPieces(currentPiece)){
+        Piece piece;
+        for (Object item : connectedPieces(currentPiece)){
+            piece = (Piece)item;
             if ((piece.bitRep & ourGoalMaskB) != 0){
                 return true;
             }
