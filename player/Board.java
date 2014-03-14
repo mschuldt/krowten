@@ -936,7 +936,8 @@ public class Board{
             "'showBB'    display the bitboards",
             "'hideNums'  hide square numbers",
             "'showNums'  display the square numbers",
-            "'around' <num>    mark pieces that surround <num>"};
+            "'around' <num>    mark pieces that surround <num>",
+            "'connect' <num>   draw lines to pieces connected to <num>"};
 
         for (String line: lines){
             messages.add(line);
