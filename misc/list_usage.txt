@@ -15,9 +15,7 @@ for (int i = 0; i < len; i++){
 
 //OR =====================================================
 
-Piece p;
-for (Object obj : board.connectedPieces(somePiece)){
-    p = (Piece) obj;
+for (Piece p : board.connectedPieces(somePiece)){
     //do stuff with p
 }
 
