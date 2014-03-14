@@ -478,9 +478,8 @@ public class Board{
     // looks for a network from goalA -> goalB
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
         int newM, newB;
-        Piece piece;
-        for (Object item : connectedPieces(currentPiece)){
-            piece = (Piece)item;
+
+        for (Piece piece item : connectedPieces(currentPiece)){
             if ((piece.bitRep & ourGoalMaskB) != 0){
                 return true;
             }
@@ -878,8 +877,7 @@ public class Board{
                         break;
                     }
 
-                    for (Object obj: pieces){
-                        p = (Piece)obj;
+                    for (Piece p: pieces){
                         pb.drawLine(argX1, argY1, p.x, p.y);
                     }
                     messages.add("found " + pieces.length() + " pieces");

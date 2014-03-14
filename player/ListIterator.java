@@ -32,9 +32,7 @@ package player;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
-@SuppressWarnings("rawtypes")
-public class ListIterator<T> implements Iterator {
+public class ListIterator<T> implements Iterator<T> {
 
     private List<T> list;
     private ListNode<T> next;

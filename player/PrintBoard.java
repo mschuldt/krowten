@@ -67,9 +67,9 @@ public class PrintBoard{
         }
     }
 
-    public void mark(Iterable pieces){
-        for (Object p : pieces){
-            mark(((Piece)p).x, ((Piece)p).y);
+    public void mark(Iterable<Piece> pieces){
+        for (Piece p : pieces){
+            mark(p.x, p.y);
         }
     }
 

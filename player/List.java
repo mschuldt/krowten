@@ -13,7 +13,7 @@ import java.util.Iterator;
  *  of the list.
  */
 
-public class List<T> implements Iterable{
+public class List<T> implements Iterable<T>{
     /**
      *  head references the sentinel node.
      *  size is the number of items in the list.  (The sentinel node does not
