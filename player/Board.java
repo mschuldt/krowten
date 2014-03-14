@@ -854,7 +854,11 @@ public class Board{
 
             case "connected": case "connect": case "c":
                 if (arg1isRef){
-                    pb.mark(connectedPieces(argX1, argY1));
+                    Piece p;
+                    for (Object obj: connectedPieces(argX1, argY1)){
+                        p = (Piece)obj;
+                        pb.drawLine(argX1, argY1, p.x, p.y);
+                    }
                 }
                 break;
 
