@@ -284,6 +284,9 @@ public class Board{
      *  If there is no piece at (x,y) but (x,y) is still a valid
      *  board location, then this method works as expected.
      *
+     * The list returned does not include PIECE, just the ones around it,
+     * so the returned list ranges in length from 0 to 8.
+
      * Unusual conditions:
      *  if (x,y) is not a valid location on the board, then this
      *  method will likely cause the program to crash.
@@ -321,6 +324,9 @@ public class Board{
 
     /** Board.adjacentPieces(Piece) returns an array of pieces
      * that are adjacent to PIECE on the board
+     *
+     * The list returned does not include PIECE, just the ones around it,
+     * so the returned list ranges in length from 0 to 8.
      *
      * Unusual conditions:
      *  The behavior of this method is undefined if piece is not
