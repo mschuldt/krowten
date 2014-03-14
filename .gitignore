@@ -1,10 +1,4 @@
 _*
-player/Piece.class
-player/Board.class
-player/Move.class
-player/Player.class
-player/MachinePlayer.class
-player/Cell.class
-player/PrintBoard.class
+player/*.class
 
 player/list
