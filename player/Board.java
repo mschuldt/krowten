@@ -240,7 +240,7 @@ public class Board{
             assert pieceArray[fromX][fromY] != null : "square is empty";
 
             ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-            ourBitBoard &= toBitRep;
+            ourBitBoard |= toBitRep;
 
             pieceArray[toX][toY] = pieceArray[fromX][fromY];
             pieceArray[toX][toY].bitRep = toBitRep;
