@@ -408,7 +408,7 @@ public class Board{
         int[][] increments = {{0,-1}, //above
                               {0, 1}, //below
                               {-1,0}, //left
-                              {0, 1}, //right
+                              {1, 0}, //right
                               {1,-1}, //right upper diagonal
                               {1, 1}, //right lower diagonal
                               {-1,-1}, //left upper diagonal
