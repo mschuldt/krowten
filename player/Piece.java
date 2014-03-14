@@ -9,4 +9,9 @@ public class Piece{
         x = _x;
         y = _y;
     }
+
+    public String toString(){
+        return "<" + (color == 0 ? "Black" : "White")
+            +" Piece at (" + x +"," + y + ")>";
+    }
 }
