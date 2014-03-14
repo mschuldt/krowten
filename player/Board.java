@@ -2,18 +2,19 @@
 
 package player;
 
-import java.util.List;
+//import java.util.List;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Deque;
 import java.util.ArrayDeque;
-
 import java.io.*;
 
 public class Board{
     Piece[][] pieceArray;
     int ourColor;
     int opponentColor;
+    List<Piece> P = new List<Piece>();
+    PieceList PP = new PieceList();
     public static final int white = 1;
     public static final int black = 0;
     long ourBitBoard = 0;
@@ -294,7 +295,7 @@ public class Board{
      *
      *  @returns an array of pieces adjacent to location (x,y) on the board
      */
-    public Piece[] adjacentPieces(int x, int y){
+    public PieceList adjacentPieces(int x, int y){
         x++; y++;
         //TODO: use an ArrayList to avoid having to traverse this array twice
         Piece [] pieces = {pieceArray[x][y-1],   //top
@@ -307,11 +308,13 @@ public class Board{
                            pieceArray[x-1][y-1]}; //top left
 
         System.out.println("num Pieces = " + removeNonPieces(pieces).length);
-        return removeNonPieces(pieces);
+        PieceList lst = new PieceList();
+        lst.addIfPiece(pieces);
+        return lst;
     }
 
     //TODO: interface docs
-    public Piece[] adjacentPieces(int x, int y, int color){
+    public PieceList adjacentPieces(int x, int y, int color){
         return adjacentPieces(x, y); //TODO
     }
 
@@ -327,12 +330,12 @@ public class Board{
      *
      *  @returns an array of pieces adjacent to PIECE on the board
      */
-    public Piece[] adjacentPieces(Piece piece){
+    public PieceList adjacentPieces(Piece piece){
         return adjacentPieces(piece.x, piece.y);
     }
 
     //TODO: interface docs
-    public Piece[] adjacentPieces(Piece piece, int color){
+    public PieceList adjacentPieces(Piece piece, int color){
         return adjacentPieces(piece.x, piece.y, color);
     }
 
