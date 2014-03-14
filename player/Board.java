@@ -458,8 +458,7 @@ public class Board{
     }
 
     // looks for a network from goalA -> goalB
-    private boolean hasNetwork(Piece currentPiece, int color, long memberPieces, int m, int b){
-        long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
         int newM, newB;
         Piece piece;
         for (Object item : connectedPieces(currentPiece)){
@@ -475,7 +474,7 @@ public class Board{
             if ((newM == m) && (newB == b)){
                 return false; //on the same line
             }
-            if (hasNetwork(piece, color, memberPieces & piece.bitRep, newM, newB)){
+            if (hasNetwork(piece, bitBoard, memberPieces & piece.bitRep, newM, newB)){
                 return true;
             }
         }
@@ -496,7 +495,7 @@ public class Board{
     public boolean hasNetwork(){
         if (((ourBitBoard & ourGoalMaskA) != 0)
             && ((ourBitBoard & ourGoalMaskB) != 0)){
-            return hasNetwork(getGoalPiece(), ourColor, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+            return hasNetwork(getGoalPiece(), ourBitBoard, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
         }
         return false; //does not have at least one piece in each goal
     }
@@ -507,7 +506,7 @@ public class Board{
         long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
-            return hasNetwork(getGoalPiece(), color, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+            return hasNetwork(getGoalPiece(), bitBoard, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
         }
         return false; //does not have at lease one piece in each goal
     }
@@ -987,4 +986,3 @@ public class Board{
         b.interactiveDebug();
     }
 }
-
