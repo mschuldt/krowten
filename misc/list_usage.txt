@@ -1,8 +1,8 @@
-Examples of using the PieceList that is returned from
+Examples of using the PieceList objects that are returned from
 Board.adjacentPieces and Board.connectedPieces
 
-Here are some ways of iterating through the PieceList ojbects
-They are all equivalent in function but the second one will be much slower
+Here are some ways of iterating through the PieceList ojbects.
+They are all equivalent in function but the first one will be much slower.
 
 
 PieceList pieces = board.connectedPieces(somePiece);
