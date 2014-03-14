@@ -4,6 +4,7 @@ package player;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PrintBoard{
     Cell[][] cells;
@@ -34,22 +35,22 @@ public class PrintBoard{
         writeLines(charArray);
         return charArray;
     }
-    
+
     public String toString(){
         return charArrayToString(toCharArray());
     }
-    
+
     public String toString(String ourBB, String oppBB){
         return charArrayToString(toCharArray(),ourBB, oppBB);
     }
-    
+
     public void showNumbers(){
         showNums = true;
     }
     public void hideNumbers(){
         showNums = false;
     }
-    
+
     public void markAll(){
         for (Cell[] row: cells){
             for (Cell cell : row){
@@ -63,6 +64,12 @@ public class PrintBoard{
     public void mark(Piece[] pieces){
         for (Piece p : pieces){
             mark(p.x, p.y);
+        }
+    }
+
+    public void mark(Iterable pieces){
+        for (Object p : pieces){
+            mark(((Piece)p).x, ((Piece)p).y);
         }
     }
 
@@ -81,7 +88,7 @@ public class PrintBoard{
         System.out.println("Invalid Char Index");
         return false;
     }
-    
+
     private void writeLines(char[][] charArray){
         int n = lines.size();
         int[] line;
@@ -95,9 +102,9 @@ public class PrintBoard{
             startY = toCharYIndex(line[1]);
             endX = toCharXIndex(line[2]);
             endY = toCharYIndex(line[3]);
-            
+
             //TODO: 'line 23 55' fails
-            
+
             if ((startY > endY) || (startX > endX)){ //shitty bug fix
                 tmp = startY;
                 startY = endY;
@@ -134,11 +141,11 @@ public class PrintBoard{
                 charArray[startY][startX] = '*';
                 continue;
             }
-            
+
             m = (endY - startY)/((double)(endX - startX));
             y = startY;
             //            System.out.println("m = "+m);
-            //doing: 
+            //doing:
             while (startX != endX && y != endY
                    && isValidCharIndex(startX, (int)y)){
                 // System.out.print("("+ startX +", " + (int)y + ")") ;
@@ -147,10 +154,10 @@ public class PrintBoard{
                 y += m;
             }
             //charArray[(int)Math.ceil(y)][startX] = '*';
-            
+
         }
     }
-    
+
     private String charArrayToString(char[][] array){
         String ret = "";
         for (char[] row : array){
@@ -168,7 +175,7 @@ public class PrintBoard{
 
         String[] ourRows = ourBB.split("\n");
         String[] oppRows = opponentBB.split("\n");
-        
+
         for (char[] row : array){
             for (char c : row){
                 ret += c;
