@@ -395,6 +395,7 @@ public class Board{
      *   readme file.
      *
      *   If there is no piece at (X,Y) return null
+     *   Only pieces of the same color as the one at (X,Y) are returned.
      *
      *   Unusual conditions:
      *    -If (X,Y) does not describe a valid location on the board, the
@@ -407,11 +408,15 @@ public class Board{
      * @returns an array of pieces that are 'connected' to the one at (X,Y)
      */
     public PieceList connectedPieces(int x, int y){
-        PieceList pieces = new PieceList();
         int startX = x + 1;
         int startY = y + 1;
+        Piece current = pieceArray[startX][startY];
+        if (current == null){
+            return null;
+        }
+        int color = current.color;
+        PieceList pieces = new PieceList();
         int currentX = startX, currentY = startY -1;
-        Piece current = pieceArray[currentX][currentY];
         int xInc, yInc;
         int[][] increments = {{0,-1}, //above
                               {0, 1}, //below
@@ -435,7 +440,7 @@ public class Board{
                 current = pieceArray[currentX][currentY];
             }
             if (current != edge){
-                pieces.push(current);
+                pieces.addIfColor(current,color);
             }
         }
         return pieces;
@@ -862,10 +867,17 @@ public class Board{
             case "connected": case "connect": case "c":
                 if (arg1isRef){
                     Piece p;
-                    for (Object obj: connectedPieces(argX1, argY1)){
+                    PieceList pieces = connectedPieces(argX1, argY1);
+                    if (pieces == null){
+                        messages.add("no piece at ("+argX1+","+argY1+")");
+                        break;
+                    }
+
+                    for (Object obj: pieces){
                         p = (Piece)obj;
                         pb.drawLine(argX1, argY1, p.x, p.y);
                     }
+                    messages.add("found " + pieces.length() + " pieces");
                 }
                 break;
 
