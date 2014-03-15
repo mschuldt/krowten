@@ -162,6 +162,7 @@ public class Board{
             bitRep = getBitRep(toX-1, toY-1);
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
+            assert pieceArray[fromX][fromY].color == color : "cannot move opponents piece";
 
             if (color == ourColor){
                 //remove old location
