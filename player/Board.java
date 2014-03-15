@@ -56,6 +56,7 @@ public class Board{
        00000000
        00000000""".replace("\n",""), 2))
     */
+    //TODO: why are these masks effectively reflected?
     long cornersMask = 0x4081000000000081L,
         upperGoalMask = 0x7e00000000000000L,
         lowerGoalMask = 0x7e,
@@ -88,6 +89,14 @@ public class Board{
         opponentColor = 1-color;
         //TODO: assign goal masks
         pieceArray = new Piece[10][10];
+
+        //TODO: proper goal assignment
+        ourGoalMaskA = lowerGoalMask;
+        ourGoalMaskB = upperGoalMask;
+        opponentGoalMaskA = leftGoalMask;
+        opponentGoalMaskB  = rightGoalMask;
+        ourGoalMask = (ourGoalMaskA & ourGoalMaskB);
+        opponentGoalMask = (opponentGoalMaskA & opponentGoalMaskB);
 
         for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
@@ -468,8 +477,17 @@ public class Board{
 
     //returns a piece from goalA
     private Piece getGoalPiece(){
-        //TODO:
-
+        Piece p = null;
+        for (int x = 0; x < 8; x ++){
+            for (int y = 0; y < 8; y ++){
+                p = pieceArray[x][y];
+                if ((p == null) || (p == edge)) continue;
+                if ((p.bitRep & ourGoalMaskA) != 0){
+                    return p;
+                }
+            }
+        }
+        System.out.println("No goal piece found");
         //?? what is the orientation of the board during play
         //are we or a color always centered up-down or can it vary?
         return new Piece(0,0,0,0);
@@ -479,19 +497,46 @@ public class Board{
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
         int newM, newB;
 
-        for (Piece piece : connectedPieces(currentPiece)){
+        // System.out.println("current piece:");
+        // System.out.println(bitBoardToString(currentPiece.bitRep));
+        // System.out.println("memberPieces:");
+        // System.out.println(bitBoardToString(memberPieces));
+
+
+        // System.out.println(pl.length() + " Connected pieces");
+        // long tmp = 0;
+        // for (Piece p : pl){
+        //     tmp |= p.bitRep;
+        // }
+        // System.out.println("connected pieces:");
+        // System.out.println(bitBoardToString(tmp));
+
+        PieceList pl = connectedPieces(currentPiece);
+        if (pl == null){
+            return false;
+        }
+        for (Piece piece : pl){
+            System.out.println("(" + piece.x +"," + piece.y + ")");
+            // System.out.println("trying Piece:");
+            // System.out.println(bitBoardToString(piece.bitRep));
             if ((piece.bitRep & ourGoalMaskB) != 0){
+                // System.out.println("found network!");
+                System.out.println("end: (" + piece.x +"," + piece.y + ")");
                 return true;
             }
             if ((piece.bitRep & memberPieces) != 0){
-                return false; // we have already visited this piece
+                // System.out.println("already visited");
+                continue; // we have already visited this piece
             }
             newM = (piece.y - currentPiece.y)/(piece.x == currentPiece.x ? 10 : (piece.x - currentPiece.x));
             newB = piece.y - newM*piece.x;
             if ((newM == m) && (newB == b)){
-                return false; //on the same line
+                System.out.println("on the same line");
+                continue; //on the same line
             }
-            if (hasNetwork(piece, bitBoard, memberPieces & piece.bitRep, newM, newB)){
+            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, newM, newB)){
+                System.out.println("==>(" + piece.x +"," + piece.y + ")");
+                // System.out.println("found network!!");
                 return true;
             }
         }
@@ -523,7 +568,9 @@ public class Board{
         long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
-            return hasNetwork(getGoalPiece(), bitBoard, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+            Piece p = getGoalPiece();
+            System.out.println("start: (" + p.x +"," + p.y + ")");
+            return hasNetwork(p, bitBoard, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
         }
         return false; //does not have at lease one piece in each goal
     }
@@ -536,6 +583,7 @@ public class Board{
     public boolean verify(){
         //check that the bitboards and pieceArray are synced
 
+        //check that no color has a piece in their opponents goals
         return false;
     }
     //construct a board from a string representation of it.
@@ -688,7 +736,7 @@ public class Board{
     }
 
     public void interactiveDebug(){
-        //TODO:
+
         BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
         Stack<Move> history = new Stack<Move>();
         String input = "";
@@ -908,7 +956,7 @@ public class Board{
                 break;
             case "network": case "net": case "n":
                 // visually show the detected network
-                messages.add("Not Implemented");
+                messages.add(hasNetwork(color) ? "YES" : "NO");
                 break;
             case "network?": case "net?": case "n?":
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
@@ -992,19 +1040,30 @@ public class Board{
     }
 
     public static void main(String[] args){
+        // Board b = new Board(white,
+        //                     " oo   x " +
+        //                     "   o ox " +
+        //                     "  o  o o" +
+        //                     "xo o   o" +
+        //                     "   x    " +
+        //                     " x   o  " +
+        //                     " o      " +
+        //                     " o o xx ");
         Board b = new Board(white,
-                            " oo   x " +
-                            "     ox " +
-                            "  o     " +
-                            "x      o" +
-                            "   x    " +
-                            "     o  " +
-                            " o      " +
-                            " o o xx ");
+                            " o    x " +
+                            "      x " +
+                            "   o    " +
+                            "x       " +
+                            "   x o  " +
+                            " x      " +
+                            "   o    " +
+                            "  o  xx ");
 
         PrintBoard pb = b.toPrintBoard();
 
-        System.out.println(pb.toString());
+        //left/right and upper/lower goals masks are switched
+        // System.out.println(b.bitBoardToString(b.leftGoalMask));
+        // System.out.println(b.bitBoardToString(b.ourBitBoard & b.leftGoalMask));
         //b.test();
         b.interactiveDebug();
     }
