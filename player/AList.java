@@ -2,13 +2,17 @@ package player;
 import java.util.Iterator;
 
 // Array List
+
 public class AList<T> implements Iterable<T>{
     protected T[] array;
     private int len, maxSize;
 
+    //we have Java's retardation to thank for this
+    @SuppressWarnings("unchecked")
     public AList(int n){
-        //TODO:
-        //array = new T[n]; //error: generic array creation
+        // prevent generic array creation error
+        array = (T[]) new Object[n];
+
         maxSize = n;
         len = 0;
     }
