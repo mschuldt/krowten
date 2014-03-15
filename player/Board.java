@@ -479,7 +479,7 @@ public class Board{
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
         int newM, newB;
 
-        for (Piece piece item : connectedPieces(currentPiece)){
+        for (Piece piece : connectedPieces(currentPiece)){
             if ((piece.bitRep & ourGoalMaskB) != 0){
                 return true;
             }
@@ -877,8 +877,8 @@ public class Board{
                         break;
                     }
 
-                    for (Piece p: pieces){
-                        pb.drawLine(argX1, argY1, p.x, p.y);
+                    for (Piece pp: pieces){
+                        pb.drawLine(argX1, argY1, pp.x, pp.y);
                     }
                     messages.add("found " + pieces.length() + " pieces");
                 }
