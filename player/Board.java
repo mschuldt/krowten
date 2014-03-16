@@ -457,7 +457,7 @@ public class Board{
                 current = pieceArray[currentX][currentY];
             }
             if (current != edge){
-                pieces.addIfColor(current,color);
+                pieces.addIfColor(current, color);
             }
         }
         return pieces;
@@ -812,6 +812,7 @@ public class Board{
         System.out.println(". (Use commands 'white' & 'black' to switch)");
         System.out.println("Use command 'help' to print options");
         while (loop){
+            verify();
             pb = toPrintBoard();
             System.out.print(">>> ");
 
@@ -869,9 +870,18 @@ public class Board{
                 if (arg1isRef){
                     pb.mark(argX1, argY1);
                 } break;
-            case "us":
-                //highlight our pieces
-                break;
+            // case "us":
+            //     Piece p;
+            //     for (int x = 1; x < 9; x++){
+            //         for (int y = 1; y < 9; y++){
+            //             p = pieceArray[x][y];
+            //             if (piece != null && piece != edge && piece.color == ourColor){
+
+            //             }
+
+            //         }
+            //     }
+            //     break;
             case "them":
                 // highlight their pieces
                 break;
@@ -967,7 +977,9 @@ public class Board{
 
                     for (Piece pp: pieces){
                         pb.drawLine(argX1, argY1, pp.x, pp.y);
+                        System.out.print("(" + pp.x + "," + pp.y + ")");
                     }
+                    System.out.println("");
                     messages.add("found " + pieces.length() + " pieces");
                 }
                 break;
@@ -988,9 +1000,14 @@ public class Board{
                 break;
 
                 //idea: use transposition table from last move to help order the moves
-            case "valid": case "v": //valid moves
-                messages.add("Not Implemented");
+            case "verify": case "valid": case "v":
+                if (verify()){
+                    messages.add("Everything seems OK.");
+                }else{
+                    messages.add("Board is corrupted.");
+                }
                 break;
+
             case "invalid": case "illegal": case "i": //invalid moves
                 messages.add("Not Implemented");
                 break;
@@ -1000,6 +1017,28 @@ public class Board{
                 break;
             case "network?": case "net?": case "n?":
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
+                break;
+            case "moves":
+                pb.mark(allValidMoves);
+                break;
+
+            case "pieceat": case "pa":
+                System.out.println("argX1 = "+argX1 + "argY1 = "+argY1);
+                if (arg1isRef){
+                    Piece p = pieceArray[argX1+1][argY2+1];
+                    String loc = locStr(argX1, argY1);
+                    if (p == null){
+                        messages.add("No piece at "+ loc);
+                    }else if (p == edge){
+                        messages.add(loc + " is an edge piece");
+                    }else{
+                        messages.add("Piece at " + loc);
+                        messages.add("  Color = " + colorStr(p.color));
+                        messages.add("  bitRep = " + p.bitRep);
+                    }
+                }else{
+                    messages.add("Invalid arg: " + arg1);
+                }
                 break;
             case "print":
                 break;
@@ -1090,14 +1129,23 @@ public class Board{
         //                     " o      " +
         //                     " o o xx ");
         Board b = new Board(white,
-                            " o    x " +
+                            " o   ox " +
                             "      x " +
-                            "   o    " +
+                            "        " +
                             "x       " +
-                            "   x o  " +
+                            "   x o o" +
                             " x      " +
                             "   o    " +
                             "  o  xx ");
+        // Board b = new Board(white,
+        //                     " o   ox " +
+        //                     "      x " +
+        //                     "   o   o" +
+        //                     "x       " +
+        //                     "   x o  " +
+        //                     " x      " +
+        //                     "   o   o" +
+        //                     "  o  xx ");
 
         PrintBoard pb = b.toPrintBoard();
 
@@ -1108,3 +1156,4 @@ public class Board{
         b.interactiveDebug();
     }
 }
+
