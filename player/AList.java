@@ -49,5 +49,8 @@ public class AList<T> implements Iterable<T>{
         array[len] = null;//help the GC
         return item;
     }
+    public void clear(){
+        len=0;
+    }
 }
 
