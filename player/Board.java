@@ -737,13 +737,11 @@ public class Board{
         return pieces;
     }
 
-    public int getNumPieces(int color) {
-        int counter = 0;
-        for (int x = 0; x < 8; x++)
-            for (int y = 0; y < 8; y++)
-                if (pieceAt(x, y) && (getPiece(x, y).color == color))
-                    counter++;
-        return counter;
+    public int getNumPieces(int color){
+        if (color == ourColor){
+            return ourPieceCount;
+        }
+        return opponentPieceCount;
     }
 
     //==========================================================================
