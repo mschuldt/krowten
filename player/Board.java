@@ -341,10 +341,9 @@ public class Board{
      *
      *  @returns an array of pieces adjacent to location (x,y) on the board
      */
-    public PieceList adjacentPieces(int x, int y){
+    public PieceList adjacentPieces(int x, int y,int color){
         x++; y++;
         //TODO: index bounds checking
-        Piece p = pieceArray[x][y];
         Piece [] pieces = {pieceArray[x][y-1],    //top
                            pieceArray[x+1][y-1],  //top right
                            pieceArray[x+1][y],    //right
@@ -355,20 +354,22 @@ public class Board{
                            pieceArray[x-1][y-1]}; //top left
 
         PieceList lst = new PieceList();
-        if (p == null){
-            lst.addIfPiece(pieces);
-        }else{
-            lst.addIfColor(pieces, p.color);
+        for (Piece p : pieces){
+            if (p != null && p != edge){
+                System.out.print("X");
+            }else{
+                System.out.print("_");
+            }
         }
-
+        lst.addIfColor(pieces, color);
         return lst;
     }
 
     //TODO: interface docs
-    public PieceList adjacentPieces(int x, int y, int color){
-        return adjacentPieces(x, y); //TODO
+    public PieceList adjacentPieces(int x, int y){
+        assert pieceArray[x+1][y+1] != null : "cannot get adjacent pieces to empty square";
+        return adjacentPieces(x, y, pieceArray[x+1][y+1].color);
     }
-
 
     /** Board.adjacentPieces(Piece) returns an array of pieces
      * that are adjacent to PIECE on the board
@@ -537,7 +538,6 @@ public class Board{
         // System.out.println("memberPieces:");
         // System.out.println(bitBoardToString(memberPieces));
 
-
         // System.out.println(pl.length() + " Connected pieces");
         // long tmp = 0;
         // for (Piece p : pl){
@@ -618,7 +618,6 @@ public class Board{
     /**
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
      */
-
     public boolean formsIllegalCluster(Move m, int color){
         int x = m.x1;
         int y = m.y1;
