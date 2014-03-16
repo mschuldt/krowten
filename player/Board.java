@@ -758,7 +758,7 @@ public class Board{
         String arg1 = "", arg2 = "";
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
-        boolean showBitBoards = false;
+        boolean showBitBoards = true;
         Move m = null;
         //keeping track of messages this way is allows us to print the board before the
         //messages
