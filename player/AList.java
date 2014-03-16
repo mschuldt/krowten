@@ -30,9 +30,10 @@ public class AList<T> implements Iterable<T>{
         if (len < maxSize){
             array[len] = item;
             len++;
+        }else{
+            //TODO: throw error (or resize)
+            System.out.println("Error -- AList.add: overflow");
         }
-        //TODO: throw error (or resize)
-        System.out.println("Error -- AList.add: overflow");
     }
     public T get(int index){
         if (index >= 0 && index < len){
