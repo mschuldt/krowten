@@ -6,9 +6,11 @@
 (add-hook 'before-save-hook
           (lambda ()
             (when (memq major-mode '(java-mode jde-mode))
-              (delete-trailing-whitespace (point-min) (point-max))
+              (if (>= emacs-major-version 23)
+                  (delete-trailing-whitespace)
+                (delete-trailing-whitespace (point-min) (point-max)))
               (untabify (point-min) (point-max)))))
-
+      
 ;;Insert spaces only when indenting.
 ;;This matters because different editors indent spaces differently
 ;;making code indented in one editor messed up in another.
