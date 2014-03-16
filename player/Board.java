@@ -1172,11 +1172,28 @@ public class Board{
                         messages.add("Piece at " + loc);
                         messages.add("  Color = " + colorStr(p.color));
                         messages.add("  bitRep = " + p.bitRep);
+                        messages.add("  x,y = " + p.x + "," + p.y);
                     }
                 }else{
                     messages.add("Invalid arg: " + arg1);
                 }
                 break;
+
+            case "clusters": case "cluster": case "clus":
+                int c = 0;
+                Move mov;
+                for (int x = 0; x<0; x++){
+                    for (int y = 0; y<0; y++){
+                        mov = new  Move(x,y);
+                        if (formsIllegalCluster(mov, color)){
+                            mark(x,y);
+                        }
+                        c++;
+                    }
+                }
+                messages.add("found "+c+" illegal squares");
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
