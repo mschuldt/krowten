@@ -583,7 +583,7 @@ public class Board{
     //==========================================================================
 
     private String locStr(int x, int y){
-        return "(" + x + "," + x +")";
+        return "(" + x + "," + y +")";
     }
 
     //verify that all internal state is valid
