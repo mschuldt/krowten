@@ -482,9 +482,9 @@ public class Board{
                 pieces.addIfColor(current, color);
             }
 
-            for (Piece p : pieces){
-                System.out.print(locStr(p.x,p.y));
-            }
+            // for (Piece p : pieces){
+            //     System.out.print(locStr(p.x,p.y));
+            // }
             //            System.out.println("");
         }
         return pieces;
@@ -522,8 +522,8 @@ public class Board{
     }
 
     // looks for a network from goalA -> goalB
-    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask, int m, int b,
-                               PrintBoard pb){ //printBoard is just for debugging
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
+                               int m, int b, int depth, PrintBoard pb){ //printBoard is just for debugging
         int newM, newB;
 
         // System.out.println("current piece:");
@@ -544,7 +544,7 @@ public class Board{
             return false;
         }
         for (Piece piece : pl){
-            System.out.println("(" + piece.x +"," + piece.y + ")");
+            //System.out.println("(" + piece.x +"," + piece.y + ")");
             // System.out.println("trying Piece:");
             // System.out.println(bitBoardToString(piece.bitRep));
 
@@ -560,22 +560,25 @@ public class Board{
             //System.out.println("b = "+ newB);
 
             if ((newM == m) && (newB == b)){
-                System.out.println("on the same line");
+                //System.out.println("on the same line");
                 continue; //on the same line
             }
 
             if ((piece.bitRep & goalmask) != 0){
                 // System.out.println("found network!");
                 // System.out.println("end: (" + piece.x +"," + piece.y + ")");
+                if (depth >= 6){
                 pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                 return true;
+                }
+                continue; //can't visit a goal piece until the end
             }
             if ((piece.bitRep & memberPieces) != 0){
                 // System.out.println("already visited");
                 continue; // we have already visited this piece
             }
 
-            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, goalmask, newM, newB,pb)){
+            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, goalmask, newM, newB, depth+1,pb)){
                 // System.out.println("==>(" + piece.x +"," + piece.y + ")");
                 // System.out.println("found network!!");
                 pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
@@ -587,7 +590,7 @@ public class Board{
     //this is just temporary to maintain the interface. the origonal has a printboard passed to it
     //so that it can draw the lines on it.
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
-        return hasNetwork(currentPiece, bitBoard, memberPieces, ourGoalMaskA, m, b, toPrintBoard());
+        return hasNetwork(currentPiece, bitBoard, memberPieces, ourGoalMaskA, m, b, 1, toPrintBoard());
     }
 
     /**
@@ -605,7 +608,7 @@ public class Board{
         if (((ourBitBoard & ourGoalMaskA) != 0)
             && ((ourBitBoard & ourGoalMaskB) != 0)){
             for (Piece piece : getStartGoalPieces(ourColor)){
-                if (hasNetwork(piece, ourBitBoard, ourGoalMaskB, ourGoalMaskA,11, 60, toPrintBoard())){ //11x+60: just an impossible line
+                if (hasNetwork(piece, ourBitBoard, ourGoalMaskB, ourGoalMaskA,11, 60, 1,toPrintBoard())){ //11x+60: just an impossible line
                     return true;
                 }
             }
@@ -620,7 +623,7 @@ public class Board{
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
             for (Piece piece : getStartGoalPieces(color)){
-                if (hasNetwork(piece, bitBoard, goalB, goalA, 11, 60, pb)){ //11x+60: just an impossible line
+                if (hasNetwork(piece, bitBoard, goalB, goalA, 11, 60,1, pb)){ //11x+60: just an impossible line
                     return true;
                 }
             }
@@ -1414,7 +1417,7 @@ public class Board{
                             "   o   o" +
                             "o    o  " +
                             "   x o  " +
-                            " x     o" +
+                            " x o   o" +
                             " o o   o" +
                             "     xx ");
 
