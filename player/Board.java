@@ -1410,12 +1410,12 @@ public class Board{
         //                     " o o xx ");
         Board b = new Board(white,
                             "      x " +
-                            "      x " +
+                            " o    x " +
                             "   o   o" +
-                            "o       " +
+                            "o    o  " +
                             "   x o  " +
-                            " x      " +
-                            "   o   o" +
+                            " x     o" +
+                            " o o   o" +
                             "     xx ");
 
         PrintBoard pb = b.toPrintBoard();
