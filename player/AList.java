@@ -51,4 +51,3 @@ public class AList<T> implements Iterable<T>{
         return item;
     }
 }
-
