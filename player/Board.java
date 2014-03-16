@@ -91,7 +91,7 @@ public class Board{
         pieceArray = new Piece[10][10];
 
         //NOTE: if this goal mask assignment is changed, then
-        //      code in getGoalPieces must be updated.
+        //      code in getStartGoalPieces must be updated.
         if (ourColor == 1){ //white's goals are on the left and right
             ourGoalMaskA = leftGoalMask;
             ourGoalMaskB = rightGoalMask;
@@ -506,21 +506,19 @@ public class Board{
     }
 
     //returns a piece from goalA
-    private Piece getGoalPiece(){
+    private PieceList getStartGoalPieces(int color){
         Piece p = null;
-        for (int x = 0; x < 8; x ++){
-            for (int y = 0; y < 8; y ++){
-                p = pieceArray[x][y];
-                if ((p == null) || (p == edge)) continue;
-                if ((p.bitRep & ourGoalMaskA) != 0){
-                    return p;
-                }
+        PieceList lst = new PieceList();
+        if (color == white){ //start at the left
+            for (int y=2; y<8; y++){
+                lst.addIfPiece(pieceArray[1][y]);
+            }
+        }else{//black starts at bottom
+            for (int x=2; x<8; x++){
+                lst.addIfPiece(pieceArray[x][8]);
             }
         }
-        System.out.println("No goal piece found");
-        //?? what is the orientation of the board during play
-        //are we or a color always centered up-down or can it vary?
-        return new Piece(0,0,0,0);
+        return lst;
     }
 
     // looks for a network from goalA -> goalB
@@ -564,9 +562,10 @@ public class Board{
                 System.out.println("on the same line");
                 continue; //on the same line
             }
-            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, newM, newB)){
+            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, newM, newB,pb)){
                 System.out.println("==>(" + piece.x +"," + piece.y + ")");
                 // System.out.println("found network!!");
+                pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                 return true;
             }
         }
@@ -592,24 +591,32 @@ public class Board{
     public boolean hasNetwork(){
         if (((ourBitBoard & ourGoalMaskA) != 0)
             && ((ourBitBoard & ourGoalMaskB) != 0)){
-            return hasNetwork(getGoalPiece(), ourBitBoard, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+            for (Piece piece : getStartGoalPieces(ourColor)){
+                if (hasNetwork(piece, ourBitBoard, ourGoalMaskA, 11, 60)){ //11x+60: just an impossible line
+                    return true;
+                }
+            }
         }
         return false; //does not have at least one piece in each goal
     }
 
-    public boolean hasNetwork(int color){
+    public boolean hasNetwork(int color,PrintBoard pb){
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
         long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
-            Piece p = getGoalPiece();
-            System.out.println("start: (" + p.x +"," + p.y + ")");
-            return hasNetwork(p, bitBoard, ourGoalMaskA, 11, 60); //11x+60: just an impossible line
+            for (Piece piece : getStartGoalPieces(color)){
+                if (hasNetwork(piece, bitBoard, ourGoalMaskA, 11, 60,pb)){ //11x+60: just an impossible line
+                    return true;
+                }
+            }
         }
         return false; //does not have at lease one piece in each goal
     }
-
+    public boolean hasNetwork(int color){//Temp for debugging
+        return hasNetwork(color,toPrintBoard());
+    }
     /**
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
      */
