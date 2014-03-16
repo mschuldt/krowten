@@ -575,6 +575,38 @@ public class Board{
         }
         return false; //does not have at lease one piece in each goal
     }
+    
+    /**
+     *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
+     */
+    
+    public boolean formsIllegalCluster(Move m){
+        int x = m.x1;
+        int y = m.y1;
+        int playerColor= this.ourColor; //Player doesn't have a color field?
+        int numNeighbors; 
+        if (this.pieceAt(x,y)){
+            return false; // for now... probably need to throw an error, but isValidMove will also take care of it
+        }
+        this.move(m, playerColor); //Board is updated
+        PieceList neighbors = this.adjacentPieces(x, y, playerColor); // get neighboring pieces of (presumably) the same color
+        numNeighbors = neighbors.length();
+        if (numNeighbors >1){
+            this.unMove(m);
+            return true;
+        }
+        if (numNeighbors == 1){
+            Piece oneNeighbor = neighbors.get(0);
+            PieceList moreNeighbors = this.adjacentPieces(oneNeighbor);
+            int moreNumNeighbors = moreNeighbors.length();
+            if (moreNumNeighbors >1){
+                this.unMove(m);
+                return true;
+            }
+        }
+        this.unMove(m); //ALWAYS UNMOVE
+        return false;
+    }
 
     //==========================================================================
     // Verification and testing code ===========================================
