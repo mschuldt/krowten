@@ -401,7 +401,6 @@ public class Board{
      * @returns boolean; true if a piece is located at (X,Y), elsefalse
      */
     public boolean pieceAt(int x, int y){
-        //TODO: bounds checking
         if (x < 0 || y < 0 || y > 7 || x > 7){
             return false;
         }
@@ -470,23 +469,23 @@ public class Board{
             currentX = startX + xInc;
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
-            System.out.print("Trying: ");
+            //            System.out.print("Trying: ");
             while (current == null){
                 System.out.print(locStr(currentX-1, currentY-1));
                 currentX += xInc;
                 currentY += yInc;
                 current = pieceArray[currentX][currentY];
             }
-            System.out.println("=> found non-nil");
+            //            System.out.println("=> found non-nil");
             if (current != edge){
-                System.out.println("Found "+colorStr(current.color)+" piece at" + locStr(currentX-1, currentY-1));
+                //                System.out.println("Found "+colorStr(current.color)+" piece at" + locStr(currentX-1, currentY-1));
                 pieces.addIfColor(current, color);
             }
-            System.out.print("current pieces: ");
+
             for (Piece p : pieces){
                 System.out.print(locStr(p.x,p.y));
             }
-            System.out.println("");
+            //            System.out.println("");
         }
         return pieces;
     }
@@ -512,18 +511,18 @@ public class Board{
         PieceList lst = new PieceList();
         if (color == white){ //start at the left
             for (int y=2; y<8; y++){
-                lst.addIfPiece(pieceArray[1][y]);
+                lst.addIfColor(pieceArray[1][y],color);
             }
         }else{//black starts at bottom
             for (int x=2; x<8; x++){
-                lst.addIfPiece(pieceArray[x][8]);
+                lst.addIfColor(pieceArray[x][8],color);
             }
         }
         return lst;
     }
 
     // looks for a network from goalA -> goalB
-    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b,
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask, int m, int b,
                                PrintBoard pb){ //printBoard is just for debugging
         int newM, newB;
 
@@ -548,23 +547,36 @@ public class Board{
             System.out.println("(" + piece.x +"," + piece.y + ")");
             // System.out.println("trying Piece:");
             // System.out.println(bitBoardToString(piece.bitRep));
-            if ((piece.bitRep & ourGoalMaskB) != 0){
+
+            if (piece.x == currentPiece.x){
+                newM = 10;
+                newB = piece.x;
+            }else{
+                newM = (piece.y - currentPiece.y)/(piece.x - currentPiece.x);
+                newB = piece.y - newM*piece.x;
+            }
+
+            // System.out.println("m = "+ newM);
+            //System.out.println("b = "+ newB);
+
+            if ((newM == m) && (newB == b)){
+                System.out.println("on the same line");
+                continue; //on the same line
+            }
+
+            if ((piece.bitRep & goalmask) != 0){
                 // System.out.println("found network!");
-                System.out.println("end: (" + piece.x +"," + piece.y + ")");
+                // System.out.println("end: (" + piece.x +"," + piece.y + ")");
+                pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                 return true;
             }
             if ((piece.bitRep & memberPieces) != 0){
                 // System.out.println("already visited");
                 continue; // we have already visited this piece
             }
-            newM = (piece.y - currentPiece.y)/(piece.x == currentPiece.x ? 10 : (piece.x - currentPiece.x));
-            newB = piece.y - newM*piece.x;
-            if ((newM == m) && (newB == b)){
-                System.out.println("on the same line");
-                continue; //on the same line
-            }
-            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, newM, newB,pb)){
-                System.out.println("==>(" + piece.x +"," + piece.y + ")");
+
+            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, goalmask, newM, newB,pb)){
+                // System.out.println("==>(" + piece.x +"," + piece.y + ")");
                 // System.out.println("found network!!");
                 pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                 return true;
@@ -575,7 +587,7 @@ public class Board{
     //this is just temporary to maintain the interface. the origonal has a printboard passed to it
     //so that it can draw the lines on it.
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
-        return hasNetwork(currentPiece, bitBoard, memberPieces, m,  b, toPrintBoard());
+        return hasNetwork(currentPiece, bitBoard, memberPieces, ourGoalMaskA, m, b, toPrintBoard());
     }
 
     /**
@@ -593,7 +605,7 @@ public class Board{
         if (((ourBitBoard & ourGoalMaskA) != 0)
             && ((ourBitBoard & ourGoalMaskB) != 0)){
             for (Piece piece : getStartGoalPieces(ourColor)){
-                if (hasNetwork(piece, ourBitBoard, ourGoalMaskA, 11, 60)){ //11x+60: just an impossible line
+                if (hasNetwork(piece, ourBitBoard, ourGoalMaskB, ourGoalMaskA,11, 60, toPrintBoard())){ //11x+60: just an impossible line
                     return true;
                 }
             }
@@ -601,14 +613,14 @@ public class Board{
         return false; //does not have at least one piece in each goal
     }
 
-    public boolean hasNetwork(int color,PrintBoard pb){
+    public boolean hasNetwork(int color, PrintBoard pb){
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
         long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
             for (Piece piece : getStartGoalPieces(color)){
-                if (hasNetwork(piece, bitBoard, ourGoalMaskA, 11, 60,pb)){ //11x+60: just an impossible line
+                if (hasNetwork(piece, bitBoard, goalB, goalA, 11, 60, pb)){ //11x+60: just an impossible line
                     return true;
                 }
             }
@@ -785,6 +797,18 @@ public class Board{
                 }
 
             }
+        }
+        if ((ourBitBoard & opponentBitBoard) != 0){
+            System.out.println("bitboards share pieces");
+            ok = false;
+        }
+        if ((ourGoalMask & opponentBitBoard) != 0){
+            System.out.println(colorStr(1-ourColor) + " has pieces in opponents goal");
+            ok = false;
+        }
+        if ((opponentGoalMask & ourBitBoard) != 0){
+            System.out.println(colorStr(ourColor) + " has pieces in opponents goal");
+            ok = false;
         }
 
         return ok;
@@ -1193,7 +1217,7 @@ public class Board{
                 break;
             case "network": case "net": case "n":
                 // visually show the detected network
-                messages.add(hasNetwork(color,pb) ? "YES" : "NO");
+                messages.add(hasNetwork(color, pb) ? "YES" : "NO");
                 break;
             case "network?": case "net?": case "n?":
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
