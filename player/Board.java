@@ -183,6 +183,7 @@ public class Board{
             //TODO
             break;
         }
+        verify();
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -260,6 +261,7 @@ public class Board{
             //TODO
             break;
         }
+        verify();
     }
 
     //return the hash of the current board
@@ -455,7 +457,7 @@ public class Board{
                 current = pieceArray[currentX][currentY];
             }
             if (current != edge){
-                pieces.addIfColor(current,color);
+                pieces.addIfColor(current, color);
             }
         }
         return pieces;
@@ -608,16 +610,116 @@ public class Board{
         return false;
     }
 
+
+    /*
+    * returns list of all valid moves available, meaning
+    * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+    * 2) the location where the piece will be placed is a valid and legal location on the board 
+    * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+    * and is not currently occupied by any piece including itself.
+    * 3) there will not be any clusters >= 3 on the board after making the Move.
+    */
+    public AList<Move> validMoves() {
+        //
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (pieceAt(i, j) && (getPiece(i, j).color == ourColor))
+                    pieces.add(getPiece(i, j));
+
+        //delete the above when there is some sort of getpiece funciton.
+        int numPieces = pieces.size();
+        AList<Move> mList = new AList<Move>(440);
+        int x_lower, y_lower, x_upper, y_upper;
+        if (ourColor == 0) { // black
+            x_lower = 0;
+            x_upper = 7;
+            y_lower = 1;
+            y_upper = 6;
+        } else { // white
+            y_lower = 0;
+            y_upper = 7;
+            x_lower = 1;
+            x_upper = 6;
+        }
+        if (numPieces < 10) { //ADD moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        Move m = new Move(x, y);
+                        if (!formsIllegalCluster(m))
+                            mList.add(m);
+                    }
+                }
+            }
+        } else {                      // STEP moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        for (int i = 0; i < pieces.size(); i++) {
+                            Move m = new Move(x, y, pieces.get(i).x, pieces.get(i).y);
+                            if (!formsIllegalCluster(m))
+                                mList.add(m);                        
+                        } 
+                    }
+                }
+            }          
+        } 
+        return mList;
+    }
+
+    // placeholder marker: todo
+    public boolean formsIllegalCluster(Move m) {
+        return false;
+    }
+
     //==========================================================================
     // Verification and testing code ===========================================
     //==========================================================================
 
+    private String locStr(int x, int y){
+        return "(" + x + "," + y +")";
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         //check that the bitboards and pieceArray are synced
+        boolean ok = true;
+        int c = 0;
+        Piece p;
+        for (int x = 1; x < 9; x++){
+            for (int y = 1; y < 9; y++){
+                p = pieceArray[x][y];
+                if (p == edge){
+                    continue;
+                }
+                if (p == null){
+                    if ((getBitRep(x-1,y-1) & ourBitBoard) != 0){
+                        ok = false;
+                        System.out.println(colorStr(ourColor) +" bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
+                    }
+                    if ((getBitRep(x-1,y-1) & opponentBitBoard) != 0){
+                        ok = false;
+                        System.out.println(colorStr(1 - ourColor) + " bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
+                    }
+                    continue;
+                }
+                c = p.color;
+                if (c == ourColor){
+                    if ((p.bitRep & ourBitBoard) == 0){
+                        ok = false;
+                        System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
+                    }
+                } else if ((p.bitRep & opponentBitBoard) == 0){
+                    ok = false;
+                    System.out.println(colorStr(1-c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
+
+                }
+            }
+        }
 
         //check that no color has a piece in their opponents goals
-        return false;
+        return ok;
     }
     //construct a board from a string representation of it.
     //'x' for black pieces, 'o' for white piece (case does not matter).
@@ -790,7 +892,7 @@ public class Board{
         String arg1 = "", arg2 = "";
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
-        boolean showBitBoards = false;
+        boolean showBitBoards = true;
         Move m = null;
         //keeping track of messages this way is allows us to print the board before the
         //messages
@@ -805,6 +907,7 @@ public class Board{
         System.out.println(". (Use commands 'white' & 'black' to switch)");
         System.out.println("Use command 'help' to print options");
         while (loop){
+            verify();
             pb = toPrintBoard();
             System.out.print(">>> ");
 
@@ -862,9 +965,18 @@ public class Board{
                 if (arg1isRef){
                     pb.mark(argX1, argY1);
                 } break;
-            case "us":
-                //highlight our pieces
-                break;
+            // case "us":
+            //     Piece p;
+            //     for (int x = 1; x < 9; x++){
+            //         for (int y = 1; y < 9; y++){
+            //             p = pieceArray[x][y];
+            //             if (piece != null && piece != edge && piece.color == ourColor){
+
+            //             }
+
+            //         }
+            //     }
+            //     break;
             case "them":
                 // highlight their pieces
                 break;
@@ -960,7 +1072,9 @@ public class Board{
 
                     for (Piece pp: pieces){
                         pb.drawLine(argX1, argY1, pp.x, pp.y);
+                        System.out.print("(" + pp.x + "," + pp.y + ")");
                     }
+                    System.out.println("");
                     messages.add("found " + pieces.length() + " pieces");
                 }
                 break;
@@ -980,10 +1094,25 @@ public class Board{
                 }
                 break;
 
-                //idea: use transposition table from last move to help order the moves
-            case "valid": case "v": //valid moves
-                messages.add("Not Implemented");
+            case "validmoves":
+                System.out.println("Valid moves:");
+                AList<Move> validMoves = new AList<Move>(1);
+                validMoves = validMoves();
+                AListIterator iter = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
+                iter = validMoves.iterator();
+                while (iter.hasNext())
+                System.out.print(iter.next() + ", ");
                 break;
+
+                //idea: use transposition table from last move to help order the moves
+            case "verify": case "valid": case "v":
+                if (verify()){
+                    messages.add("Everything seems OK.");
+                }else{
+                    messages.add("Board is corrupted.");
+                }
+                break;
+
             case "invalid": case "illegal": case "i": //invalid moves
                 messages.add("Not Implemented");
                 break;
@@ -993,6 +1122,28 @@ public class Board{
                 break;
             case "network?": case "net?": case "n?":
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
+                break;
+            case "moves":
+                pb.mark(allValidMoves);
+                break;
+
+            case "pieceat": case "pa":
+                System.out.println("argX1 = "+argX1 + "argY1 = "+argY1);
+                if (arg1isRef){
+                    Piece p = pieceArray[argX1+1][argY2+1];
+                    String loc = locStr(argX1, argY1);
+                    if (p == null){
+                        messages.add("No piece at "+ loc);
+                    }else if (p == edge){
+                        messages.add(loc + " is an edge piece");
+                    }else{
+                        messages.add("Piece at " + loc);
+                        messages.add("  Color = " + colorStr(p.color));
+                        messages.add("  bitRep = " + p.bitRep);
+                    }
+                }else{
+                    messages.add("Invalid arg: " + arg1);
+                }
                 break;
             case "print":
                 break;
@@ -1040,7 +1191,8 @@ public class Board{
             "'hideNums'  hide square numbers",
             "'showNums'  display the square numbers",
             "'around' <num>    mark pieces that surround <num>",
-            "'connect' <num>   draw lines to pieces connected to <num>"};
+            "'connect' <num>   draw lines to pieces connected to <num>",
+            "'validmoves'    displays valid moves"};
 
         for (String line: lines){
             messages.add(line);
@@ -1083,14 +1235,23 @@ public class Board{
         //                     " o      " +
         //                     " o o xx ");
         Board b = new Board(white,
-                            " o    x " +
+                            " o   ox " +
                             "      x " +
-                            "   o    " +
+                            "        " +
                             "x       " +
-                            "   x o  " +
+                            "   x o o" +
                             " x      " +
                             "   o    " +
                             "  o  xx ");
+        // Board b = new Board(white,
+        //                     " o   ox " +
+        //                     "      x " +
+        //                     "   o   o" +
+        //                     "x       " +
+        //                     "   x o  " +
+        //                     " x      " +
+        //                     "   o   o" +
+        //                     "  o  xx ");
 
         PrintBoard pb = b.toPrintBoard();
 
@@ -1099,5 +1260,8 @@ public class Board{
         // System.out.println(b.bitBoardToString(b.ourBitBoard & b.leftGoalMask));
         //b.test();
         b.interactiveDebug();
+        //
+        
     }
 }
+
