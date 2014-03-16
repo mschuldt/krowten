@@ -46,7 +46,7 @@ public class AList<T> implements Iterable<T>{
     public T pop(){
         len--;
         T item = array[len];
-        array[len] = null;//help the GC
+        //array[len] = null;//don't help the GC. speed > memory
         return item;
     }
     public void clear(){
