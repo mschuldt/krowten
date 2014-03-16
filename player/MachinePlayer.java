@@ -51,7 +51,7 @@ public class MachinePlayer extends Player {
             return myBest; //not sure...
         }
         if (depth == 0){
-            //this.board.scoreBoard(this.board, this); TODO
+            //myBest.score = this.board.scoreBoard(this.board, this); TODO
             return myBest;
         }
         if (side){
