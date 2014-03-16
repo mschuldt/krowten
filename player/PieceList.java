@@ -20,7 +20,7 @@ public class PieceList extends AList<Piece>{
     //add Piece P if piece has color COLOR
     //if P is null, it is not added to the list
     public void addIfColor(Piece p, int color){
-        if (p != null && p.color == color){
+        if (p != null && p.color == color && p != Board.edge){
             add(p);
         }
     }
