@@ -103,22 +103,6 @@ public class PrintBoard{
             endX = toCharXIndex(line[2]);
             endY = toCharYIndex(line[3]);
 
-            //TODO: 'line 23 55' fails
-
-            if ((startY > endY) || (startX > endX)){ //shitty bug fix
-                tmp = startY;
-                startY = endY;
-                endY = tmp;
-                tmp = startX;
-                startX = endX;
-                endX = tmp;
-
-            }
-            // System.out.println("startX = "+startX);
-            // System.out.println("startY = "+startY);
-            // System.out.println("endX = "+endX);
-            // System.out.println("endY = "+endY);
-
             horiz = startY == endY;
             vert = startX == endX;
             yInc = (startY > endY ? -1 : 1);
@@ -143,11 +127,12 @@ public class PrintBoard{
             }
 
             m = (endY - startY)/((double)(endX - startX));
+            m = m*(startX > endX ? -1 : 1);
             y = startY;
             //            System.out.println("m = "+m);
             //doing:
             while (startX != endX && y != endY
-                   && isValidCharIndex(startX, (int)y)){
+                   && isValidCharIndex(startX, (int)Math.ceil(y))){
                 // System.out.print("("+ startX +", " + (int)y + ")") ;
                 charArray[(int)Math.ceil(y)][startX] = '*';
                 startX += xInc;
@@ -252,3 +237,4 @@ public class PrintBoard{
         return board;
     }
 }
+
