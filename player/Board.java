@@ -1209,16 +1209,30 @@ public class Board{
             case "clusters": case "cluster": case "clus":
                 int c = 0;
                 Move mov;
-                for (int x = 0; x<0; x++){
-                    for (int y = 0; y<0; y++){
+                for (int x = 0; x<8; x++){
+                    for (int y = 0; y<8; y++){
                         mov = new  Move(x,y);
                         if (formsIllegalCluster(mov, color)){
                             pb.mark(x,y);
+                            c++;
                         }
-                        c++;
                     }
                 }
                 messages.add("found "+c+" illegal squares");
+                break;
+
+            case "markall": //ok
+                int c2 = 0;
+                for (int x = 0; x<8; x++){
+                    for (int y = 0; y<8; y++){
+                        mov = new  Move(x,y);
+                        if (pieceAt(x,y)){
+                            pb.mark(x,y);
+                            c2++;
+                        }
+                    }
+                }
+                messages.add("found "+c2+" pieces");
                 break;
 
             case "print":
