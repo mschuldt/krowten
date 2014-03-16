@@ -582,7 +582,7 @@ public class Board{
     /*
     * returns list of all valid moves available, meaning
     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
-    * 2) the location where the piece will be placed is a valid and legal location on the board 
+    * 2) the location where the piece will be placed is a valid and legal location on the board
     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
     * and is not currently occupied by any piece including itself.
     * 3) there will not be any clusters >= 3 on the board after making the Move.
@@ -627,12 +627,12 @@ public class Board{
                         for (int i = 0; i < pieces.size(); i++) {
                             Move m = new Move(x, y, pieces.get(i).x, pieces.get(i).y);
                             if (!formsIllegalCluster(m))
-                                mList.add(m);                        
-                        } 
+                                mList.add(m);
+                        }
                     }
                 }
-            }          
-        } 
+            }
+        }
         return mList;
     }
 
@@ -1092,7 +1092,14 @@ public class Board{
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
                 break;
             case "moves":
-                pb.mark(allValidMoves);
+                AList<Move> moves = validMoves();
+                messages.add("found " + moves.length() +" moves");
+                System.out.print("moves: ");
+                for (Move move : moves){
+                    System.out.print(locStr(move.x1, move.y1));
+                    //                    pb.mark(move.x1,move.y2);
+                }
+                pb.mark(moves);
                 break;
 
             case "pieceat": case "pa":
@@ -1229,7 +1236,7 @@ public class Board{
         //b.test();
         b.interactiveDebug();
         //
-        
+
     }
 }
 

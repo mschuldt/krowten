@@ -68,7 +68,7 @@ public class PrintBoard{
     }
     public void mark(AList<Move> lst){
         for (Move m :lst){
-            mark(m.x1, m.x2);
+            mark(m.x1, m.y1);
         }
     }
 
