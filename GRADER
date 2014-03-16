@@ -253,20 +253,13 @@ public boolean hasNetwork()
 
 
 /*
-* for current Board B, returns an array of all valid Moves available to Player P.
-*/
-  Move[] validMoves(Board B, Player P);
-
-
-/*
-* returns true if and only if Player P can legally make Move M on Board B, meaning
-* 1) P is placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+* returns list of all valid moves available, meaning
+* 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
 * 2) the location where the piece will be placed is a valid and legal location on the board 
 * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
 * and is not currently occupied by any piece including itself.
 * 3) there will not be any clusters >= 3 on the board after making the Move.
 */
-  boolean isValidMove(Board B, Move M, Player P);
 
 
 /*
