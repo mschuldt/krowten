@@ -873,6 +873,16 @@ public class Board{
         return str;
     }
 
+    private boolean isValidIndex(int x, int y){
+        if (x < 0 || x > 7 || y < 0  || y > 7
+            || (x == 0 && y == 0)
+            || (x == 7 && y == 0)
+            || (x == 0 && y == 7)
+            || (x == 7 && y == 7)){
+            return false;
+        }
+        return true;
+    }
     //check if N is a valid number for referencing squares
     private boolean isValidSquareRef(String n, boolean printMessages){
         int i,x,y;
@@ -885,19 +895,16 @@ public class Board{
             }
             return false;
         }
+        
         x = i / 10;
         y = i % 10;
-        if (i < 0 || i > 76 || x > 7 || y > 7
-            || (x == 0 && y == 0)
-            || (x == 7 && y == 0)
-            || (x == 0 && y == 7)
-            || (x == 7 && y == 7)){
-            if (printMessages){
-                System.out.println("Invalid Index: ("+ x +"," +y+")");
-            }
-            return false;
+        if (isValidIndex(x,y)){
+            return true;
         }
-        return true;
+        if (printMessages){
+            System.out.println("Invalid Index: ("+ x +"," +y+")");
+        }
+        return false;
     }
 
     private boolean isValidSquareRef(String n){
