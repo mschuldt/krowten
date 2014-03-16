@@ -13,6 +13,7 @@ public class Board{
     Piece[][] pieceArray;
     int ourColor;
     int opponentColor;
+    int ourPieceCount, opponentPieceCount;
     List<Piece> P = new List<Piece>();
     PieceList PP = new PieceList();
     public static final int white = 1;
@@ -86,6 +87,7 @@ public class Board{
         if (color != 1 && color != 0){
             System.out.println("Board.Board(int) -- Error: invalid color");
         }
+        ourPieceCount =  opponentPieceCount = 0;
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
         //TODO: assign goal masks
@@ -157,8 +159,12 @@ public class Board{
             //does lefthand ternary operator work in java??
             if (color == ourColor){
                 ourBitBoard |= bitRep;
+                ourPieceCount++;
+                assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }else{
                 opponentBitBoard |= bitRep;
+                opponentPieceCount++;
+                assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }
             pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
             break;
@@ -255,8 +261,11 @@ public class Board{
 
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
+                ourPieceCount--;
+
             }else{
                 opponentBitBoard ^= p.bitRep;
+                opponentPieceCount--;
             }
             pieceArray[x][y] = null;
             break;
@@ -831,6 +840,7 @@ public class Board{
     //
     public Board (int color, String boardString){
         this(color);
+        int whiteCount=0, blackCount=0;
         Move m;
         boardString = boardString.toLowerCase();
         if (boardString.length() != 64){
@@ -849,6 +859,7 @@ public class Board{
                     }else{
                         opponentMove(m);
                     }
+                    blackCount++;
                     continue;
                 case 'o' :
                     m = new Move(x,y);
@@ -857,11 +868,15 @@ public class Board{
                     }else{
                         opponentMove(m);
                     }
+                    whiteCount++;
                     continue;
                 default:
                     System.out.println("Error - Board.Board(int, String)- invalid char");
                 }
             }
+        }
+        if (whiteCount > 10 || blackCount > 10){
+            System.out.println("Error - Board.Board(int, String) - constructed illegal board");
         }
     }
 
