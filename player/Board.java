@@ -808,16 +808,28 @@ public class Board{
 
             }
         }
+        //check for shared bits
         if ((ourBitBoard & opponentBitBoard) != 0){
             System.out.println("bitboards share pieces");
             ok = false;
         }
+        //check that players are not in opponents goals
         if ((ourGoalMask & opponentBitBoard) != 0){
             System.out.println(colorStr(1-ourColor) + " has pieces in opponents goal");
             ok = false;
         }
         if ((opponentGoalMask & ourBitBoard) != 0){
             System.out.println(colorStr(ourColor) + " has pieces in opponents goal");
+            ok = false;
+        }
+
+        //check piece counts
+        if (ourPieceCount > 10){
+            System.out.println(colorStr(ourColor) + " has "+ ourPieceCount + " pieces");
+            ok = false;
+        }
+        if (opponentPieceCount > 10){
+            System.out.println(colorStr(1-ourColor) + " has "+ opponentPieceCount + " pieces");
             ok = false;
         }
 
@@ -1120,8 +1132,13 @@ public class Board{
             case "add": case "a": //ok
                 //g&t 9.24
                 if (arg1isRef){
-                    m = new Move(argX1, argY1);
-                    input = "_applyMove";
+                    if (((color == ourColor) && (ourPieceCount >= 10))
+                        ||((color != ourColor) && (opponentPieceCount >= 10))){
+                            messages.add("Cannot add more then 10 pieces");
+                            break;
+                        }
+                        m = new Move(argX1, argY1);
+                        input = "_applyMove";
                     fakeInput = true;
                 }else{
                     messages.add("Invalid arg: " + arg1);
@@ -1148,14 +1165,17 @@ public class Board{
             case "_applymove": //ok
                 System.out.println("applying move...");
                 if (m != null){
-                    if (color == ourColor){
-                        move(m);
-                        history.push(m);
-                    }else {
-                        opponentMove(m);
-                    }
+                    move(m,color);
+                    history.push(m);
                     pb = toPrintBoard(); //update board
                     messages.add("Made move: " + m.toString());
+                    if (m.moveKind == Move.ADD){
+                        if (color == ourColor){
+                            messages.add(colorStr(color) +" now has " + ourPieceCount + " pieces");
+                        }else{
+                            messages.add(colorStr(color) +" now has " + opponentPieceCount + " pieces");
+                        }
+                    }
                 }else{
                     System.out.println("Error: invalid move");
                 }
@@ -1430,7 +1450,7 @@ public class Board{
                             "   o   o" +
                             "o    o  " +
                             "   x o  " +
-                            " x o   o" +
+                            " x     o" +
                             " o o   o" +
                             "     xx ");
 
