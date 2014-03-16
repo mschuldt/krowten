@@ -33,7 +33,7 @@ public class MachinePlayer extends Player {
         else{
             side = false;
         }
-        Best bestMove = minimax(side, alpha, beta); //TODO: figure out values
+        Best bestMove = minimax(side, -1, 1); //TODO: evaluation function
         return bestMove.Move;
         */
 	return new Move();
@@ -56,7 +56,7 @@ public class MachinePlayer extends Player {
             myBest.score = beta;
         }
         AList allValidMoves = this.board.validMoves();
-        for (int i; i < allValidMoves.length(); i++){ // validMoves returns a list
+        for (int i = 0; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = (Move) allValidMoves.get(i); 
             this.board.move(m);
             reply = minimax(!side, alpha, beta); // ummmmm
