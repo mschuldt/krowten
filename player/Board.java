@@ -240,13 +240,21 @@ public class Board{
      *  @param move the move to reverse.
      */
     void unMove(Move move){
+        Piece p = null;
         switch (move.moveKind){
         case Move.ADD :
             int x = move.x1 + 1,
                 y = move.y1 + 1;
             //TODO: asserts to check index validity
-            assert pieceArray[x][y] != null : "square should not be empty";
-            ourBitBoard ^= pieceArray[x][y].bitRep;
+            p = pieceArray[x][y];
+            assert p != null : "square should not be empty";
+            assert p != edge : "cannot undo: piece is an edge";
+
+            if (p.color == ourColor){
+                ourBitBoard ^= p.bitRep;
+            }else{
+                opponentBitBoard ^= p.bitRep;
+            }
             pieceArray[x][y] = null;
             break;
         case Move.STEP :
@@ -256,13 +264,19 @@ public class Board{
                 fromY = move.y1 + 1;
             long toBitRep = getBitRep(toX-1, toY-1);
 
+            p = pieceArray[fromX][fromY];
             assert pieceArray[toX][toY] == null : "square is already full";
-            assert pieceArray[fromX][fromY] != null : "square is empty";
+            assert p != null : "square is empty";
 
-            ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-            ourBitBoard |= toBitRep;
-
-            pieceArray[toX][toY] = pieceArray[fromX][fromY];
+            if (p.color == ourColor){
+                ourBitBoard ^= p.bitRep;
+                ourBitBoard |= toBitRep;
+            }else{
+                opponentBitBoard ^= p.bitRep;
+                opponentBitBoard |= toBitRep;
+            }
+            //TODO: change p.x and p.y
+            pieceArray[toX][toY] = p;
             pieceArray[toX][toY].bitRep = toBitRep;
             pieceArray[fromX][fromY] = null;
             break;
