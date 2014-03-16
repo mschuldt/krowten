@@ -66,6 +66,11 @@ public class PrintBoard{
             mark(p.x, p.y);
         }
     }
+    public void mark(AList<Move> lst){
+        for (Move m :lst){
+            mark(m.x1, m.x2);
+        }
+    }
 
     public void mark(Iterable<Piece> pieces){
         for (Piece p : pieces){
