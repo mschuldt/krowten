@@ -598,15 +598,15 @@ public class Board{
         AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
         if (ourColor == 0) { // black
+            x_lower = 1;
+            x_upper = 6;
+            y_lower = 0;
+            y_upper = 7;
+        } else { // white
             x_lower = 0;
             x_upper = 7;
             y_lower = 1;
             y_upper = 6;
-        } else { // white
-            y_lower = 0;
-            y_upper = 7;
-            x_lower = 1;
-            x_upper = 6;
         }
         if (numPieces < 10) { //ADD moves
             for (int x = x_lower; x <= x_upper; x++) {
