@@ -183,7 +183,7 @@ public class Board{
             //TODO
             break;
         }
-        verify(); 
+        verify();
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -618,7 +618,7 @@ public class Board{
                 } else if ((p.bitRep & opponentBitBoard) == 0){
                     ok = false;
                     System.out.println(colorStr(1-c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
-                    
+
                 }
             }
         }
