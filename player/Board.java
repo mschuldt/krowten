@@ -57,6 +57,7 @@ public class Board{
        00000000""".replace("\n",""), 2))
     */
     //TODO: why are these masks effectively reflected?
+    //      NOTE: they have been reversed in hasNetwork to account for this
     long cornersMask = 0x4081000000000081L,
         upperGoalMask = 0x7e00000000000000L,
         lowerGoalMask = 0x7e,
@@ -1179,7 +1180,7 @@ public class Board{
                 break;
 
                 //idea: use transposition table from last move to help order the moves
-            case "verify": case "valid": case "v":
+            case "verify": case "valid": case "v": //ok
                 if (verify()){
                     messages.add("Everything seems OK.");
                 }else{
@@ -1256,11 +1257,44 @@ public class Board{
                 messages.add("found "+c2+" pieces");
                 break;
 
-            case "goalpieces":
+            case "goalpieces": //ok
                 PieceList pl = getStartGoalPieces(color);
                 pb.mark(pl);
-                messages.add("Found " +  pl.length() + " network start pieces");
+                messages.add("Found " + pl.length() + " network start pieces");
                 break;
+
+            case "goalmaska": case "gmaska"://Goal Mask A  //ok
+                long goalmask = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
+                Piece p;
+                int c3=0;
+                for (int x = 1; x<9; x++){
+                    for (int y = 1; y<9; y++){
+                        p = pieceArray[x][y];
+                        if (p != null && p != edge && (p.bitRep & goalmask) != 0){
+                            pb.mark(x-1,y-1);
+                            c3++;
+                        }
+                    }
+                }
+                messages.add("found " + c3 + " goal A pieces");
+                break;
+
+            case "goalmaskb": case "gmaskb"://Goal Mask B  //ok
+                long goalmask2 = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
+                Piece p2;
+                int c4=0;
+                for (int x = 1; x<9; x++){
+                    for (int y = 1; y<9; y++){
+                        p2 = pieceArray[x][y];
+                        if (p2 != null && p2 != edge && (p2.bitRep & goalmask2)!=0){
+                            pb.mark(x-1,y-1);
+                            c4++;
+                        }
+                    }
+                }
+                messages.add("found " + c4 + " goal A pieces");
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
@@ -1350,24 +1384,15 @@ public class Board{
         //                     " x   o  " +
         //                     " o      " +
         //                     " o o xx ");
-        Board b = new Board(black,
-                            "        " +
-                            "        " +
-                            "        " +
-                            "        " +
-                            "        " +
-                            "        " +
-                            "        " +
-                            "        ");
-        // Board b = new Board(white,
-        //                     " o   ox " +
-        //                     "      x " +
-        //                     "   o   o" +
-        //                     "x       " +
-        //                     "   x o  " +
-        //                     " x      " +
-        //                     "   o   o" +
-        //                     "  o  xx ");
+        Board b = new Board(white,
+                            "      x " +
+                            "      x " +
+                            "   o   o" +
+                            "o       " +
+                            "   x o  " +
+                            " x      " +
+                            "   o   o" +
+                            "     xx ");
 
         PrintBoard pb = b.toPrintBoard();
 
