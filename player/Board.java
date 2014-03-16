@@ -356,13 +356,6 @@ public class Board{
                            pieceArray[x-1][y-1]}; //top left
 
         PieceList lst = new PieceList();
-        for (Piece p : pieces){
-            if (p != null && p != edge){
-                System.out.print("X");
-            }else{
-                System.out.print("_");
-            }
-        }
         lst.addIfColor(pieces, color);
         return lst;
     }
