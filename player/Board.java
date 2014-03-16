@@ -514,7 +514,8 @@ public class Board{
     }
 
     // looks for a network from goalA -> goalB
-    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b,
+                               PrintBoard pb){ //printBoard is just for debugging
         int newM, newB;
 
         // System.out.println("current piece:");
@@ -561,6 +562,11 @@ public class Board{
             }
         }
         return false;
+    }
+    //this is just temporary to maintain the interface. the origonal has a printboard passed to it
+    //so that it can draw the lines on it.
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
+        return hasNetwork(currentPiece, bitBoard, memberPieces, m,  b, toPrintBoard());
     }
 
     /**
@@ -1207,7 +1213,7 @@ public class Board{
                     for (int y = 0; y<0; y++){
                         mov = new  Move(x,y);
                         if (formsIllegalCluster(mov, color)){
-                            mark(x,y);
+                            pb.mark(x,y);
                         }
                         c++;
                     }
