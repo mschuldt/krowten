@@ -645,15 +645,14 @@ public class Board{
         return false;
     }
 
-
     /*
-    * returns list of all valid moves available for color, meaning
-    * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
-    * 2) the location where the piece will be placed is a valid and legal location on the board
-    * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
-    * and is not currently occupied by any piece including itself.
-    * 3) there will not be any clusters >= 3 on the board after making the Move.
-    */
+     * returns list of all valid moves available for color, meaning
+     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+     * 2) the location where the piece will be placed is a valid and legal location on the board
+     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+     * and is not currently occupied by any piece including itself.
+     * 3) there will not be any clusters >= 3 on the board after making the Move.
+     */
     public AList<Move> validMoves(int color) {
         int numPieces = getNumPieces(color);
         Piece[] pieces = new Piece[numPieces];
@@ -697,8 +696,8 @@ public class Board{
     }
 
     /*
-    *
-    */
+     *
+     */
     public Piece[] getPieces(int color) {
         Piece[] pieces = new Piece[10];
         int i = 0;
@@ -714,12 +713,11 @@ public class Board{
     public int getNumPieces(int color) {
         int counter = 0;
         for (int x = 0; x < 8; x++)
-             for (int y = 0; y < 8; y++)
-                 if (pieceAt(x, y) && (getPiece(x, y).color == color))
-                     counter++;
+            for (int y = 0; y < 8; y++)
+                if (pieceAt(x, y) && (getPiece(x, y).color == color))
+                    counter++;
         return counter;
-     }
-
+    }
 
     //==========================================================================
     // Verification and testing code ===========================================
@@ -731,10 +729,11 @@ public class Board{
 
     //verify that all internal state is valid
     public boolean verify(){
-        //check that the bitboards and pieceArray are synced
         boolean ok = true;
         int c = 0;
         Piece p;
+
+        //check that the bitboards and pieceArray are synced
         for (int x = 1; x < 9; x++){
             for (int y = 1; y < 9; y++){
                 p = pieceArray[x][y];
@@ -768,8 +767,8 @@ public class Board{
 
                 } else {//Else it's the  opponents piece
                     if ((p.bitRep & opponentBitBoard) == 0){
-                    ok = false;
-                    System.out.println(colorStr(1-c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
+                        ok = false;
+                        System.out.println(colorStr(1-c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
                     }
                     if ((p.bitRep & ourBitBoard) != 0){
                         ok = false;
@@ -908,7 +907,7 @@ public class Board{
             }
             return false;
         }
-        
+
         x = i / 10;
         y = i % 10;
         if (isValidIndex(x,y)){
@@ -1038,18 +1037,18 @@ public class Board{
                 if (arg1isRef){
                     pb.mark(argX1, argY1);
                 } break;
-            // case "us":
-            //     Piece p;
-            //     for (int x = 1; x < 9; x++){
-            //         for (int y = 1; y < 9; y++){
-            //             p = pieceArray[x][y];
-            //             if (piece != null && piece != edge && piece.color == ourColor){
+                // case "us":
+                //     Piece p;
+                //     for (int x = 1; x < 9; x++){
+                //         for (int y = 1; y < 9; y++){
+                //             p = pieceArray[x][y];
+                //             if (piece != null && piece != edge && piece.color == ourColor){
 
-            //             }
+                //             }
 
-            //         }
-            //     }
-            //     break;
+                //         }
+                //     }
+                //     break;
             case "them":
                 // highlight their pieces
                 break;
@@ -1174,7 +1173,7 @@ public class Board{
                 AListIterator iter = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
                 iter = validMoves.iterator();
                 while (iter.hasNext())
-                System.out.print(iter.next() + ", ");
+                    System.out.print(iter.next() + ", ");
                 break;
 
                 //idea: use transposition table from last move to help order the moves
@@ -1232,7 +1231,7 @@ public class Board{
                 for (int x = 0; x<8; x++){
                     for (int y = 0; y<8; y++){
                         mov = new  Move(x,y);
-                        if (formsIllegalCluster(mov, color)){
+                        if (isValidIndex(x,y) && formsIllegalCluster(mov, color)){
                             pb.mark(x,y);
                             c++;
                         }
@@ -1344,15 +1343,15 @@ public class Board{
         //                     " x   o  " +
         //                     " o      " +
         //                     " o o xx ");
-        Board b = new Board(white,
-                            " o   ox " +
-                            "      x " +
+        Board b = new Board(black,
                             "        " +
-                            "x       " +
-                            "   x o o" +
-                            " x      " +
-                            "   o    " +
-                            "  o  xx ");
+                            "        " +
+                            "        " +
+                            "        " +
+                            "        " +
+                            "        " +
+                            "        " +
+                            "        ");
         // Board b = new Board(white,
         //                     " o   ox " +
         //                     "      x " +
