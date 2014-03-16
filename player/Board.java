@@ -459,15 +459,23 @@ public class Board{
             currentX = startX + xInc;
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
-
+            System.out.print("Trying: ");
             while (current == null){
+                System.out.print(locStr(currentX-1, currentY-1));
                 currentX += xInc;
                 currentY += yInc;
                 current = pieceArray[currentX][currentY];
             }
+            System.out.println("=> found non-nil");
             if (current != edge){
+                System.out.println("Found "+colorStr(current.color)+" piece at" + locStr(currentX-1, currentY-1));
                 pieces.addIfColor(current, color);
             }
+            System.out.print("current pieces: ");
+            for (Piece p : pieces){
+                System.out.print(locStr(p.x,p.y));
+            }
+            System.out.println("");
         }
         return pieces;
     }
@@ -586,16 +594,16 @@ public class Board{
         }
         return false; //does not have at lease one piece in each goal
     }
-    
+
     /**
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
      */
-    
+
     public boolean formsIllegalCluster(Move m){
         int x = m.x1;
         int y = m.y1;
         int playerColor= this.ourColor; //Player doesn't have a color field?
-        int numNeighbors; 
+        int numNeighbors;
         if (this.pieceAt(x,y)){
             return false; // for now... probably need to throw an error, but isValidMove will also take care of it
         }
@@ -677,11 +685,6 @@ public class Board{
         return mList;
     }
 
-    // placeholder marker: todo
-    public boolean formsIllegalCluster(Move m) {
-        return false;
-    }
-
     //==========================================================================
     // Verification and testing code ===========================================
     //==========================================================================
@@ -702,7 +705,9 @@ public class Board{
                 if (p == edge){
                     continue;
                 }
+
                 if (p == null){
+                    //check that this space is also empty in the bitboads
                     if ((getBitRep(x-1,y-1) & ourBitBoard) != 0){
                         ok = false;
                         System.out.println(colorStr(ourColor) +" bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
@@ -1159,10 +1164,9 @@ public class Board{
                 pb.mark(moves);
                 break;
 
-            case "pieceat": case "pa":
-                System.out.println("argX1 = "+argX1 + "argY1 = "+argY1);
+            case "pieceat": case "pa": //Piece At
                 if (arg1isRef){
-                    Piece p = pieceArray[argX1+1][argY2+1];
+                    Piece p = pieceArray[argX1+1][argY1+1];
                     String loc = locStr(argX1, argY1);
                     if (p == null){
                         messages.add("No piece at "+ loc);
