@@ -668,10 +668,6 @@ public class Board{
         return mList;
     }
 
-    // placeholder marker: todo
-    public boolean formsIllegalCluster(Move m) {
-        return false;
-    }
 
     //==========================================================================
     // Verification and testing code ===========================================

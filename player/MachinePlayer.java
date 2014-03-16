@@ -26,8 +26,57 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
+        /* Boolean side;
+        if (color == this.board.ourColor) { // need to figure out of color is even necessary or what
+            side = true;
+        }
+        else{
+            side = false;
+        }
+        Best bestMove = minimax(side, alpha, beta); //TODO: figure out values
+        return bestMove.Move;
+        */
 	return new Move();
     } 
+
+
+    /**
+     * Minimax algorithm with alpha-beta pruning which returns a Best object with a score and Move
+     **/
+    
+    public Best minimax(Boolean side, int alpha, int beta){
+        Best myBest = new Best();
+        Best reply;
+        if (this.board.hasNetwork()){ // with or without color argument? 
+            return myBest; //not sure...
+        }
+        if (side){
+            myBest.score = alpha;
+        }else{
+            myBest.score = beta;
+        }
+        AList allValidMoves = this.board.validMoves();
+        for (int i; i < allValidMoves.length(); i++){ // validMoves returns a list
+            Move m = (Move) allValidMoves.get(i); 
+            this.board.move(m);
+            reply = minimax(!side, alpha, beta); // ummmmm
+            this.board.unMove(m);
+            if (side && (reply.score >= myBest.score)){
+                myBest.move = m;
+                myBest.score = reply.score;
+                alpha = reply.score;
+            } else if (!side && (reply.score <= myBest.score)){
+                myBest.move = m;
+                myBest.score = reply.score;
+                beta = reply.score;
+            }
+            if (alpha >= beta){
+                return myBest;
+            }
+        }
+        return myBest;
+    }
+    
 
     // If the Move m is legal, records the move as a move by the opponent
     // (updates the internal game board) and returns true.  If the move is
