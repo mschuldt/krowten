@@ -612,42 +612,35 @@ public class Board{
 
 
     /*
-    * returns list of all valid moves available, meaning
+    * returns list of all valid moves available for color, meaning
     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
     * 2) the location where the piece will be placed is a valid and legal location on the board
     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
     * and is not currently occupied by any piece including itself.
     * 3) there will not be any clusters >= 3 on the board after making the Move.
     */
-    public AList<Move> validMoves() {
-        //
-        ArrayList<Piece> pieces = new ArrayList<Piece>();
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                if (pieceAt(i, j) && (getPiece(i, j).color == ourColor))
-                    pieces.add(getPiece(i, j));
-
-        //delete the above when there is some sort of getpiece funciton.
-        int numPieces = pieces.size();
+    public AList<Move> validMoves(int color) {
+        int numPieces = getNumPieces(color);
+        Piece[] pieces = new Piece[numPieces];
         AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
-        if (ourColor == 0) { // black
-            x_lower = 0;
-            x_upper = 7;
-            y_lower = 1;
-            y_upper = 6;
-        } else { // white
+        if (color == 0) { // black
             x_lower = 1;
             x_upper = 6;
             y_lower = 0;
             y_upper = 7;
+        } else { // white
+            x_lower = 0;
+            x_upper = 7;
+            y_lower = 1;
+            y_upper = 6;
         }
         if (numPieces < 10) { //ADD moves
             for (int x = x_lower; x <= x_upper; x++) {
                 for (int y = y_lower; y <= y_upper; y++) {
                     if (!pieceAt(x, y)) {
                         Move m = new Move(x, y);
-                        if (!formsIllegalCluster(m))
+                        if (!formsIllegalCluster(m, color))
                             mList.add(m);
                     }
                 }
@@ -656,9 +649,9 @@ public class Board{
             for (int x = x_lower; x <= x_upper; x++) {
                 for (int y = y_lower; y <= y_upper; y++) {
                     if (!pieceAt(x, y)) {
-                        for (int i = 0; i < pieces.size(); i++) {
-                            Move m = new Move(x, y, pieces.get(i).x, pieces.get(i).y);
-                            if (!formsIllegalCluster(m))
+                        for (int i = 0; i < numPieces; i++) {
+                            Move m = new Move(x, y, pieces[i].x, pieces[i].y);
+                            if (!formsIllegalCluster(m, color))
                                 mList.add(m);
                         }
                     }
@@ -667,6 +660,30 @@ public class Board{
         }
         return mList;
     }
+
+    /*
+    *
+    */
+    public Piece[] getPieces(int color) { 
+        Piece[] pieces = new Piece[10];
+        int i = 0;
+        for (int x = 0; x < 8; x++)
+            for (int y = 0; y < 8; y++)
+                if (pieceAt(x, y) && (getPiece(x, y).color == color)) {
+                    pieces[i] = getPiece(x, y);
+                    i++;
+                }
+        return pieces;
+    }
+
+    public int getNumPieces(int color) {
+        int counter = 0;
+        for (int x = 0; x < 8; x++)
+             for (int y = 0; y < 8; y++)
+                 if (pieceAt(x, y) && (getPiece(x, y).color == color)) 
+                     counter++;
+        return counter;
+     }
 
 
     //==========================================================================
@@ -1093,7 +1110,7 @@ public class Board{
             case "validmoves":
                 System.out.println("Valid moves:");
                 AList<Move> validMoves = new AList<Move>(1);
-                validMoves = validMoves();
+                validMoves = validMoves(color);
                 AListIterator iter = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
                 iter = validMoves.iterator();
                 while (iter.hasNext())
@@ -1120,7 +1137,7 @@ public class Board{
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
                 break;
             case "moves":
-                AList<Move> moves = validMoves();
+                AList<Move> moves = validMoves(color);
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
                 for (Move move : moves){

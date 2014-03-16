@@ -55,7 +55,7 @@ public class MachinePlayer extends Player {
         }else{
             myBest.score = beta;
         }
-        AList allValidMoves = this.board.validMoves();
+        AList allValidMoves = this.board.validMoves(this.board.color);
         for (int i; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = (Move) allValidMoves.get(i); 
             this.board.move(m);
