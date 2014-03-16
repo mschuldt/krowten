@@ -181,10 +181,12 @@ public class Board{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 opponentBitBoard |= bitRep;
             }
-            pieceArray[toX][toY] = pieceArray[fromX][fromY];
-            pieceArray[toX][toY].bitRep = getBitRep(toX-1, toY-1);
+            Piece p = pieceArray[fromX][fromY];
+            pieceArray[toX][toY] = p;
+            p.bitRep = getBitRep(toX-1, toY-1);
+            p.x = toX-1;
+            p.y = toY-1;
             pieceArray[fromX][fromY] = null;
-
             break;
         case Move.QUIT :
             //TODO
