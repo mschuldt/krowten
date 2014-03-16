@@ -582,16 +582,15 @@ public class Board{
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
      */
     
-    public boolean formsIllegalCluster(Move m){
+    public boolean formsIllegalCluster(Move m, int color){
         int x = m.x1;
-        int y = m.y1;
-        int playerColor= this.ourColor; //Player doesn't have a color field?
+        int y = m.y1; 
         int numNeighbors; 
         if (this.pieceAt(x,y)){
             return false; // for now... probably need to throw an error, but isValidMove will also take care of it
         }
-        this.move(m, playerColor); //Board is updated
-        PieceList neighbors = this.adjacentPieces(x, y, playerColor); // get neighboring pieces of (presumably) the same color
+        this.move(m, color); //Board is updated
+        PieceList neighbors = this.adjacentPieces(x, y, color); // get neighboring pieces of (presumably) the same color
         numNeighbors = neighbors.length();
         if (numNeighbors >1){
             this.unMove(m);
