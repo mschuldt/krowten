@@ -183,6 +183,7 @@ public class Board{
             //TODO
             break;
         }
+        verify(); 
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -260,6 +261,7 @@ public class Board{
             //TODO
             break;
         }
+        verify();
     }
 
     //return the hash of the current board
@@ -580,12 +582,49 @@ public class Board{
     // Verification and testing code ===========================================
     //==========================================================================
 
+    private String locStr(int x, int y){
+        return "(" + x + "," + x +")";
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         //check that the bitboards and pieceArray are synced
+        boolean ok = true;
+        int c = 0;
+        Piece p;
+        for (int x = 1; x < 9; x++){
+            for (int y = 1; y < 9; y++){
+                p = pieceArray[x][y];
+                if (p == edge){
+                    continue;
+                }
+                if (p == null){
+                    if ((getBitRep(x-1,y-1) & ourBitBoard) != 0){
+                        ok = false;
+                        System.out.println(colorStr(ourColor) +" bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
+                    }
+                    if ((getBitRep(x-1,y-1) & opponentBitBoard) != 0){
+                        ok = false;
+                        System.out.println(colorStr(1 - ourColor) + " bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
+                    }
+                    continue;
+                }
+                c = p.color;
+                if (c == ourColor){
+                    if ((p.bitRep & ourBitBoard) == 0){
+                        ok = false;
+                        System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
+                    }
+                } else if ((p.bitRep & opponentBitBoard) == 0){
+                    ok = false;
+                    System.out.println(colorStr(1-c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
+                    
+                }
+            }
+        }
 
         //check that no color has a piece in their opponents goals
-        return false;
+        return ok;
     }
     //construct a board from a string representation of it.
     //'x' for black pieces, 'o' for white piece (case does not matter).
