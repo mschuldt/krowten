@@ -1192,12 +1192,12 @@ public class Board{
                 break;
             case "network": case "net": case "n":
                 // visually show the detected network
-                messages.add(hasNetwork(color) ? "YES" : "NO");
+                messages.add(hasNetwork(color,pb) ? "YES" : "NO");
                 break;
             case "network?": case "net?": case "n?":
                 System.out.println((hasNetwork(color) ? "YES": "NO"));
                 break;
-            case "moves":
+            case "moves": //ok
                 AList<Move> moves = validMoves(color);
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
@@ -1208,7 +1208,7 @@ public class Board{
                 pb.mark(moves);
                 break;
 
-            case "pieceat": case "pa": //Piece At
+            case "pieceat": case "pa": //Piece At    //ok
                 if (arg1isRef){
                     Piece p = pieceArray[argX1+1][argY1+1];
                     String loc = locStr(argX1, argY1);
@@ -1227,7 +1227,7 @@ public class Board{
                 }
                 break;
 
-            case "clusters": case "cluster": case "clus":
+            case "clusters": case "cluster": case "clus"://ok
                 int c = 0;
                 Move mov;
                 for (int x = 0; x<8; x++){
@@ -1256,6 +1256,11 @@ public class Board{
                 messages.add("found "+c2+" pieces");
                 break;
 
+            case "goalpieces":
+                PieceList pl = getStartGoalPieces(color);
+                pb.mark(pl);
+                messages.add("Found " +  pl.length() + " network start pieces");
+                break;
             case "print":
                 break;
             case "exit": case "quit": case "done":
