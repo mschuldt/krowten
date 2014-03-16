@@ -714,20 +714,36 @@ public class Board{
                     continue;
                 }
                 c = p.color;
+                //the piece of this color is in its bitboard and also not in the other bitboard
                 if (c == ourColor){
                     if ((p.bitRep & ourBitBoard) == 0){
                         ok = false;
                         System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
                     }
-                } else if ((p.bitRep & opponentBitBoard) == 0){
+                    if ((p.bitRep & opponentBitBoard) != 0){
+                        ok = false;
+                        System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is in its opponents bitboard");
+                    }
+
+                } else {//Else it's the  opponents piece
+                    if ((p.bitRep & opponentBitBoard) == 0){
                     ok = false;
                     System.out.println(colorStr(1-c) + " Piece at" + locStr(p.x, p.y) + " is missing from its biboard");
-
+                    }
+                    if ((p.bitRep & ourBitBoard) != 0){
+                        ok = false;
+                        System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is in its opponents bitboard");
+                    }
                 }
+                //check that no color has a piece in their opponents goals
+                if (p.x != x-1 || p.y != y-1){
+                    ok = false;
+                    System.out.println(colorStr(c) + "Piece at " + locStr(x-1, y-1) + " has internal coordinate of "+ locStr(p.x,p.y));
+                }
+
             }
         }
 
-        //check that no color has a piece in their opponents goals
         return ok;
     }
     //construct a board from a string representation of it.
