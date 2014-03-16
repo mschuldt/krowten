@@ -33,7 +33,7 @@ public class MachinePlayer extends Player {
         else{
             side = false;
         }
-        Best bestMove = minimax(side, -1, 1); //TODO: evaluation function
+        Best bestMove = minimax(true, -1, 1, depth) //TODO: optimal depth and evaluation function
         return bestMove.Move;
         */
 	return new Move();
@@ -44,11 +44,15 @@ public class MachinePlayer extends Player {
      * Minimax algorithm with alpha-beta pruning which returns a Best object with a score and Move
      **/
     
-    public Best minimax(Boolean side, int alpha, int beta){
+    public Best minimax(Boolean side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
         if (this.board.hasNetwork()){ // with or without color argument? 
             return myBest; //not sure...
+        }
+        if (depth == 0){
+            //this.board.scoreBoard(this.board, this); TODO
+            return myBest;
         }
         if (side){
             myBest.score = alpha;
@@ -59,7 +63,7 @@ public class MachinePlayer extends Player {
         for (int i = 0; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = (Move) allValidMoves.get(i); 
             this.board.move(m);
-            reply = minimax(!side, alpha, beta); // ummmmm
+            reply = minimax(!side, alpha, beta, depth-1); // ummmmm
             this.board.unMove(m);
             if (side && (reply.score >= myBest.score)){
                 myBest.move = m;
