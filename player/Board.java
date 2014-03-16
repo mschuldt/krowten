@@ -578,6 +578,69 @@ public class Board{
         return false; //does not have at lease one piece in each goal
     }
 
+
+    /*
+    * returns list of all valid moves available, meaning
+    * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+    * 2) the location where the piece will be placed is a valid and legal location on the board 
+    * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+    * and is not currently occupied by any piece including itself.
+    * 3) there will not be any clusters >= 3 on the board after making the Move.
+    */
+    public AList<Move> validMoves() {
+        //
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (pieceAt(i, j) && (getPiece(i, j).color == ourColor))
+                    pieces.add(getPiece(i, j));
+
+        //delete the above when there is some sort of getpiece funciton.
+        int numPieces = pieces.size();
+        AList<Move> mList = new AList<Move>(440);
+        int x_lower, y_lower, x_upper, y_upper;
+        if (ourColor == 0) { // black
+            x_lower = 0;
+            x_upper = 7;
+            y_lower = 1;
+            y_upper = 6;
+        } else { // white
+            y_lower = 0;
+            y_upper = 7;
+            x_lower = 1;
+            x_upper = 6;
+        }
+        if (numPieces < 10) { //ADD moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        Move m = new Move(x, y);
+                        if (!formsIllegalCluster(m))
+                            mList.add(m);
+                    }
+                }
+            }
+        } else {                      // STEP moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        for (int i = 0; i < pieces.size(); i++) {
+                            Move m = new Move(x, y, pieces.get(i).x, pieces.get(i).y);
+                            if (!formsIllegalCluster(m))
+                                mList.add(m);                        
+                        } 
+                    }
+                }
+            }          
+        } 
+        return mList;
+    }
+
+    // placeholder marker: todo
+    public boolean formsIllegalCluster(Move m) {
+        return false;
+    }
+
     //==========================================================================
     // Verification and testing code ===========================================
     //==========================================================================
@@ -999,6 +1062,16 @@ public class Board{
                 }
                 break;
 
+            case "validmoves":
+                System.out.println("Valid moves:");
+                AList<Move> validMoves = new AList<Move>(1);
+                validMoves = validMoves();
+                AListIterator iter = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
+                iter = validMoves.iterator();
+                while (iter.hasNext())
+                System.out.print(iter.next() + ", ");
+                break;
+
                 //idea: use transposition table from last move to help order the moves
             case "verify": case "valid": case "v":
                 if (verify()){
@@ -1086,7 +1159,8 @@ public class Board{
             "'hideNums'  hide square numbers",
             "'showNums'  display the square numbers",
             "'around' <num>    mark pieces that surround <num>",
-            "'connect' <num>   draw lines to pieces connected to <num>"};
+            "'connect' <num>   draw lines to pieces connected to <num>",
+            "'validmoves'    displays valid moves"};
 
         for (String line: lines){
             messages.add(line);
@@ -1154,6 +1228,8 @@ public class Board{
         // System.out.println(b.bitBoardToString(b.ourBitBoard & b.leftGoalMask));
         //b.test();
         b.interactiveDebug();
+        //
+        
     }
 }
 
