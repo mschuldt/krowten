@@ -90,11 +90,18 @@ public class Board{
         //TODO: assign goal masks
         pieceArray = new Piece[10][10];
 
-        //TODO: proper goal assignment
-        ourGoalMaskA = lowerGoalMask;
-        ourGoalMaskB = upperGoalMask;
-        opponentGoalMaskA = leftGoalMask;
-        opponentGoalMaskB  = rightGoalMask;
+        if (ourColor == 1){ //white's goals are on the left and right
+            ourGoalMaskA = rightGoalMask;
+            ourGoalMaskB = leftGoalMask;
+            opponentGoalMaskA = lowerGoalMask;
+            opponentGoalMaskB = upperGoalMask;
+        }else{
+            ourGoalMaskA = lowerGoalMask;
+            ourGoalMaskB = upperGoalMask;
+            opponentGoalMaskA = rightGoalMask;
+            opponentGoalMaskB = leftGoalMask;
+        }
+
         ourGoalMask = (ourGoalMaskA & ourGoalMaskB);
         opponentGoalMask = (opponentGoalMaskA & opponentGoalMaskB);
 
