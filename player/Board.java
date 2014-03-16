@@ -104,8 +104,8 @@ public class Board{
             opponentGoalMaskB = rightGoalMask;
         }
 
-        ourGoalMask = (ourGoalMaskA & ourGoalMaskB);
-        opponentGoalMask = (opponentGoalMaskA & opponentGoalMaskB);
+        ourGoalMask = (ourGoalMaskA | ourGoalMaskB);
+        opponentGoalMask = (opponentGoalMaskA | opponentGoalMaskB);
 
         for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
