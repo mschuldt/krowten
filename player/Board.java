@@ -267,27 +267,6 @@ public class Board{
         return ((ourBitBoard % 1073741789) << 31) & (opponentBitBoard % 1073741789);
     }
 
-    private int countPieces (Piece[] pieces){
-        int c = 0;
-        for (Piece p : pieces){
-            if ((p != edge) && (p != null)) {
-                c+=1;
-            }
-        }
-        return c;
-    }
-
-    //this should be fixed to prevent the double traversal
-    private Piece[] removeNonPieces(Piece[] pieces){
-        Piece [] ret = new Piece[countPieces(pieces)];
-        int i=0;
-        for (Piece p : pieces){
-            if ((p != edge) && (p != null)){
-                ret[i++] = p;
-            }
-        }
-        return ret;
-    }
 
     /** Board.adjacentPieces(int,int) returns an array of pieces
      * that are adjacent to the pieces at coordinates (X,Y) on
