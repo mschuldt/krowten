@@ -1161,10 +1161,6 @@ public class Board{
                 break;
 
             case "undo": case "u": //ok
-                if (color != ourColor){
-                    messages.add("Cannot undo opponents moves");
-                    break;
-                }
                 if (history.empty()){
                     messages.add("No history to undo");
                     break;
