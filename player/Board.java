@@ -605,6 +605,9 @@ public class Board{
     }
 
     public boolean hasNetwork(int color, PrintBoard pb){
+        if ((color == ourColor ? ourPieceCount : OpponentPieceCount) < 6){
+            return false;
+        }
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
         long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
         long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
