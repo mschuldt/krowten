@@ -90,7 +90,7 @@ public class Board{
         ourPieceCount =  opponentPieceCount = 0;
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
-        //TODO: assign goal masks
+        
         pieceArray = new Piece[10][10];
 
         //NOTE: if this goal mask assignment is changed, then
