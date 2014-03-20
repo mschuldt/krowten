@@ -1188,7 +1188,7 @@ public class Board{
                 System.out.println("Valid moves:");
                 AList<Move> validMoves = new AList<Move>(1);
                 validMoves = validMoves(color);
-                AListIterator iter = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
+                AListIterator<Move> iter;// = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
                 iter = validMoves.iterator();
                 while (iter.hasNext())
                     System.out.print(iter.next() + ", ");
