@@ -581,29 +581,6 @@ public class Board{
         return hasNetwork(currentPiece, bitBoard, memberPieces, ourGoalMaskA, m, b, 1, toPrintBoard());
     }
 
-    /**
-     *  Board.hasNetwork() determines whether "this" Board has a valid
-     *  network for player whose color is Board.color.
-     *
-     *  Unusual conditions:
-     *  If the board contain illegal squares, the behavior of this
-     *        method is undefined.
-     *
-     *  @return true if player whose color is 'this.color' has a winning network
-     *          on 'this' GameBoard; false otherwise.
-     **/
-    public boolean hasNetwork(){
-        if (((ourBitBoard & ourGoalMaskA) != 0)
-            && ((ourBitBoard & ourGoalMaskB) != 0)){
-            for (Piece piece : getStartGoalPieces(ourColor)){
-                if (hasNetwork(piece, ourBitBoard, ourGoalMaskB, ourGoalMaskA,11, 60, 1,toPrintBoard())){ //11x+60: just an impossible line
-                    return true;
-                }
-            }
-        }
-        return false; //does not have at least one piece in each goal
-    }
-
     public boolean hasNetwork(int color, PrintBoard pb){
         if ((color == ourColor ? ourPieceCount : OpponentPieceCount) < 6){
             return false;
