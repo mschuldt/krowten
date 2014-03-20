@@ -47,7 +47,9 @@ public class MachinePlayer extends Player {
     public Best minimax(Boolean side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        if (this.board.hasNetwork()){ // with or without color argument?
+        //`hasNetwork' needs to know the color. I'm not sure what `side'
+        // represents but this makes it compile for now --Michael
+        if (this.board.hasNetwork(side?1:0)){ // with or without color argument?
             return myBest; //not sure...
         }
         if (depth == 0){

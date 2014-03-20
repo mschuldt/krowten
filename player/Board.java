@@ -90,7 +90,7 @@ public class Board{
         ourPieceCount =  opponentPieceCount = 0;
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
-        
+
         pieceArray = new Piece[10][10];
 
         //NOTE: if this goal mask assignment is changed, then
@@ -582,7 +582,7 @@ public class Board{
     }
 
     public boolean hasNetwork(int color, PrintBoard pb){
-        if ((color == ourColor ? ourPieceCount : OpponentPieceCount) < 6){
+        if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
             return false;
         }
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
@@ -599,7 +599,7 @@ public class Board{
         return false; //does not have at lease one piece in each goal
     }
     public boolean hasNetwork(int color){//Temp for debugging
-        return hasNetwork(color,toPrintBoard());
+        return hasNetwork(color, toPrintBoard());
     }
     /**
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
