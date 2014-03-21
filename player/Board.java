@@ -26,7 +26,7 @@ public class Board{
     //
     // The `bitReps' array was generated with this python code:
     // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
-    long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
+    final long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
                       0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
                       0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
                       0x100000L, 0x200000L, 0x400000L, 0x800000L,
@@ -59,12 +59,12 @@ public class Board{
     */
     //TODO: why are these masks effectively reflected?
     //      NOTE: they have been reversed in hasNetwork to account for this
-    long cornersMask = 0x4081000000000081L,
+    final long cornersMask = 0x4081000000000081L,
         upperGoalMask = 0x7e00000000000000L,
         lowerGoalMask = 0x7e,
         rightGoalMask = 0x1010101010100L,
-        leftGoalMask = 0x80808080808000L,
-        ourGoalMaskA,
+        leftGoalMask = 0x80808080808000L;
+    long ourGoalMaskA,
         ourGoalMaskB,
         ourGoalMask,
         opponentGoalMaskA,
