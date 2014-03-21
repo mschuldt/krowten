@@ -684,15 +684,20 @@ public class Board{
     /*
      *
      */
-    public Piece[] getPieces(int color) {
-        Piece[] pieces = new Piece[10];
+    public PieceList getPieces(int color){
+        PieceList pieces = new PieceList(10);
+        Piece p = null;
         int i = 0;
-        for (int x = 0; x < 8; x++)
-            for (int y = 0; y < 8; y++)
-                if (pieceAt(x, y) && (getPiece(x, y).color == color)) {
-                    pieces[i] = getPiece(x, y);
-                    i++;
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++){
+                if (pieceAt(x, y)){
+                    p = getPiece(x, y);
+                    if (p.color == color){
+                        pieces.add(p);
+                    }
                 }
+            }
+        }
         return pieces;
     }
 
