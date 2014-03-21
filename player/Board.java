@@ -708,6 +708,23 @@ public class Board{
         return opponentPieceCount;
     }
 
+    //? interface change:
+    //    MachinePlayer.scoreBoard(Board B, Player P)
+    //    -> Baord.score(int color);
+    //
+    /**
+       Temporary evaluation function so we can test the rest of the program.
+       Just sum the connections of all the pieces of a given color
+     */
+    public int score(int color){
+        int sum = 0;
+        for (Piece p: getPieces(color)){
+            sum += connectedPieces(p).length();
+        }
+        return sum;
+    }
+
+
     //==========================================================================
     // Verification and testing code ===========================================
     //==========================================================================
