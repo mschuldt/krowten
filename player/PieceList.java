@@ -5,7 +5,9 @@ public class PieceList extends AList<Piece>{
     public PieceList(){
         super(8);//motel
     }
-
+    public PieceList(int n){
+        super(n);
+    }
     public void addIfPiece(Piece p){
         if (p == null || p == Board.edge){
             return;
