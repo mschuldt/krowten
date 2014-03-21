@@ -1281,16 +1281,19 @@ public class Board{
                 break;
 
             case "markall": //ok
-                int c2 = 0;
-                for (int x = 0; x<8; x++){
-                    for (int y = 0; y<8; y++){
-                        if (pieceAt(x,y)){
-                            pb.mark(x,y);
-                            c2++;
-                        }
-                    }
+                int num= 0;
+                PieceList pLst = getPieces(black);
+                num+=pLst.length();
+                for (Piece p: pLst){
+                    pb.mark(p);
                 }
-                messages.add("found "+c2+" pieces");
+                pLst = pLst = getPieces(white);
+                    num+=pLst.length();
+                for (Piece p: pLst){
+                    pb.mark(p);
+                }
+
+                messages.add("found "+num+" pieces");
                 break;
 
             case "goalpieces": //ok
