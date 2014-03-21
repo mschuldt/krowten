@@ -498,12 +498,12 @@ public class Board{
         Piece p = null;
         PieceList lst = new PieceList();
         if (color == white){ //start at the left
-            for (int y=2; y<8; y++){
-                lst.addIfColor(pieceArray[1][y],color);
+            for (int y=1; y<7; y++){
+                lst.addIfColor(getPiece(0, y), color);
             }
         }else{//black starts at bottom
-            for (int x=2; x<8; x++){
-                lst.addIfColor(pieceArray[x][8],color);
+            for (int x=1; x<7; x++){
+                lst.addIfColor(getPiece(x, 7), color);
             }
         }
         return lst;
@@ -741,20 +741,20 @@ public class Board{
         Piece p;
 
         //check that the bitboards and pieceArray are synced
-        for (int x = 1; x < 9; x++){
-            for (int y = 1; y < 9; y++){
-                p = pieceArray[x][y];
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+                p = getPiece(x,y);
                 if (p == edge){
                     continue;
                 }
 
                 if (p == null){
                     //check that this space is also empty in the bitboads
-                    if ((getBitRep(x-1,y-1) & ourBitBoard) != 0){
+                    if ((getBitRep(x,y) & ourBitBoard) != 0){
                         ok = false;
                         System.out.println(colorStr(ourColor) +" bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
                     }
-                    if ((getBitRep(x-1,y-1) & opponentBitBoard) != 0){
+                    if ((getBitRep(x,y) & opponentBitBoard) != 0){
                         ok = false;
                         System.out.println(colorStr(1 - ourColor) + " bitBoard has a piece at " + locStr(x,y) + " but the pieceArray is empty there");
                     }
@@ -783,7 +783,7 @@ public class Board{
                     }
                 }
                 //check that no color has a piece in their opponents goals
-                if (p.x != x-1 || p.y != y-1){
+                if (p.x != x || p.y != y){
                     ok = false;
                     System.out.println(colorStr(c) + "Piece at " + locStr(x-1, y-1) + " has internal coordinate of "+ locStr(p.x,p.y));
                 }
@@ -892,7 +892,7 @@ public class Board{
         for (int x = 0; x < 8; x++){
             for (int y = 0; y < 8; y++){
 
-                piece = pieceArray[x+1][y+1];
+                piece = getPiece(x, y);
                 cell = new Cell(x, y);
                 cells[x][y] = cell;
                 if (piece == null){
