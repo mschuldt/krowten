@@ -583,6 +583,7 @@ public class Board{
 
     public boolean hasNetwork(int color, PrintBoard pb){
         if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
+            System.out.println("< 6 pieces: no network");
             return false;
         }
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
@@ -811,6 +812,18 @@ public class Board{
         }
         if (opponentPieceCount > 10){
             System.out.println(colorStr(1-ourColor) + " has "+ opponentPieceCount + " pieces");
+            ok = false;
+        }
+
+        //check piece count methods
+        PieceList wp = getPieces(white);
+        PieceList bp = getPieces(black);
+        if (getNumPieces(white) != wp.length()){
+            System.out.println("getPieces(white).length() != getNumPieces(white)");
+            ok = false;
+        }
+        if (getNumPieces(black) != bp.length()){
+            System.out.println("getPieces(black).length() != getNumPieces(black)");
             ok = false;
         }
 
@@ -1423,15 +1436,27 @@ public class Board{
         //                     " x   o  " +
         //                     " o      " +
         //                     " o o xx ");
-        Board b = new Board(white,
-                            "      x " +
-                            " o    x " +
-                            "   o   o" +
-                            "o    o  " +
-                            "   x o  " +
-                            " x     o" +
-                            " o o   o" +
+        // Board b = new Board(white,
+        //                     "      x " +
+        //                     " o    x " +
+        //                     "   o   o" +
+        //                     "o    o  " +
+        //                     "   x o  " +
+        //                     " x     o" +
+        //                     " o o   o" +
+        //                     "     xx ");
+
+        Board b = new Board(black,
+                            "     x  " +
+                            "  x x   " +
+                            " o o x  " +
+                            "o   o o " +
+                            "  x   oo" +
+                            " x x    " +
+                            "        " +
                             "     xx ");
+
+
 
         PrintBoard pb = b.toPrintBoard();
 
