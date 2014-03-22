@@ -734,12 +734,10 @@ public class Board{
         return "(" + x + "," + y +")";
     }
 
-    //verify that all internal state is valid
-    public boolean verify(){
+    public boolean verifyBitBoards(){
         boolean ok = true;
         int c = 0;
         Piece p;
-
         //check that the bitboards and pieceArray are synced
         for (int x = 0; x < 8; x++){
             for (int y = 0; y < 8; y++){
@@ -790,11 +788,17 @@ public class Board{
 
             }
         }
-        //check for shared bits
+
+        //check for shared bits (another way)
         if ((ourBitBoard & opponentBitBoard) != 0){
             System.out.println("bitboards share pieces");
             ok = false;
         }
+        return ok;
+    }
+
+    public boolean verifyGoals(){
+        boolean ok = true;
         //check that players are not in opponents goals
         if ((ourGoalMask & opponentBitBoard) != 0){
             System.out.println(colorStr(1-ourColor) + " has pieces in opponents goal");
@@ -804,7 +808,11 @@ public class Board{
             System.out.println(colorStr(ourColor) + " has pieces in opponents goal");
             ok = false;
         }
+        return ok;
+    }
 
+    public boolean verifyPieceCount(){
+        boolean ok = true;
         //check piece counts
         if (ourPieceCount > 10){
             System.out.println(colorStr(ourColor) + " has "+ ourPieceCount + " pieces");
@@ -826,9 +834,16 @@ public class Board{
             System.out.println("getPieces(black).length() != getNumPieces(black)");
             ok = false;
         }
-
-        return ok;
+        return true;
     }
+
+    //verify that all internal state is valid
+    public boolean verify(){
+        return verifyBitBoards()
+            && verifyGoals()
+            && verifyPieceCount();
+    }
+
     //construct a board from a string representation of it.
     //'x' for black pieces, 'o' for white piece (case does not matter).
     //example:
