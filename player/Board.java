@@ -1092,7 +1092,7 @@ public class Board{
     }
 
     public void interactiveDebug(){
-
+        loadGeneratedTests();
         BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
         Stack<Move> history = new Stack<Move>();
         String input = "";
