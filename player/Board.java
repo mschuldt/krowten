@@ -1447,6 +1447,87 @@ public class Board{
                 messages.add("found " + c4 + " goal A pieces");
                 break;
 
+            case "boardstring":
+                messages.add("boardString:");
+                messages.add(toBoardString());
+                Board testBoard = new Board(color, toBoardString(true));
+                if ((testBoard.getOurBitBoard() == ourBitBoard)
+                    && (testBoard.getOpponentBitBoard() == opponentBitBoard)){
+                    messages.add("tests ok");
+                }else{
+                    messages.add("failure to reconstruct");
+                }
+
+                break;
+
+            case "clustersbitboard" : case "clustersbb":
+                messages.add(colorStr(color) + " cluster bitBoard:");
+                messages.add(bitBoardToString(clustersBB(color)));
+                break;
+
+            case "movesbitboard" : case "movesbb":
+                messages.add(colorStr(color) + " moves bitBoard:");
+                messages.add(bitBoardToString(legalMovesBB(color)));
+                break;
+
+            case "connectedbb": case "cbb":
+                int index = 0;
+                try{
+                    index = Integer.parseInt(arg1);
+                }catch(NumberFormatException err){
+                    messages.add("Invalid number: '"+ arg1 +"'");
+                    break;
+                }
+                if (index <0 || index > 8){
+                    messages.add("  board index must be between 0 and 8");
+                    break;
+                }
+                messages.add("bitboard for pieces with "+ index+ " connections: ");
+                messages.add(bitBoardToString(connectedPiecesBB(color)[index]));
+                break;
+
+            case "maketest": case "createtest":
+                BoardTest test = new BoardTest(1);
+
+                test.board = toBoardString(); //the kind of string that can reconstruct the board by passing it to the constructor;
+                test.whiteBB = (ourColor == white? ourBitBoard : opponentBitBoard);
+                test.blackBB = (ourColor == black? ourBitBoard : opponentBitBoard);
+                test.whiteClustersBB = clustersBB(white);
+                test.blackClustersBB = clustersBB(black);
+                test.whiteLegalMovesBB = legalMovesBB(white);
+                test.blackLegalMovesBB = legalMovesBB(black);
+                test.whiteConnectedPieces = connectedPiecesBB(white);
+                test.blackConnectedPieces = connectedPiecesBB(black);
+                test.whiteNetwork = hasNetwork(white);
+                test.blackNetwork = hasNetwork(black);
+                test.whiteNumPieces = ourColor == white? ourPieceCount: opponentPieceCount;
+                test.blackNumPieces = ourColor == black? ourPieceCount: opponentPieceCount;
+                test.passedBitBoardTests = verifyBitBoards();
+                test.passedGoalTests = verifyGoals();
+                test.passedPieceCountTests = verifyPieceCount();
+
+                //TODO: save generated tests to file
+                messages.add(test.toString());
+
+                break;
+
+            case "ntests":
+                messages.add("there are " + BoardTest.tests.length() + " generated tests");
+                break;
+
+            case "runtests": case "rt":
+                if (runGeneratedTests()){
+                    messages.add("All tests pass.");
+                    break;
+                }
+                messages.add("Tests failed. Board is broken. Time to cry");
+                break;
+
+            case "piececount":
+                messages.add("piece count:");
+                messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
+                messages.add("black: "+(ourColor==black? ourPieceCount: opponentPieceCount));
+                    break;
             case "print":
                 break;
             case "exit": case "quit": case "done":
