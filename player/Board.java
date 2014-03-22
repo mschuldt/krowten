@@ -884,6 +884,48 @@ public class Board{
         }
     }
 
+    //returns a string that evaluates to a string used to reconstruct
+    //this board. For use with the Board.Board(int, String) constructor
+    // if trueString is non-false, return the true string representation
+    // (no  '+', '"' or '\n' included)
+    public String toBoardString(boolean trueString){
+        String lines = "";
+        String line = "";
+        long bitRep = 0;
+        long whiteBB = (ourColor == white ? ourBitBoard : opponentBitBoard);
+        long blackBB = (ourColor == black ? ourBitBoard : opponentBitBoard);
+
+        for (int y = 0; y < 8; y++){
+            line = trueString? "" : "\"";
+            for (int x = 0; x < 8; x++){
+                bitRep = getBitRep(x, y);
+                if ((bitRep & whiteBB) != 0){
+                    line += "o";
+                }else if ((bitRep & blackBB) != 0){
+                    line += "x";
+                }else{
+                    line += " ";
+                }
+            }
+            lines = lines + line + (trueString ? "" : "\" +\n");
+        }
+        return lines;
+    }
+    public String toBoardString(){
+        return toBoardString(false);
+    }
+
+    public long clustersBB(int color){
+        return 0;//TODO
+    }
+    public long legalMovesBB(int color){
+        return 0;//TODO
+    }
+    public long[] connectedPiecesBB(int color){
+        long[] clusters = new long[8];
+        return clusters; //TODO
+    }
+
     public Cell[][] toCellArray(){
         Piece piece;
         Cell[][] cells = new Cell[8][8];
