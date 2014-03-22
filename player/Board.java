@@ -619,25 +619,19 @@ public class Board{
         if (this.pieceAt(x,y)){
             return false; // for now... probably need to throw an error, but isValidMove will also take care of it
         }
-        checkingIllegalClusters_TEMP = true;
-        this.move(m, color); //Board is updated
-        checkingIllegalClusters_TEMP = false;
         PieceList neighbors = this.adjacentPieces(x, y, color); // get neighboring pieces of (presumably) the same color
         numNeighbors = neighbors.length();
         if (numNeighbors >1){
-            this.unMove(m);
             return true;
         }
         if (numNeighbors == 1){
             Piece oneNeighbor = neighbors.get(0);
             PieceList moreNeighbors = this.adjacentPieces(oneNeighbor);
             int moreNumNeighbors = moreNeighbors.length();
-            if (moreNumNeighbors >1){
-                this.unMove(m);
+            if (moreNumNeighbors >0){
                 return true;
             }
         }
-        this.unMove(m); //ALWAYS UNMOVE
         return false;
     }
 
@@ -680,6 +674,7 @@ public class Board{
                 for (int y = y_lower; y <= y_upper; y++) {
                     if (!pieceAt(x, y)) {
                         for (int i = 0; i < numPieces; i++) {
+                            //where is 'pieces' set??
                             Move m = new Move(x, y, pieces[i].x, pieces[i].y);
                             if (!formsIllegalCluster(m, color))
                                 mList.add(m);
