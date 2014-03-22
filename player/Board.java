@@ -952,8 +952,13 @@ public class Board{
     }
 
     public long legalMovesBB(int color){
-        return 0;//TODO
+        long movesBoard = 0;
+        for (Move m: validMoves(color)){
+            movesBoard |= getBitRep(m.x1, m.y1);
+        }
+        return movesBoard;
     }
+
     public long[] connectedPiecesBB(int color){
         long[] clusters = new long[8];
         return clusters; //TODO
