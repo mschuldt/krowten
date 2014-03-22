@@ -930,7 +930,12 @@ public class Board{
                     line += " ";
                 }
             }
+            if (y == 7){
+                lines = lines + line + (trueString ? "" : "\"");
+                continue;
+            }
             lines = lines + line + (trueString ? "" : "\" +\n");
+
         }
         return lines;
     }
