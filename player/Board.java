@@ -1526,6 +1526,152 @@ public class Board{
         return pass;
     }
 
+    //compare 'this' boards fields to those in test,
+    //return true if they match, otherwise false.
+    public boolean compareToTest(BoardTest test){
+        boolean ok = true;
+        AList<String> errors  = new AList<String>(10);
+
+        if (test.whiteBB != (ourColor == white ? ourBitBoard : opponentBitBoard)){
+            errors.add("white bitBoard does not match");
+        }
+        if (test.blackBB != (ourColor == black ? ourBitBoard : opponentBitBoard)){
+            errors.add("black bitBoard does not match");
+        }
+        if (test.whiteClustersBB != clustersBB(white)){
+            errors.add("white clusters does not match");
+        }
+        if (test.blackClustersBB != clustersBB(black)){
+            errors.add("black clusters does not match");
+        }
+        if (test.whiteLegalMovesBB != legalMovesBB(white)){
+            errors.add("white legal moves does not match");
+        }
+        if (test.blackLegalMovesBB != legalMovesBB(black)){
+            errors.add("black legal moves does not match");
+        }
+        long[] wcp = connectedPiecesBB(white);
+        long[] bcp = connectedPiecesBB(black);
+
+        for (int i = 0; i < 8; i++){
+            if (test.whiteConnectedPieces[i] != wcp[i]){
+                errors.add("white Connected pieces don't match (level " + i +")");
+            }
+            if (test.blackConnectedPieces[i] != bcp[i]){
+                errors.add("black Connected pieces don't match (level " + i +")");
+            }
+        }
+        if (test.whiteNetwork != hasNetwork(white)){
+            errors.add("hasNetwork(white) does not match");
+        }
+        if (test.blackNetwork != hasNetwork(black)){
+            errors.add("hasNetwork(black) does not match");
+        }
+        if (test.whiteNumPieces
+            != (ourColor == white ? ourPieceCount: opponentPieceCount)){
+            errors.add("white piece count does not match");
+        }
+        if (test.blackNumPieces
+            != (ourColor == black ? ourPieceCount: opponentPieceCount)){
+            errors.add("blackpiece count does not match");
+        }
+        if (test.passedBitBoardTests != verifyBitBoards()){
+            errors.add("verfiyBitBoards test result does not match");
+        }
+        if (test.passedGoalTests != verifyGoals()){
+            errors.add("verifyGoals test result does not match");
+        }
+        if (test.passedPieceCountTests != verifyPieceCount()){
+            errors.add("verifyPieceCount test result does not match");
+        }
+
+        int nErrors = errors.length();
+        if (nErrors != 0){
+            System.out.println(nErrors + " errors with test #" + test.getId());
+            for (String s: errors){
+                System.out.println("   "+ s);
+            }
+            return false;
+        }
+        return true;
+    }
+    // run a generated test, this does not modify 'this' board
+    private boolean runGeneratedTest (BoardTest test){
+        if (test.version != 1){
+            System.out.println("Warning: unknown test version");
+        }
+        Board testBoard = new Board(white, test.board);
+        return testBoard.compareToTest(test);
+    }
+
+    //run all generated tests, this does not modify 'this' board
+    private boolean runGeneratedTests(){
+        boolean ok = true;
+        for (BoardTest test : BoardTest.tests){
+            ok = (ok && runGeneratedTest(test));
+        }
+        return ok;
+    }
+
+    private void loadGeneratedTests(){
+        BoardTest test = null;
+        /// all code that follows are tests generated with the
+        /// 'makeTest' interactive command
+
+        test = new BoardTest(1);
+        test.board =
+            "     x  " +
+            "  x x   " +
+            " o o x  " +
+            "o   o o " +
+            "  x   oo" +
+            " x x    " +//<= first
+            "        " +
+            "     xx ";
+        test.whiteBB = 825993330688L;
+        test.blackBB = 6917540039939331104L;
+        test.whiteClustersBB = 246546940889856L;
+        test.blackClustersBB = 1224720830153386072L;
+        test.whiteLegalMovesBB = 71799208805457920L;
+        test.blackLegalMovesBB = 1008912007086473734L;
+        test.whiteConnectedPieces = new long[] {0L,0L,824651153408L,1342177280L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,4611686018427387904L,2199023256608L,2305851822488686592L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = true;
+        test.whiteNumPieces = 7;
+        test.blackNumPieces = 9;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "  x  x  " +
+            "    x   " +
+            " o o x  " +
+            "o   o o " +
+            "  x   oo" +
+            " x x    " +
+            "o       " +
+            "     xx ";
+        test.whiteBB = 282300970041344L;
+        test.blackBB = 6917540039939330084L;
+        test.whiteClustersBB = 246546940890880L;
+        test.blackClustersBB = 1224439355176675416L;
+        test.whiteLegalMovesBB = 71517733828747264L;
+        test.blackLegalMovesBB = 1008912007086474754L;
+        test.whiteConnectedPieces = new long[] {0L,281474976710656L,824634376192L,1358954496L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,4611686018427387904L,2199023259652L,2305851822488682528L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 8;
+        test.blackNumPieces = 9;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+    }
+
     public static void main(String[] args){
         // Board b = new Board(white,
         //                     " oo   x " +
