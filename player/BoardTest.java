@@ -4,7 +4,8 @@ public class BoardTest{
     //version of this test (in case new fields/tests are added later)
     public int version;
     public String board; //string representation of the board to test
-    public String boardString;//Board String to write to file
+    public String boardString;//Board String to write to file. this is only
+                              // set after this test is first created.
     public long whiteBB; //white bitboard
     public long blackBB; //black bitboard
     //all the squares that would form white/black clusters
