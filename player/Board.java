@@ -1094,9 +1094,20 @@ public class Board{
         boolean fakeInput = false;
         boolean showBitBoards = true;
         Move m = null;
+
         //keeping track of messages this way is allows us to print the board before the
         //messages
         AList<String> messages = new AList<String>(100);
+
+        PrintWriter writer = null;
+        try{
+            writer = new PrintWriter("_new-tests.java", "UTF-8");
+
+        }catch (FileNotFoundException err){
+            messages.add("Error saving to file: file not found");
+        }catch (UnsupportedEncodingException err){
+            messages.add("Error saving to file: unsupported encoding");
+        }
 
         //TODO: ::Q split up a string
         //      ::Q string to number
@@ -1489,8 +1500,12 @@ public class Board{
                 test.passedGoalTests = verifyGoals();
                 test.passedPieceCountTests = verifyPieceCount();
 
-                //TODO: save generated tests to file
                 messages.add(test.toString());
+
+                writer.println(test.toString());
+                writer.flush();
+
+
                 if (compareToTest(test)){
                     messages.add("(Test is OK)");
                 }else{
