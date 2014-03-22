@@ -33,24 +33,24 @@ public class Board{
     // The `bitReps' array was generated with this python code:
     // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
     final long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
-                      0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
-                      0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
-                      0x100000L, 0x200000L, 0x400000L, 0x800000L,
-                      0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
-                      0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
-                      0x100000000L, 0x200000000L, 0x400000000L,
-                      0x800000000L, 0x1000000000L, 0x2000000000L,
-                      0x4000000000L, 0x8000000000L, 0x10000000000L,
-                      0x20000000000L, 0x40000000000L, 0x80000000000L,
-                      0x100000000000L, 0x200000000000L, 0x400000000000L,
-                      0x800000000000L, 0x1000000000000L, 0x2000000000000L,
-                      0x4000000000000L, 0x8000000000000L, 0x10000000000000L,
-                      0x20000000000000L, 0x40000000000000L,
-                      0x80000000000000L, 0x100000000000000L,
-                      0x200000000000000L, 0x400000000000000L,
-                      0x800000000000000L, 0x1000000000000000L,
-                      0x2000000000000000L, 0x4000000000000000L,
-                      0x8000000000000000L};
+                            0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
+                            0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
+                            0x100000L, 0x200000L, 0x400000L, 0x800000L,
+                            0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
+                            0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
+                            0x100000000L, 0x200000000L, 0x400000000L,
+                            0x800000000L, 0x1000000000L, 0x2000000000L,
+                            0x4000000000L, 0x8000000000L, 0x10000000000L,
+                            0x20000000000L, 0x40000000000L, 0x80000000000L,
+                            0x100000000000L, 0x200000000000L, 0x400000000000L,
+                            0x800000000000L, 0x1000000000000L, 0x2000000000000L,
+                            0x4000000000000L, 0x8000000000000L, 0x10000000000000L,
+                            0x20000000000000L, 0x40000000000000L,
+                            0x80000000000000L, 0x100000000000000L,
+                            0x200000000000000L, 0x400000000000000L,
+                            0x800000000000000L, 0x1000000000000000L,
+                            0x2000000000000000L, 0x4000000000000000L,
+                            0x8000000000000000L};
 
     /* Python code template used for generating bitmasks
        hex(int("""
@@ -311,7 +311,6 @@ public class Board{
         return ((ourBitBoard % 1073741789) << 31) | (opponentBitBoard % 1073741789);
     }
 
-
     /** Board.adjacentPieces(int,int) returns an array of pieces
      * that are adjacent to the pieces at coordinates (X,Y) on
      * the board.
@@ -563,8 +562,8 @@ public class Board{
                 // System.out.println("found network!");
                 // System.out.println("end: (" + piece.x +"," + piece.y + ")");
                 if (depth >= 6){
-                pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
-                return true;
+                    pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
+                    return true;
                 }
                 continue; //can't visit a goal piece until the end
             }
@@ -726,7 +725,7 @@ public class Board{
     /**
        Temporary evaluation function so we can test the rest of the program.
        Just sum the connections of all the pieces of a given color
-     */
+    */
     public int score(int color){
         int sum = 0;
         for (Piece p: getPieces(color)){
@@ -734,7 +733,6 @@ public class Board{
         }
         return sum;
     }
-
 
     //==========================================================================
     // Verification and testing code ===========================================
@@ -1228,11 +1226,11 @@ public class Board{
                 if (arg1isRef){
                     if (((color == ourColor) && (ourPieceCount >= 10))
                         ||((color != ourColor) && (opponentPieceCount >= 10))){
-                            messages.add("Cannot add more then 10 pieces");
-                            break;
-                        }
-                        m = new Move(argX1, argY1);
-                        input = "_applyMove";
+                        messages.add("Cannot add more then 10 pieces");
+                        break;
+                    }
+                    m = new Move(argX1, argY1);
+                    input = "_applyMove";
                     fakeInput = true;
                 }else{
                     messages.add("Invalid arg: " + arg1);
@@ -1401,7 +1399,7 @@ public class Board{
                     pb.mark(p);
                 }
                 pLst = pLst = getPieces(white);
-                    num+=pLst.length();
+                num+=pLst.length();
                 for (Piece p: pLst){
                     pb.mark(p);
                 }
@@ -1782,8 +1780,6 @@ public class Board{
                             " x x    " +
                             "        " +
                             "     xx ");
-
-
 
         PrintBoard pb = b.toPrintBoard();
 
