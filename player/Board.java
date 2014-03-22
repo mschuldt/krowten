@@ -21,11 +21,6 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
-    //this bit of absurdity is a temp fix that allows the
-    // formsIllegalCluster() method to add an 11th piece on the
-    // board without the assertion check crashing the program
-    boolean checkingIllegalClusters_TEMP = false;
-
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -167,11 +162,11 @@ public class Board{
             if (color == ourColor){
                 ourBitBoard |= bitRep;
                 ourPieceCount++;
-                assert checkingIllegalClusters_TEMP || ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+                assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }else{
                 opponentBitBoard |= bitRep;
                 opponentPieceCount++;
-                assert checkingIllegalClusters_TEMP ||opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+                assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }
             pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
             break;
