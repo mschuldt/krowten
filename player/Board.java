@@ -158,7 +158,6 @@ public class Board{
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
 
-            //does lefthand ternary operator work in java??
             if (color == ourColor){
                 ourBitBoard |= bitRep;
                 ourPieceCount++;
@@ -458,23 +457,15 @@ public class Board{
             currentX = startX + xInc;
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
-            //            System.out.print("Trying: ");
             while (current == null){
                 System.out.print(locStr(currentX-1, currentY-1));
                 currentX += xInc;
                 currentY += yInc;
                 current = pieceArray[currentX][currentY];
             }
-            //            System.out.println("=> found non-nil");
             if (current != edge){
-                //                System.out.println("Found "+colorStr(current.color)+" piece at" + locStr(currentX-1, currentY-1));
                 pieces.addIfColor(current, color);
             }
-
-            // for (Piece p : pieces){
-            //     System.out.print(locStr(p.x,p.y));
-            // }
-            //            System.out.println("");
         }
         return pieces;
     }
@@ -603,6 +594,7 @@ public class Board{
     public boolean hasNetwork(int color){//Temp for debugging
         return hasNetwork(color, toPrintBoard());
     }
+
     /**
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
      */
@@ -944,8 +936,6 @@ public class Board{
             for (int y = 0; y < 8; y++){
                 if (! pieceAt(x,y) && isValidIndex(x,y)){
                     m = new Move(x, y);
-                    System.out.println("x = " + x);
-                    System.out.println("y = " + y);
                     if (formsIllegalCluster(m, color)){
                         clusterBoard |= getBitRep(x, y);
                     }
@@ -1526,7 +1516,7 @@ public class Board{
                 messages.add("piece count:");
                 messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
                 messages.add("black: "+(ourColor==black? ourPieceCount: opponentPieceCount));
-                    break;
+                break;
             case "evaluate": case "eval":case "score":
                 messages.add(colorStr(color)+ " board score: " + score(color));
                 break;
