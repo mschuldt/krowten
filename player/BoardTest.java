@@ -6,8 +6,8 @@ public class BoardTest{
     public String board; //string representation of the board to test
     public long whiteBB; //white bitboard
     public long blackBB; //black bitboard
-    //all the squares that would form white/black clusters 
-    public long whiteClustersBB; 
+    //all the squares that would form white/black clusters
+    public long whiteClustersBB;
     public long blackClustersBB;
     //all the white/black legal moves
     public long whiteLegalMovesBB;
@@ -29,20 +29,47 @@ public class BoardTest{
     public static AList<BoardTest> tests = new AList<BoardTest>(1000);
 
     public BoardTest(int v){
-	version = v;
-	id = count;
-	count++;
-	tests.add(this);
+        version = v;
+        id = count;
+        count++;
+        tests.add(this);
     }
 
     public int getId(){
-	return id;
+        return id;
     }
     public int numTests(){
-	return count;
+        return count;
     }
+    private String arrayStr(long [] array){
+        String ret = "new long[] {";
+        int len = array.length;
+        for (int i = 0; i < len-1; i++){
+            ret += array[i] + "L,";
+        }
+        ret += array[len-1]+"L}";
+    return ret;
+    }
+
     public String toString(){
-	return "TODO: BoardTest.toString()";
+        String ret = "";
+        ret += "test = new BoardTest(" + version +");\n";
+        ret += "test.board = \n" + board + ";\n";
+        ret += "test.whiteBB = " + whiteBB + "L;\n";
+        ret += "test.blackBB = " + blackBB + "L;\n";
+        ret += "test.whiteClustersBB = " + whiteClustersBB + "L;\n";
+        ret += "test.blackClustersBB = " + blackClustersBB + "L;\n";
+        ret += "test.whiteLegalMovesBB = " + whiteLegalMovesBB + "L;\n";
+        ret += "test.blackLegalMovesBB = " + blackLegalMovesBB + "L;\n";
+        ret += "test.whiteConnectedPieces = "+arrayStr(whiteConnectedPieces)+";\n";
+        ret += "test.blackConnectedPieces = "+arrayStr(blackConnectedPieces)+";\n";
+        ret += "test.whiteNetwork = " + whiteNetwork + ";\n";
+        ret += "test.blackNetwork = " + blackNetwork + ";\n";
+        ret += "test.whiteNumPieces = " + whiteNumPieces + ";\n";
+        ret += "test.blackNumPieces = " + blackNumPieces + ";\n";
+        ret += "test.passedBitBoardTests = " + passedBitBoardTests + ";\n";
+        ret += "test.passedGoalTests = " + passedGoalTests + ";\n";
+        ret += "test.passedPieceCountTests = " + passedPieceCountTests + ";\n";
+        return ret;
     }
-    
 }
