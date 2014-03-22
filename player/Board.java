@@ -1506,6 +1506,11 @@ public class Board{
 
                 //TODO: save generated tests to file
                 messages.add(test.toString());
+                if (compareToTest(test)){
+                    messages.add("(Test is OK)");
+                }else{
+                    messages.add("(Test fails)");
+                }
 
                 break;
 
