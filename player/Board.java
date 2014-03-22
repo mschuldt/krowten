@@ -931,8 +931,26 @@ public class Board{
     }
 
     public long clustersBB(int color){
-        return 0;//TODO
+        //this includes clusters that would be formed by placing
+        //pieces in the opponents goals, which would otherwise
+        //be illegal
+        long clusterBoard = 0;
+        Move m = null;
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+                if (! pieceAt(x,y) && isValidIndex(x,y)){
+                    m = new Move(x, y);
+                    System.out.println("x = " + x);
+                    System.out.println("y = " + y);
+                    if (formsIllegalCluster(m, color)){
+                        clusterBoard |= getBitRep(x, y);
+                    }
+                }
+            }
+        }
+        return clusterBoard;
     }
+
     public long legalMovesBB(int color){
         return 0;//TODO
     }
