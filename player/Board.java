@@ -2,10 +2,6 @@
 
 package player;
 
-//import java.util.List;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.ArrayDeque;
 import java.io.*;
 
 public class Board{
@@ -1100,7 +1096,7 @@ public class Board{
         Move m = null;
         //keeping track of messages this way is allows us to print the board before the
         //messages
-        Deque<String> messages = new ArrayDeque<String>();
+        AList<String> messages = new AList<String>(100);
 
         //TODO: ::Q split up a string
         //      ::Q string to number
@@ -1543,15 +1539,16 @@ public class Board{
 
                 System.out.print("you are color " + colorStr(color).toUpperCase());
                 System.out.println(color == ourColor ? "" : " (your opponent)");
-                while (messages.size() != 0){
-                    System.out.println(messages.remove());
+                for (String message : messages){
+                    System.out.println(message);
                 }
+                messages.clear();
             }
         }
         System.out.println("done");
     }
 
-    private void interactiveHelp(Deque<String> messages){
+    private void interactiveHelp(AList<String> messages){
         String [] lines = {
             "\nAvailable commands -----------------------",
             "(Case does not matter)",
