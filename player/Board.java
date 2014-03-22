@@ -648,7 +648,7 @@ public class Board{
         Piece[] pieces = new Piece[numPieces];
         AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
-        if (color == 0) { // black
+        if (color == black) {
             x_lower = 1;
             x_upper = 6;
             y_lower = 0;
