@@ -1047,6 +1047,12 @@ public class Board{
         default: return "rainbow";
         }
     }
+    public long getOurBitBoard(){
+        return ourBitBoard;
+    }
+    public long getOpponentBitBoard(){
+        return opponentBitBoard;
+    }
 
     public void interactiveDebug(){
 
