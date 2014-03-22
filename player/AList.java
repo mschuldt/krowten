@@ -19,7 +19,7 @@ public class AList<T> implements Iterable<T>{
     public int length(){
         return len;
     }
-    public boolean isEmpty(){
+    public boolean empty(){
         return len == 0;
     }
     public AListIterator<T> iterator(){
