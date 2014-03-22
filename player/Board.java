@@ -4,7 +4,6 @@ package player;
 
 //import java.util.List;
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.io.*;
@@ -1078,7 +1077,7 @@ public class Board{
     public void interactiveDebug(){
         loadGeneratedTests();
         BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
-        Stack<Move> history = new Stack<Move>();
+        AList<Move> history = new AList<Move>(100);
         String input = "";
         String[] splitInput = null;
         int nArgs = 0;
@@ -1244,7 +1243,7 @@ public class Board{
                 System.out.println("applying move...");
                 if (m != null){
                     move(m,color);
-                    history.push(m);
+                    history.add(m);
                     pb = toPrintBoard(); //update board
                     messages.add("Made move: " + m.toString());
                     if (m.moveKind == Move.ADD){
