@@ -1468,7 +1468,11 @@ public class Board{
             case "maketest": case "createtest": case "mt":
                 BoardTest test = new BoardTest(1);
 
-                test.board = toBoardString(); //the kind of string that can reconstruct the board by passing it to the constructor;
+                //test.boardString is written to file, test.board is read from file
+                //it is provided here to that this test can also be run
+                //in this round with 'runtests'
+                test.boardString = toBoardString();
+                test.board = toBoardString(true);
                 test.whiteBB = (ourColor == white? ourBitBoard : opponentBitBoard);
                 test.blackBB = (ourColor == black? ourBitBoard : opponentBitBoard);
                 test.whiteClustersBB = clustersBB(white);
