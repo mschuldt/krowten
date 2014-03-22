@@ -645,7 +645,7 @@ public class Board{
      */
     public AList<Move> validMoves(int color) {
         int numPieces = getNumPieces(color);
-        Piece[] pieces = new Piece[numPieces];
+        PieceList pieces = getPieces(color);
         AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
         if (color == black) {
@@ -674,9 +674,8 @@ public class Board{
             for (int x = x_lower; x <= x_upper; x++) {
                 for (int y = y_lower; y <= y_upper; y++) {
                     if (!pieceAt(x, y)) {
-                        for (int i = 0; i < numPieces; i++) {
-                            //where is 'pieces' set??
-                            Move m = new Move(x, y, pieces[i].x, pieces[i].y);
+                        for (Piece p : pieces){
+                            Move m = new Move(x, y, p.x, p.y);
                             if (!formsIllegalCluster(m, color)){
                                 mList.add(m);
                             }
