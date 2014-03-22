@@ -664,8 +664,9 @@ public class Board{
                 for (int y = y_lower; y <= y_upper; y++) {
                     if (!pieceAt(x, y)) {
                         Move m = new Move(x, y);
-                        if (!formsIllegalCluster(m, color))
+                        if (!formsIllegalCluster(m, color)){
                             mList.add(m);
+                        }
                     }
                 }
             }
@@ -676,8 +677,9 @@ public class Board{
                         for (int i = 0; i < numPieces; i++) {
                             //where is 'pieces' set??
                             Move m = new Move(x, y, pieces[i].x, pieces[i].y);
-                            if (!formsIllegalCluster(m, color))
+                            if (!formsIllegalCluster(m, color)){
                                 mList.add(m);
+                            }
                         }
                     }
                 }
