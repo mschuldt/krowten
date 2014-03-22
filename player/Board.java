@@ -1532,6 +1532,9 @@ public class Board{
                 messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
                 messages.add("black: "+(ourColor==black? ourPieceCount: opponentPieceCount));
                     break;
+            case "evaluate": case "eval":case "score":
+                messages.add(colorStr(color)+ " board score: " + score(color));
+                break;
             case "print":
                 break;
             case "exit": case "quit": case "done":
