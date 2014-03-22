@@ -20,6 +20,12 @@ public class Board{
     public static final int black = 0;
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
+
+    //this bit of absurdity is a temp fix that allows the
+    // formsIllegalCluster() method to add an 11th piece on the
+    // board without the assertion check crashing the program
+    boolean checkingIllegalClusters_TEMP = false;
+
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -84,6 +90,7 @@ public class Board{
      *         who 'owns' this board. 1 for white and 0 for black.n
      */
     public Board(int color){
+
         if (color != 1 && color != 0){
             System.out.println("Board.Board(int) -- Error: invalid color");
         }
@@ -160,11 +167,11 @@ public class Board{
             if (color == ourColor){
                 ourBitBoard |= bitRep;
                 ourPieceCount++;
-                assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+                assert checkingIllegalClusters_TEMP || ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }else{
                 opponentBitBoard |= bitRep;
                 opponentPieceCount++;
-                assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+                assert checkingIllegalClusters_TEMP ||opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }
             pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
             break;
@@ -609,10 +616,13 @@ public class Board{
         int x = m.x1;
         int y = m.y1;
         int numNeighbors;
+
         if (this.pieceAt(x,y)){
             return false; // for now... probably need to throw an error, but isValidMove will also take care of it
         }
+        checkingIllegalClusters_TEMP = true;
         this.move(m, color); //Board is updated
+        checkingIllegalClusters_TEMP = false;
         PieceList neighbors = this.adjacentPieces(x, y, color); // get neighboring pieces of (presumably) the same color
         numNeighbors = neighbors.length();
         if (numNeighbors >1){
