@@ -1324,7 +1324,7 @@ public class Board{
 
             case "pieceat": case "pa": //Piece At    //ok
                 if (arg1isRef){
-                    Piece p = pieceArray[argX1+1][argY1+1];
+                    Piece p = getPiece(argX1, argY1);
                     String loc = locStr(argX1, argY1);
                     if (p == null){
                         messages.add("No piece at "+ loc);
@@ -1382,11 +1382,11 @@ public class Board{
                 long goalmask = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
                 Piece p;
                 int c3=0;
-                for (int x = 1; x<9; x++){
-                    for (int y = 1; y<9; y++){
-                        p = pieceArray[x][y];
+                for (int x = 0; x<8; x++){
+                    for (int y = 0; y<8; y++){
+                        p = getPiece(x, y);
                         if (p != null && p != edge && (p.bitRep & goalmask) != 0){
-                            pb.mark(x-1,y-1);
+                            pb.mark(x,y);
                             c3++;
                         }
                     }
@@ -1398,11 +1398,11 @@ public class Board{
                 long goalmask2 = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
                 Piece p2;
                 int c4=0;
-                for (int x = 1; x<9; x++){
-                    for (int y = 1; y<9; y++){
-                        p2 = pieceArray[x][y];
+                for (int x = 0; x<8; x++){
+                    for (int y = 0; y<8; y++){
+                        p2 = getPiece(x,y);
                         if (p2 != null && p2 != edge && (p2.bitRep & goalmask2)!=0){
-                            pb.mark(x-1,y-1);
+                            pb.mark(x,y);
                             c4++;
                         }
                     }
