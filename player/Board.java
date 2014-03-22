@@ -960,8 +960,12 @@ public class Board{
     }
 
     public long[] connectedPiecesBB(int color){
-        long[] clusters = new long[8];
-        return clusters; //TODO
+        long[] clusters = {0,0,0,0,0,0,0,0,0};
+        int n = 0;
+        for (Piece p : getPieces(color)){
+            clusters[connectedPieces(p).length()] |= p.bitRep;
+        }
+        return clusters;
     }
 
     public Cell[][] toCellArray(){
