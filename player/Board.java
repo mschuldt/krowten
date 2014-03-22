@@ -1480,7 +1480,7 @@ public class Board{
                 messages.add(bitBoardToString(connectedPiecesBB(color)[index]));
                 break;
 
-            case "maketest": case "createtest":
+            case "maketest": case "createtest": case "mt":
                 BoardTest test = new BoardTest(1);
 
                 test.board = toBoardString(); //the kind of string that can reconstruct the board by passing it to the constructor;
