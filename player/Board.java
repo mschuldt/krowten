@@ -453,7 +453,6 @@ public class Board{
             currentY = startY + yInc;
             current = pieceArray[currentX][currentY];
             while (current == null){
-                System.out.print(locStr(currentX-1, currentY-1));
                 currentX += xInc;
                 currentY += yInc;
                 current = pieceArray[currentX][currentY];
@@ -849,7 +848,7 @@ public class Board{
         Move m;
         boardString = boardString.toLowerCase();
         if (boardString.length() != 64){
-            System.out.println("Error --Board.Board(int, String)-- invalid board string");
+            System.out.println("Error --Board.Board(int, String)-- invalid board string:\n"+boardString);
         }
         char[] chars = boardString.toCharArray();
         for (int x = 0; x < 8; x++){
