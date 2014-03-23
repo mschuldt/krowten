@@ -1504,7 +1504,6 @@ public class Board{
                 writer.println(test.toString());
                 writer.flush();
 
-
                 if (compareToTest(test)){
                     messages.add("(Test is OK)");
                 }else{
@@ -1739,25 +1738,443 @@ public class Board{
 
         test = new BoardTest(1);
         test.board =
-            "     x  " +
-            "  x x   " +
-            " o o x  " +
-            "o   o o " +
-            "  x   oo" +
-            " x x    " +//<= first
             "        " +
-            "     xx ";
-        test.whiteBB = 825993330688L;
-        test.blackBB = 6917540039939331104L;
-        test.whiteClustersBB = 246546940889856L;
-        test.blackClustersBB = 1224720830153386072L;
-        test.whiteLegalMovesBB = 71799208805457920L;
-        test.blackLegalMovesBB = 1008912007086473734L;
-        test.whiteConnectedPieces = new long[] {0L,0L,824651153408L,1342177280L,0L,0L,0L,0L,0L};
-        test.blackConnectedPieces = new long[] {0L,4611686018427387904L,2199023256608L,2305851822488686592L,0L,0L,0L,0L,0L};
+            "        " +
+            "        " +
+            "        " +
+            "        " +
+            "        " +
+            "        " +
+            "        ";
+        test.whiteBB = 0L;
+        test.blackBB = 0L;
+        test.whiteClustersBB = 0L;
+        test.blackClustersBB = 0L;
+        test.whiteLegalMovesBB = 72057594037927680L;
+        test.blackLegalMovesBB = 9114861777597660798L;
+        test.whiteConnectedPieces = new long[] {0L,0L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,0L,0L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 0;
+        test.blackNumPieces = 0;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "        " +
+            "        " +
+            "        " +
+            "   o    " +
+            "        " +
+            "        " +
+            "        " +
+            "        ";
+        test.whiteBB = 134217728L;
+        test.blackBB = 0L;
+        test.whiteClustersBB = 0L;
+        test.blackClustersBB = 0L;
+        test.whiteLegalMovesBB = 72057593903709952L;
+        test.blackLegalMovesBB = 9114861777463443070L;
+        test.whiteConnectedPieces = new long[] {134217728L,0L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,0L,0L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 1;
+        test.blackNumPieces = 0;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "        " +
+            "        " +
+            "        " +
+            "   oo   " +
+            "        " +
+            "        " +
+            "        " +
+            "        ";
+        test.whiteBB = 402653184L;
+        test.blackBB = 0L;
+        test.whiteClustersBB = 258305949696L;
+        test.blackClustersBB = 0L;
+        test.whiteLegalMovesBB = 72057335329324800L;
+        test.blackLegalMovesBB = 9114861777195007614L;
+        test.whiteConnectedPieces = new long[] {0L,402653184L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,0L,0L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 2;
+        test.blackNumPieces = 0;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "        " +
+            "        " +
+            "        " +
+            "  xoo   " +
+            "        " +
+            "        " +
+            "        " +
+            "        ";
+        test.whiteBB = 402653184L;
+        test.blackBB = 67108864L;
+        test.whiteClustersBB = 258238840832L;
+        test.blackClustersBB = 0L;
+        test.whiteLegalMovesBB = 72057335329324800L;
+        test.blackLegalMovesBB = 9114861777127898750L;
+        test.whiteConnectedPieces = new long[] {0L,402653184L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {67108864L,0L,0L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 2;
+        test.blackNumPieces = 1;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "        " +
+            "        " +
+            "        " +
+            "  xoo   " +
+            "  x     " +
+            "        " +
+            "        " +
+            "        ";
+        test.whiteBB = 402653184L;
+        test.blackBB = 17246978048L;
+        test.whiteClustersBB = 241058971648L;
+        test.blackClustersBB = 15436146933760L;
+        test.whiteLegalMovesBB = 72057335329324800L;
+        test.blackLegalMovesBB = 9114846323801095806L;
+        test.whiteConnectedPieces = new long[] {0L,402653184L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,17246978048L,0L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 2;
+        test.blackNumPieces = 2;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "        " +
+            "  x   x " +
+            "        " +
+            "  xoo   " +
+            "  x     " +
+            "        " +
+            "        " +
+            "     x  ";
+        test.whiteBB = 402653184L;
+        test.blackBB = 2305843026460689408L;
+        test.whiteClustersBB = 241058971648L;
+        test.blackClustersBB = 15436146933760L;
+        test.whiteLegalMovesBB = 72057335329307392L;
+        test.blackLegalMovesBB = 6809003314587384446L;
+        test.whiteConnectedPieces = new long[] {0L,402653184L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,2305843009213710336L,17246979072L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 2;
+        test.blackNumPieces = 5;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "    x   " +
+            "  x   x " +
+            "        " +
+            "  xoo   " +
+            "  x     " +
+            "        " +
+            "        " +
+            "     x  ";
+        test.whiteBB = 402653184L;
+        test.blackBB = 2305843026460689424L;
+        test.whiteClustersBB = 241058971648L;
+        test.blackClustersBB = 15436146944040L;
+        test.whiteLegalMovesBB = 72057335329307392L;
+        test.blackLegalMovesBB = 6809003314587374150L;
+        test.whiteConnectedPieces = new long[] {0L,402653184L,0L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {16L,2305843009213710336L,17246979072L,0L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 2;
+        test.blackNumPieces = 6;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "      x " +
+            "  x   x " +
+            "   x   o" +
+            "  x o o " +
+            "  x     " +
+            "o  o o  " +
+            "      o " +
+            "     x  ";
+        test.whiteBB = 18059479836786688L;
+        test.blackBB = 2305843026461213760L;
+        test.whiteClustersBB = 4661455380589608960L;
+        test.blackClustersBB = 6640194992686L;
+        test.whiteLegalMovesBB = 4228734791400192L;
+        test.blackLegalMovesBB = 6790953730624716816L;
+        test.whiteConnectedPieces = new long[] {0L,1099788451840L,18058378974593024L,1073741824L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {2305843009213693952L,0L,17180409920L,67109888L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 7;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "      x " +
+            "  x   x " +
+            "   x   o" +
+            "  x o o " +
+            "  x     " +
+            "o o  o  " +
+            " o    o " +
+            "     x  ";
+        test.whiteBB = 18618031743696896L;
+        test.blackBB = 2305843026461213760L;
+        test.whiteClustersBB = 5097471127515594752L;
+        test.blackClustersBB = 11038241503790L;
+        test.whiteLegalMovesBB = 186071808L;
+        test.blackLegalMovesBB = 6790390780671295504L;
+        test.whiteConnectedPieces = new long[] {0L,8388608L,36284152152064L,18577349536645120L,4398046511104L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,2305843009213693952L,540736L,17246979072L,0L,0L,0L,0L,0L};
         test.whiteNetwork = true;
         test.blackNetwork = true;
+        test.whiteNumPieces = 8;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "     x  " +
+            "        " +
+            "   x x  " +
+            "o x o oo" +
+            " o o    " +
+            "  x     " +
+            "        " +
+            "  x x   ";
+        test.whiteBB = 46456111104L;
+        test.blackBB = 1441156278874800160L;
+        test.whiteClustersBB = 30739799408640L;
+        test.blackClustersBB = 580401419326487552L;
+        test.whiteLegalMovesBB = 72022409666166528L;
+        test.blackLegalMovesBB = 7093304035104522846L;
+        test.whiteConnectedPieces = new long[] {0L,2164260864L,44291850240L,0L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,0L,1441151880827764768L,4398047035392L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = true;
+        test.whiteNumPieces = 6;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "     x  " +
+            "        " +
+            "   x x  " +
+            "o x o o " +
+            " o o   o" +
+            "  x     " +
+            "        " +
+            "  x x   ";
+        test.whiteBB = 594064441344L;
+        test.blackBB = 1441156278874800160L;
+        test.whiteClustersBB = 241298423611392L;
+        test.blackClustersBB = 580401419326487552L;
+        test.whiteLegalMovesBB = 71811303433633536L;
+        test.blackLegalMovesBB = 7093304035104522846L;
+        test.whiteConnectedPieces = new long[] {0L,16777216L,559687925760L,34359738368L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,0L,1441151880827764768L,4398047035392L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = true;
+        test.whiteNumPieces = 6;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "      x " +
+            "  x   x " +
+            "   x   o" +
+            "  xoo o " +
+            "  x     " +
+            "o  o    " +
+            "      o " +
+            "     x  ";
+        test.whiteBB = 18024295598915584L;
+        test.blackBB = 2305843026461213760L;
+        test.whiteClustersBB = 1067843878912L;
+        test.blackClustersBB = 6640060774958L;
+        test.whiteLegalMovesBB = 54032213347613440L;
+        test.blackLegalMovesBB = 6790988914996805648L;
+        test.whiteConnectedPieces = new long[] {0L,1099520016384L,18023194870939648L,1207959552L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {2305843009213693952L,17179869248L,540672L,67109888L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = false;
         test.whiteNumPieces = 7;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "      x " +
+            "  x   x " +
+            "   x   o" +
+            "  xoo o " +
+            "  x     " +
+            "o  o    " +
+            "      o " +
+            "     x  ";
+        test.whiteBB = 18024295598915584L;
+        test.blackBB = 2305843026461213760L;
+        test.whiteClustersBB = 1067843878912L;
+        test.blackClustersBB = 6640060774958L;
+        test.whiteLegalMovesBB = 54032213347613440L;
+        test.blackLegalMovesBB = 6790988914996805648L;
+        test.whiteConnectedPieces = new long[] {0L,1099520016384L,18023194870939648L,1207959552L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {2305843009213693952L,17179869248L,540672L,67109888L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 7;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "      x " +
+            "  x o x " +
+            " o x   o" +
+            "o x o o " +
+            "  x     " +
+            " o   o  " +
+            " o    o " +
+            "     x  ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 2305843026461213760L;
+        test.whiteClustersBB = 5095213795818963712L;
+        test.blackClustersBB = 13237264624174L;
+        test.whiteLegalMovesBB = 2260630400673792L;
+        test.blackLegalMovesBB = 6790390780671295504L;
+        test.whiteConnectedPieces = new long[] {0L,25165824L,35184372224000L,18579547754594304L,1073741824L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,2305843009213710336L,525376L,17246978048L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 10;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "      x " +
+            "  x o x " +
+            " o x   o" +
+            "o x o o " +
+            "  x     " +
+            " o   o  " +
+            " o    o " +
+            "     x  ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 2305843026461213760L;
+        test.whiteClustersBB = 5095213795818963712L;
+        test.blackClustersBB = 13237264624174L;
+        test.whiteLegalMovesBB = 2260630400673792L;
+        test.blackLegalMovesBB = 6790390780671295504L;
+        test.whiteConnectedPieces = new long[] {0L,25165824L,35184372224000L,18579547754594304L,1073741824L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,2305843009213710336L,525376L,17246978048L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 10;
+        test.blackNumPieces = 7;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "  x     " +
+            "   xo x " +
+            " o   x o" +
+            "o  xo o " +
+            "  x     " +
+            " o   o  " +
+            " ox  xo " +
+            "   x    ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 586593868781209604L;
+        test.whiteClustersBB = 7390923705936611072L;
+        test.blackClustersBB = 1592035774727759482L;
+        test.whiteLegalMovesBB = 2260630266454016L;
+        test.blackLegalMovesBB = 6917617400888164352L;
+        test.whiteConnectedPieces = new long[] {0L,25169920L,18612532835123200L,2200365432832L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,9007199256854528L,576460752303425540L,1125917220929536L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = true;
+        test.whiteNumPieces = 10;
+        test.blackNumPieces = 9;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+
+
+        test = new BoardTest(1);
+        test.board =
+            "  x     " +
+            "   xo x " +
+            " o   x o" +
+            "o  xo o " +
+            "  x     " +
+            " o   o  " +
+            " ox  xo " +
+            "   x    ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 586593868781209604L;
+        test.whiteClustersBB = 7390923705936611072L;
+        test.blackClustersBB = 1592035774727759482L;
+        test.whiteLegalMovesBB = 2260630266454016L;
+        test.blackLegalMovesBB = 6917617400888164352L;
+        test.whiteConnectedPieces = new long[] {0L,25169920L,18612532835123200L,2200365432832L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,9007199256854528L,576460752303425540L,1125917220929536L,0L,0L,0L,0L,0L};
+        test.whiteNetwork = true;
+        test.blackNetwork = true;
+        test.whiteNumPieces = 10;
         test.blackNumPieces = 9;
         test.passedBitBoardTests = true;
         test.passedGoalTests = true;
@@ -1765,61 +2182,98 @@ public class Board{
 
         test = new BoardTest(1);
         test.board =
-            "  x  x  " +
-            "    x   " +
-            " o o x  " +
-            "o   o o " +
-            "  x   oo" +
-            " x x    " +
-            "o       " +
-            "     xx ";
-        test.whiteBB = 282300970041344L;
-        test.blackBB = 6917540039939330084L;
-        test.whiteClustersBB = 246546940890880L;
-        test.blackClustersBB = 1224439355176675416L;
-        test.whiteLegalMovesBB = 71517733828747264L;
-        test.blackLegalMovesBB = 1008912007086474754L;
-        test.whiteConnectedPieces = new long[] {0L,281474976710656L,824634376192L,1358954496L,0L,0L,0L,0L,0L};
-        test.blackConnectedPieces = new long[] {0L,4611686018427387904L,2199023259652L,2305851822488682528L,0L,0L,0L,0L,0L};
+            "  x     " +
+            " x xo x " +
+            " o   x o" +
+            "o  xo o " +
+            "  x     " +
+            " o   o  " +
+            " ox  xo " +
+            "   x    ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 586593868781210116L;
+        test.whiteClustersBB = 7390923705936610560L;
+        test.blackClustersBB = 1592035774727824762L;
+        test.whiteLegalMovesBB = 2260630266454016L;
+        test.blackLegalMovesBB = 6917617400888164352L;
+        test.whiteConnectedPieces = new long[] {0L,25169920L,18612532835123200L,2200365432832L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,9007199256854528L,576460752303423488L,1125917086714372L,134217728L,0L,0L,0L,0L};
         test.whiteNetwork = true;
-        test.blackNetwork = false;
-        test.whiteNumPieces = 8;
-        test.blackNumPieces = 9;
+        test.blackNetwork = true;
+        test.whiteNumPieces = 10;
+        test.blackNumPieces = 10;
         test.passedBitBoardTests = true;
         test.passedGoalTests = true;
         test.passedPieceCountTests = true;
 
+        test = new BoardTest(1);
+        test.board =
+            "  x     " +
+            " x xo x " +
+            " o   x o" +
+            "o  xo o " +
+            "  x     " +
+            " ox  o  " +
+            " ox   o " +
+            "   x    ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 577591067572980228L;
+        test.whiteClustersBB = 7399926507144840448L;
+        test.blackClustersBB = 1592031376681313658L;
+        test.whiteLegalMovesBB = 2260630266454016L;
+        test.blackLegalMovesBB = 6926624600142905344L;
+        test.whiteConnectedPieces = new long[] {0L,598134350680064L,18016597801304064L,1073741824L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,2113536L,577591050256777216L,17179871748L,134217728L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 10;
+        test.blackNumPieces = 10;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+        test = new BoardTest(1);
+        test.board =
+            "  x     " +
+            " x xo x " +
+            " o   x o" +
+            "o  xo o " +
+            "  x     " +
+            " ox  o  " +
+            " ox   o " +
+            "   x    ";
+        test.whiteBB = 18614733225725952L;
+        test.blackBB = 577591067572980228L;
+        test.whiteClustersBB = 7399926507144840448L;
+        test.blackClustersBB = 1592031376681313658L;
+        test.whiteLegalMovesBB = 2260630266454016L;
+        test.blackLegalMovesBB = 6926624600142905344L;
+        test.whiteConnectedPieces = new long[] {0L,598134350680064L,18016597801304064L,1073741824L,0L,0L,0L,0L,0L};
+        test.blackConnectedPieces = new long[] {0L,2113536L,577591050256777216L,17179871748L,134217728L,0L,0L,0L,0L};
+        test.whiteNetwork = false;
+        test.blackNetwork = false;
+        test.whiteNumPieces = 10;
+        test.blackNumPieces = 10;
+        test.passedBitBoardTests = true;
+        test.passedGoalTests = true;
+        test.passedPieceCountTests = true;
+
+
     }
 
     public static void main(String[] args){
-        // Board b = new Board(white,
-        //                     " oo   x " +
-        //                     "   o ox " +
-        //                     "  o  o o" +
-        //                     "xo o   o" +
-        //                     "   x    " +
-        //                     " x   o  " +
-        //                     " o      " +
-        //                     " o o xx ");
-        // Board b = new Board(white,
-        //                     "      x " +
-        //                     " o    x " +
-        //                     "   o   o" +
-        //                     "o    o  " +
-        //                     "   x o  " +
-        //                     " x     o" +
-        //                     " o o   o" +
-        //                     "     xx ");
-
         Board b = new Board(black,
-                            "     x  " +
-                            "  x x   " +
-                            " o o x  " +
-                            "o   o o " +
-                            "  x   oo" +
-                            " x x    " +
-                            "        " +
-                            "     xx ");
+                            "  x     " +
+                            "   xo x " +
+                            " o   x o" +
+                            "o  xo o " +
+                            "  x     " +
+                            " o   o  " +
+                            " ox  xo " +
+                            "   x    "
+
+                            );
+
 
         PrintBoard pb = b.toPrintBoard();
 
