@@ -2,14 +2,12 @@
 
 package player;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class PrintBoard{
     Cell[][] cells;
     boolean showNums = true;
-    List<int[]> lines = new ArrayList<int[]>();
+    AList<int[]> lines = new AList<int[]>(50);
 
     public PrintBoard(Board b){
         cells = b.toCellArray();
@@ -98,7 +96,7 @@ public class PrintBoard{
     }
 
     private void writeLines(char[][] charArray){
-        int n = lines.size();
+        int n = lines.length();
         int[] line;
         int yInc = 0,xInc=0,startX=0, startY=0, endX=0, endY=0,tmp=0;
         boolean vert,horiz;
