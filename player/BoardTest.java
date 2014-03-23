@@ -50,7 +50,7 @@ public class BoardTest{
             ret += array[i] + "L,";
         }
         ret += array[len-1]+"L}";
-    return ret;
+        return ret;
     }
 
     public String toString(){

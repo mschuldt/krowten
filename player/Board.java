@@ -2152,8 +2152,6 @@ public class Board{
         test.passedGoalTests = true;
         test.passedPieceCountTests = true;
 
-
-
         test = new BoardTest(1);
         test.board =
             "  x     " +
@@ -2258,7 +2256,6 @@ public class Board{
         test.passedGoalTests = true;
         test.passedPieceCountTests = true;
 
-
     }
 
     public static void main(String[] args){
@@ -2273,7 +2270,6 @@ public class Board{
                             "   x    "
 
                             );
-
 
         PrintBoard pb = b.toPrintBoard();
 
