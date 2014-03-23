@@ -1336,16 +1336,15 @@ public class Board{
                 messages.add(hasNetwork(color, pb) ? "YES" : "NO");
                 break;
             case "network?": case "net?": case "n?":
-                System.out.println((hasNetwork(color) ? "YES": "NO"));
+                messages.add(hasNetwork(color) ? "YES": "NO");
                 break;
             case "moves": //ok
                 AList<Move> moves = validMoves(color);
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
-                for (Move move : moves){
-                    System.out.print(locStr(move.x1, move.y1));
-                    //                    pb.mark(move.x1,move.y2);
-                }
+                // for (Move move : moves){
+                //     System.out.print(locStr(move.x1, move.y1));
+                // }
                 pb.mark(moves);
                 break;
 
