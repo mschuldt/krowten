@@ -1525,6 +1525,30 @@ public class Board{
                 messages.add("Tests failed. Board is broken. Time to cry");
                 break;
 
+            case "showtest": case "st":
+                int id = 0;
+                try{
+                    id = Integer.parseInt(arg1);
+                }catch(NumberFormatException err){
+                    messages.add("Invalid number: '"+ arg1 +"'");
+                    break;
+                }
+                if (id < 0) {
+                    messages.add("Invalid test id. Must be > 0");
+                    break;
+                }
+
+                BoardTest tst = getTest(id);
+                if (tst == null){
+                    messages.add("No test with id = "+ id);
+                    break;
+                }
+                messages.add("test " +id +": ");
+                messages.add("white bitBoard: " + tst.whiteBB);
+                messages.add("black bitBoard: " + tst.blackBB);
+                messages.add(bitBoardToString(tst.whiteBB | tst.blackBB));
+                break;
+
             case "piececount":
                 messages.add("piece count:");
                 messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
@@ -1564,6 +1588,14 @@ public class Board{
             }
         }
         System.out.println("done");
+    }
+    public BoardTest getTest (int id){
+        for (BoardTest test : BoardTest.tests){
+            if (test.getId() == id){
+                return test;
+            }
+        }
+        return null;
     }
 
     private void interactiveHelp(AList<String> messages){
