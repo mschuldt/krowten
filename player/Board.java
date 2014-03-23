@@ -518,9 +518,10 @@ public class Board{
             return false;
         }
         for (Piece piece : pl){
-            //System.out.println("(" + piece.x +"," + piece.y + ")");
-            // System.out.println("trying Piece:");
-            // System.out.println(bitBoardToString(piece.bitRep));
+            //System.out.println("trying Piece: (" + piece.x +"," + piece.y + ")");
+            //System.out.println("network has " + depth + " pieces.");
+            //System.out.println("trying Piece:");
+            //System.out.println(bitBoardToString(piece.bitRep));
 
             if (piece.x == currentPiece.x){
                 newM = 10;
@@ -530,7 +531,7 @@ public class Board{
                 newB = piece.y - newM*piece.x;
             }
 
-            // System.out.println("m = "+ newM);
+            //System.out.println("m = "+ newM);
             //System.out.println("b = "+ newB);
 
             if ((newM == m) && (newB == b)){
@@ -539,16 +540,17 @@ public class Board{
             }
 
             if ((piece.bitRep & goalmask) != 0){
-                // System.out.println("found network!");
-                // System.out.println("end: (" + piece.x +"," + piece.y + ")");
-                if (depth >= 6){
+                if (depth >= 5){//5 because depth does not include this 'piece'
+                    //System.out.println("found network!");
+                    //System.out.println("end: (" + piece.x +"," + piece.y + ")");
                     pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                     return true;
                 }
+                //System.out.println("network, but < 6 pieces");
                 continue; //can't visit a goal piece until the end
             }
             if ((piece.bitRep & memberPieces) != 0){
-                // System.out.println("already visited");
+                //System.out.println("already visited");
                 continue; // we have already visited this piece
             }
 
@@ -569,7 +571,6 @@ public class Board{
 
     public boolean hasNetwork(int color, PrintBoard pb){
         if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
-            System.out.println("< 6 pieces: no network");
             return false;
         }
         long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
