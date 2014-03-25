@@ -573,9 +573,17 @@ public class Board{
         if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
             return false;
         }
-        long bitBoard = (color == ourColor ? ourBitBoard : opponentBitBoard);
-        long goalA = (color == ourColor ? ourGoalMaskA : opponentGoalMaskA);
-        long goalB = (color == ourColor ? ourGoalMaskB : opponentGoalMaskB);
+        long bitBoard, goalA, goalB;
+
+        if (color == ourColor){
+            bitBoard = ourBitBoard;
+            goalA = ourGoalMaskA;
+            goalB = ourGoalMaskB;
+        }else{
+            bitBoard = opponentBitBoard;
+            goalA = opponentGoalMaskA;
+            goalB = opponentGoalMaskB;
+        }
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
             for (Piece piece : getStartGoalPieces(color)){
