@@ -108,4 +108,26 @@ public class MachinePlayer extends Player {
         board.move(m);
         return true;
     }
+
+    public static void main(String[] args){
+        MachinePlayer p1 = new MachinePlayer(white);
+        MachinePlayer p2 = new MachinePlayer(black);
+        Move m1, m2;
+        while (true){
+            m1 =  p1.chooseMove();
+            System.out.println("player 1 moved: " + m1);
+            p2.opponentMove(m1);
+
+            m2 =  p2.chooseMove();
+            System.out.println("player 2 moved: " + m2);
+            p1.opponentMove(m2);
+
+            if (!p1.board.verify()){
+                System.out.println("player 1 has a corrupted board");
+            }
+            if (!p2.board.verify()){
+                System.out.println("player 2 has a corrupted board");
+            }
+        }
+    }
 }
