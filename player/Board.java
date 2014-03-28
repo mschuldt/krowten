@@ -1451,6 +1451,38 @@ public class Board{
                 messages.add("found " + c4 + " goal A pieces");
                 break;
 
+            case "ingoala":case "iga":
+                long goal,board;
+                if (color == ourColor){
+                    goal = ourGoalMaskA;
+                    board = ourBitBoard;
+                }else{
+                    goal = opponentGoalMaskA;
+                    board = opponentBitBoard;
+                }
+                if ((goal & board) != 0){
+                    messages.add("Piece(s)in goal A");
+                    break;
+                }
+                messages.add("goal A is empty");
+                break;
+
+            case "ingoalb":case "igb":
+                long goal2,board2;
+                if (color == ourColor){
+                    goal2 = ourGoalMaskB;
+                    board2 = ourBitBoard;
+                }else{
+                    goal2 = opponentGoalMaskB;
+                    board2 = opponentBitBoard;
+                }
+                if ((goal2 & board2) != 0){
+                    messages.add("Piece(s)in goal B");
+                    break;
+                }
+                messages.add("goal B is empty");
+                break;
+
             case "boardstring":
                 messages.add("boardString:");
                 messages.add(toBoardString());
