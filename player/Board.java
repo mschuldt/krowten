@@ -16,6 +16,8 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
+    boolean verifyAll = false; //when true, run this.verify() after every move
+
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -197,7 +199,9 @@ public class Board{
             //TODO
             break;
         }
-        verify();
+        if (verifyAll){
+            verify();
+        }
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -292,7 +296,9 @@ public class Board{
             //TODO
             break;
         }
-        verify();
+        if (verifyAll){
+            verify();
+        }
     }
 
     //return the hash of the current board
