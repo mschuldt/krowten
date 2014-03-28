@@ -109,7 +109,7 @@ public class MachinePlayer extends Player {
         return true;
     }
 
-    public static void main(String[] args){
+    public static void runGame(void){
         MachinePlayer p1 = new MachinePlayer(white);
         MachinePlayer p2 = new MachinePlayer(black);
         Move m1, m2;
@@ -137,5 +137,9 @@ public class MachinePlayer extends Player {
                 break;
             }
         }
+    }
+
+    public static void main(String[] args){
+
     }
 }
