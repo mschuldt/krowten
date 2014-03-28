@@ -20,7 +20,7 @@ public class MachinePlayer extends Player {
         ourColor = color;
         opponentColor = 1 - color;
         board = new Board(color);
-        searchDepth = 3;//TODO: determine suitable default
+        searchDepth = 4;//TODO: determine suitable default
     }
 
     // Creates a machine player with the given color and search depth.  Color is
