@@ -128,6 +128,14 @@ public class MachinePlayer extends Player {
             if (!p2.board.verify()){
                 System.out.println("player 2 has a corrupted board");
             }
+            if (p1.board.hasNetwork(white)){
+                System.out.println("player 1(white) wins");
+                break;
+            }
+            if (p1.board.hasNetwork(black)){
+                System.out.println("player 2(black) wins");
+                break;
+            }
         }
     }
 }
