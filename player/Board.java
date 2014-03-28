@@ -1141,6 +1141,9 @@ public class Board{
     }
 
     public void interactiveDebug(){
+        interactiveDebug(null);
+    }
+    public void interactiveDebug(MachinePlayer player){
         loadGeneratedTests();
         BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
         AList<Move> history = new AList<Move>(100);
