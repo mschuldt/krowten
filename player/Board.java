@@ -751,10 +751,33 @@ public class Board{
        Temporary evaluation function so we can test the rest of the program.
        Just sum the connections of all the pieces of a given color
     */
+    //? since we are minimizing the opponents moves, do we really need 'color' here
     public int score(int color){
-        int sum = 0;
-        for (Piece p: getPieces(color)){
+
+        int sum=0;
+        PieceList pieces = getPieces(ourColor);
+        PieceList adjacent;
+        for (Piece p: pieces){
             sum += connectedPieces(p).length();
+            adjacent = adjacentPieces(p);
+            if (adjacent.length() ==0){
+                sum+=3;
+            }
+        }
+
+        long a,b,board;
+        boolean inA,inB;
+        a = ourGoalMaskA;
+        b = ourGoalMaskB;
+        if (piecesInGoalA > 1){
+            sum -= ((piecesInGoalA-1)*3);
+        }
+        if (piecesInGoalB > 1){
+            sum -= ((piecesInGoalB-1)*3);
+        }
+
+        if (piecesInGoalA == 0 || piecesInGoalB == 0){
+            sum/=2;
         }
         return sum;
     }
