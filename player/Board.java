@@ -371,7 +371,7 @@ public class Board{
      *  @returns an array of pieces adjacent to PIECE on the board
      */
     public PieceList adjacentPieces(Piece piece){
-        return adjacentPieces(piece.x, piece.y);
+        return adjacentPieces(piece.x, piece.y, piece.color);
     }
 
     //TODO: interface docs
