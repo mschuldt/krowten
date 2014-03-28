@@ -16,6 +16,8 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
+    boolean verifyAll = false; //when true, run this.verify() after every move
+
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -197,7 +199,9 @@ public class Board{
             //TODO
             break;
         }
-        verify();
+        if (verifyAll){
+            verify();
+        }
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -283,16 +287,19 @@ public class Board{
                 opponentBitBoard ^= p.bitRep;
                 opponentBitBoard |= toBitRep;
             }
-            //TODO: change p.x and p.y
+            p.bitRep = toBitRep;
+            p.x = toX-1;
+            p.y = toY-1;
             pieceArray[toX][toY] = p;
-            pieceArray[toX][toY].bitRep = toBitRep;
             pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :
             //TODO
             break;
         }
-        verify();
+        if (verifyAll){
+            verify();
+        }
     }
 
     //return the hash of the current board
@@ -365,7 +372,7 @@ public class Board{
      *  @returns an array of pieces adjacent to PIECE on the board
      */
     public PieceList adjacentPieces(Piece piece){
-        return adjacentPieces(piece.x, piece.y);
+        return adjacentPieces(piece.x, piece.y, piece.color);
     }
 
     //TODO: interface docs
@@ -774,10 +781,10 @@ public class Board{
                         System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is in its opponents bitboard");
                     }
                 }
-                //check that no color has a piece in their opponents goals
+                //check that internal coordinates match board coordinates
                 if (p.x != x || p.y != y){
                     ok = false;
-                    System.out.println(colorStr(c) + "Piece at " + locStr(x-1, y-1) + " has internal coordinate of "+ locStr(p.x,p.y));
+                    System.out.println(colorStr(c) + " Piece at " + locStr(x, y) + " has internal coordinate of "+ locStr(p.x,p.y));
                 }
 
             }
@@ -2287,7 +2294,5 @@ public class Board{
         //b.test();
         b.interactiveDebug();
         //
-
     }
 }
-

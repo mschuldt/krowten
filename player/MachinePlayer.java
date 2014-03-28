@@ -9,11 +9,18 @@ package player;
 public class MachinePlayer extends Player {
     Board board;
     int searchDepth;
+    int ourColor, opponentColor;
+    public static final int white = 1;
+    public static final int black = 0;
+
+
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
+        ourColor = color;
+        opponentColor = 1 - color;
         board = new Board(color);
-        searchDepth = 3;//TODO: determine suitable default
+        searchDepth = 4;//TODO: determine suitable default
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -26,17 +33,10 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
-        /* Boolean side;
-        if (color == this.board.ourColor) { // need to figure out of color is even necessary or what
-            side = true;
-        }
-        else{
-            side = false;
-        }
-        Best bestMove = minimax(side, alpha, beta); //TODO: figure out values
-        return bestMove.Move;
-        */
-        return new Move();
+        Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
+        //make the move here instead of calling this.forceMove if we know that the move is valid
+        board.move(bestMove.move); //TODO: does minimax always return a valid move?
+        return bestMove.move;
     }
 
 
@@ -44,34 +44,34 @@ public class MachinePlayer extends Player {
      * Minimax algorithm with alpha-beta pruning which returns a Best object with a score and Move
      **/
 
-    public Best minimax(Boolean side, int alpha, int beta, int depth){
+    public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        //`hasNetwork' needs to know the color. I'm not sure what `side'
-        // represents but this makes it compile for now --Michael
-        if (this.board.hasNetwork(side?1:0)){ // with or without color argument?
-            return myBest; //not sure...
-        }
-        if (depth == 0){
-            //myBest.score = this.board.scoreBoard(this.board, this); TODO
+        if (this.board.hasNetwork(side)){
+            myBest.score = (side == ourColor ? 100000 : -100000);//temp values for testing
             return myBest;
         }
-        if (side){
+        if (depth == 0){
+            myBest.score = this.board.score(side);
+            return myBest;
+        }
+        if (side == ourColor){
             myBest.score = alpha;
         }else{
             myBest.score = beta;
         }
         AList<Move> allValidMoves = this.board.validMoves(this.board.ourColor);
+        myBest.move = allValidMoves.get(0);
         for (int i=0; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = allValidMoves.get(i);
             this.board.move(m);
-            reply = minimax(!side, alpha, beta, depth - 1); // ummmmm
+            reply = minimax(1 - side, alpha, beta, depth - 1);
             this.board.unMove(m);
-            if (side && (reply.score >= myBest.score)){
+            if (side == ourColor && (reply.score > myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 alpha = reply.score;
-            } else if (!side && (reply.score <= myBest.score)){
+            } else if (side == opponentColor && (reply.score < myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 beta = reply.score;
@@ -88,8 +88,12 @@ public class MachinePlayer extends Player {
     // (updates the internal game board) and returns true.  If the move is
     // illegal, returns false without modifying the internal state of "this"
     // player.  This method allows your opponents to inform you of their moves.
-    public boolean opponentMove(Move m) {
-        return false;
+    public boolean opponentMove(Move m){
+        if (false){//TODO: determine if move is valid
+            return false;
+        }
+        board.opponentMove(m);
+        return true;
     }
 
     // If the Move m is legal, records the move as a move by "this" player
@@ -97,8 +101,33 @@ public class MachinePlayer extends Player {
     // illegal, returns false without modifying the internal state of "this"
     // player.  This method is used to help set up "Network problems" for your
     // player to solve.
-    public boolean forceMove(Move m) {
-        return false;
+    public boolean forceMove(Move m){
+        if (false){//TODO: determine if move is valid
+            return false;
+        }
+        board.move(m);
+        return true;
     }
 
+    public static void main(String[] args){
+        MachinePlayer p1 = new MachinePlayer(white);
+        MachinePlayer p2 = new MachinePlayer(black);
+        Move m1, m2;
+        while (true){
+            m1 =  p1.chooseMove();
+            System.out.println("player 1 moved: " + m1);
+            p2.opponentMove(m1);
+
+            m2 =  p2.chooseMove();
+            System.out.println("player 2 moved: " + m2);
+            p1.opponentMove(m2);
+
+            if (!p1.board.verify()){
+                System.out.println("player 1 has a corrupted board");
+            }
+            if (!p2.board.verify()){
+                System.out.println("player 2 has a corrupted board");
+            }
+        }
+    }
 }
