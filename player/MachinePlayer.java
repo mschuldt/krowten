@@ -9,9 +9,15 @@ package player;
 public class MachinePlayer extends Player {
     Board board;
     int searchDepth;
+    int ourColor, opponentColor;
+    public static final int white = 1;
+    public static final int black = 0;
+
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
+        ourColor = color;
+        opponentColor = 1 - color;
         board = new Board(color);
         searchDepth = 3;//TODO: determine suitable default
     }
