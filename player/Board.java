@@ -9,6 +9,8 @@ public class Board{
     int ourColor;
     int opponentColor;
     int ourPieceCount, opponentPieceCount;
+    int piecesInGoalA,piecesInGoalB;//our pieces
+
     List<Piece> P = new List<Piece>();
     PieceList PP = new PieceList();
     public static final int white = 1;
@@ -87,6 +89,7 @@ public class Board{
             System.out.println("Board.Board(int) -- Error: invalid color");
         }
         ourPieceCount =  opponentPieceCount = 0;
+        piecesInGoalA = piecesInGoalB = 0;
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
 
@@ -151,6 +154,11 @@ public class Board{
             toX = move.x1 + 1;
             toY = move.y1 + 1;
             bitRep = getBitRep(toX-1, toY-1);
+            if ((bitRep & ourGoalMaskA) != 0){
+                piecesInGoalA++;
+            }else if ((bitRep & ourGoalMaskB) != 0){
+                piecesInGoalB++;
+            }
 
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
@@ -174,6 +182,12 @@ public class Board{
             toY = move.y1 + 1;
 
             bitRep = getBitRep(toX-1, toY-1);
+
+            if ((bitRep & ourGoalMaskA) != 0){
+                piecesInGoalA++;
+            }else if ((bitRep & ourGoalMaskB) != 0){
+                piecesInGoalB++;
+            }
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
             assert pieceArray[fromX][fromY].color == color : "cannot move opponents piece";
@@ -259,6 +273,12 @@ public class Board{
             assert p != null : "square should not be empty";
             assert p != edge : "cannot undo: piece is an edge";
 
+            long bitRep = p.bitRep;
+            if ((bitRep & ourGoalMaskA) != 0){
+                piecesInGoalA--;
+            }else if ((bitRep & ourGoalMaskB) != 0){
+                piecesInGoalB--;
+            }
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
                 ourPieceCount--;
@@ -279,6 +299,18 @@ public class Board{
             p = pieceArray[fromX][fromY];
             assert pieceArray[toX][toY] == null : "square is already full";
             assert p != null : "square is empty";
+
+            long fromBitRep = p.bitRep;
+            if ((fromBitRep & ourGoalMaskA) != 0){
+                piecesInGoalA--;
+            }else if ((fromBitRep & ourGoalMaskB) != 0){
+                piecesInGoalB--;
+            }
+            if ((toBitRep & ourGoalMaskA) != 0){
+                piecesInGoalA++;
+            }else if ((toBitRep & ourGoalMaskB) != 0){
+                piecesInGoalB++;
+            }
 
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
