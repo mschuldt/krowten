@@ -13,6 +13,7 @@ public class MachinePlayer extends Player {
     public static final int white = 1;
     public static final int black = 0;
 
+
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
@@ -50,19 +51,17 @@ public class MachinePlayer extends Player {
      * Minimax algorithm with alpha-beta pruning which returns a Best object with a score and Move
      **/
 
-    public Best minimax(Boolean side, int alpha, int beta, int depth){
+    public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        //`hasNetwork' needs to know the color. I'm not sure what `side'
-        // represents but this makes it compile for now --Michael
-        if (this.board.hasNetwork(side?1:0)){ // with or without color argument?
+        if (this.board.hasNetwork(side){ // with or without color argument?
             return myBest; //not sure...
         }
         if (depth == 0){
             //myBest.score = this.board.scoreBoard(this.board, this); TODO
             return myBest;
         }
-        if (side){
+        if (side == ourColor){
             myBest.score = alpha;
         }else{
             myBest.score = beta;
@@ -71,13 +70,13 @@ public class MachinePlayer extends Player {
         for (int i=0; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = allValidMoves.get(i);
             this.board.move(m);
-            reply = minimax(!side, alpha, beta, depth - 1); // ummmmm
+            reply = minimax(1 - side, alpha, beta, depth - 1); // ummmmm
             this.board.unMove(m);
-            if (side && (reply.score >= myBest.score)){
+            if (side == ourColor && (reply.score >= myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 alpha = reply.score;
-            } else if (!side && (reply.score <= myBest.score)){
+            } else if (side == opponentColor && (reply.score <= myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 beta = reply.score;
