@@ -769,7 +769,7 @@ public class Board{
                 //check that internal coordinates match board coordinates
                 if (p.x != x || p.y != y){
                     ok = false;
-                    System.out.println(colorStr(c) + "Piece at " + locStr(x-1, y-1) + " has internal coordinate of "+ locStr(p.x,p.y));
+                    System.out.println(colorStr(c) + " Piece at " + locStr(x, y) + " has internal coordinate of "+ locStr(p.x,p.y));
                 }
 
             }
