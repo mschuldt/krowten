@@ -143,7 +143,7 @@ public class Board{
      * @param move describes the type of move to make
      * @param color color of the piece to be moved (1 for white, 0 for black)
      */
-    private void move(Move move, int color){ //? public/protected?
+    public void move(Move move, int color){
         int toX, toY;
         long bitRep;
         switch (move.moveKind){
