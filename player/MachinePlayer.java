@@ -35,7 +35,7 @@ public class MachinePlayer extends Player {
     public Move chooseMove() {
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
-        board.move(bestMove.move); //TODO: does minimax always return a valid move?
+        board.move(bestMove.move,ourColor); //TODO: does minimax always return a valid move?
         return bestMove.move;
     }
 
