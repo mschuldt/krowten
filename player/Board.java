@@ -766,7 +766,7 @@ public class Board{
                         System.out.println(colorStr(c) + " Piece at" + locStr(p.x, p.y) + " is in its opponents bitboard");
                     }
                 }
-                //check that no color has a piece in their opponents goals
+                //check that internal coordinates match board coordinates
                 if (p.x != x || p.y != y){
                     ok = false;
                     System.out.println(colorStr(c) + "Piece at " + locStr(x-1, y-1) + " has internal coordinate of "+ locStr(p.x,p.y));
