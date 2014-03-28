@@ -63,8 +63,7 @@ public class MachinePlayer extends Player {
         AList<Move> allValidMoves = board.validMoves(side);
         myBest.move = allValidMoves.get(0);
 
-        for (int i=0; i < allValidMoves.length(); i++){ // validMoves returns a list
-            Move m = allValidMoves.get(i);
+        for (Move m : allValidMoves){
             board.move(m,side);
             reply = minimax(1 - side, alpha, beta, depth - 1);
             board.unMove(m);
