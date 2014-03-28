@@ -33,17 +33,10 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
-        /* Boolean side;
-        if (color == this.board.ourColor) { // need to figure out of color is even necessary or what
-            side = true;
-        }
-        else{
-            side = false;
-        }
-        Best bestMove = minimax(side, alpha, beta); //TODO: figure out values
-        return bestMove.Move;
-        */
-        return new Move();
+        Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
+        //make the move here instead of calling this.forceMove if we know that the move is valid
+        board.move(bestMove.move, ourColor); //TODO: does minimax always return a valid move?
+        return bestMove.move;
     }
 
 
