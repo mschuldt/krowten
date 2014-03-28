@@ -35,7 +35,7 @@ public class MachinePlayer extends Player {
     public Move chooseMove() {
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
-        board.move(bestMove.move, ourColor); //TODO: does minimax always return a valid move?
+        board.move(bestMove.move); //TODO: does minimax always return a valid move?
         return bestMove.move;
     }
 
@@ -47,7 +47,7 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        if (this.board.hasNetwork(side){ // with or without color argument?
+        if (this.board.hasNetwork(side)){ // with or without color argument?
             return myBest; //not sure...
         }
         if (depth == 0){
@@ -88,9 +88,9 @@ public class MachinePlayer extends Player {
     // player.  This method allows your opponents to inform you of their moves.
     public boolean opponentMove(Move m){
         if (false){//TODO: determine if move is valid
-            return false
+            return false;
         }
-        board.move(m, opponentColor);
+        board.opponentMove(m);
         return true;
     }
 
@@ -101,9 +101,9 @@ public class MachinePlayer extends Player {
     // player to solve.
     public boolean forceMove(Move m){
         if (false){//TODO: determine if move is valid
-            return false
+            return false;
         }
-        board.move(m, ourColor);
+        board.move(m);
         return true;
     }
 }
