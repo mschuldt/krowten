@@ -47,12 +47,12 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        if (this.board.hasNetwork(side)){
+        if (board.hasNetwork(side)){
             myBest.score = (side == ourColor ? 100000 : -100000);//temp values for testing
             return myBest;
         }
         if (depth == 0){
-            myBest.score = this.board.score(side);
+            myBest.score = board.score(side);
             return myBest;
         }
         if (side == ourColor){
@@ -60,14 +60,14 @@ public class MachinePlayer extends Player {
         }else{
             myBest.score = beta;
         }
-        AList<Move> allValidMoves = this.board.validMoves(side);
+        AList<Move> allValidMoves = board.validMoves(side);
         myBest.move = allValidMoves.get(0);
 
         for (int i=0; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = allValidMoves.get(i);
-            this.board.move(m);
+            board.move(m,side);
             reply = minimax(1 - side, alpha, beta, depth - 1);
-            this.board.unMove(m);
+            board.unMove(m);
             if (side == ourColor && (reply.score > myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
