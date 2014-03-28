@@ -287,9 +287,10 @@ public class Board{
                 opponentBitBoard ^= p.bitRep;
                 opponentBitBoard |= toBitRep;
             }
-            //TODO: change p.x and p.y
+            p.bitRep = toBitRep;
+            p.x = toX-1;
+            p.y = toY-1;
             pieceArray[toX][toY] = p;
-            pieceArray[toX][toY].bitRep = toBitRep;
             pieceArray[fromX][fromY] = null;
             break;
         case Move.QUIT :
@@ -2285,7 +2286,5 @@ public class Board{
         //b.test();
         b.interactiveDebug();
         //
-
     }
 }
-
