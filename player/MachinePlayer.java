@@ -47,7 +47,7 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        if (this.board.hasNetwork(side)){ // with or without color argument?
+        if (this.board.hasNetwork(side)){
             return myBest; //not sure...
         }
         if (depth == 0){
