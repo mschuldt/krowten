@@ -60,16 +60,17 @@ public class MachinePlayer extends Player {
             myBest.score = beta;
         }
         AList<Move> allValidMoves = this.board.validMoves(this.board.ourColor);
+        myBest.move = allValidMoves.get(0);
         for (int i=0; i < allValidMoves.length(); i++){ // validMoves returns a list
             Move m = allValidMoves.get(i);
             this.board.move(m);
-            reply = minimax(1 - side, alpha, beta, depth - 1); // ummmmm
+            reply = minimax(1 - side, alpha, beta, depth - 1);
             this.board.unMove(m);
-            if (side == ourColor && (reply.score >= myBest.score)){
+            if (side == ourColor && (reply.score > myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 alpha = reply.score;
-            } else if (side == opponentColor && (reply.score <= myBest.score)){
+            } else if (side == opponentColor && (reply.score < myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 beta = reply.score;
