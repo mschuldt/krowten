@@ -89,11 +89,11 @@ public class MachinePlayer extends Player {
     // illegal, returns false without modifying the internal state of "this"
     // player.  This method allows your opponents to inform you of their moves.
     public boolean opponentMove(Move m){
-        if (false){//TODO: determine if move is valid
-            return false;
+        if (board.isValidMove(m, opponentColor)){
+            board.opponentMove(m);
+            return true;
         }
-        board.opponentMove(m);
-        return true;
+        return false;
     }
 
     // If the Move m is legal, records the move as a move by "this" player
@@ -102,11 +102,11 @@ public class MachinePlayer extends Player {
     // player.  This method is used to help set up "Network problems" for your
     // player to solve.
     public boolean forceMove(Move m){
-        if (false){//TODO: determine if move is valid
-            return false;
+        if (board.isValidMove(m, ourColor)){
+            board.move(m);
+            return true;
         }
-        board.move(m);
-        return true;
+        return false;
     }
 
     public static void runGame(){
