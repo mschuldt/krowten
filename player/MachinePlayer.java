@@ -52,7 +52,7 @@ public class MachinePlayer extends Player {
             return myBest;
         }
         if (depth == 0){
-            myBest.score = board.score(side);
+            myBest.score = board.score();
             return myBest;
         }
         if (side == ourColor){

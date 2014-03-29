@@ -790,11 +790,11 @@ public class Board{
     public int score(int color){
 
         int sum=0;
-        PieceList pieces = getPieces(ourColor);
+        PieceList pieces = getPieces(color);
         PieceList adjacent;
         for (Piece p: pieces){
             sum += connectedPieces(p).length();
-            adjacent = adjacentPieces(p);
+            adjacent = adjacentPieces(p, color);
             if (adjacent.length() ==0){
                 sum+=3;
             }
@@ -802,19 +802,35 @@ public class Board{
 
         long a,b,board;
         boolean inA,inB;
-        a = ourGoalMaskA;
-        b = ourGoalMaskB;
-        if (piecesInGoalA > 1){
-            sum -= ((piecesInGoalA-1)*3);
+        int numA, numB;
+        if (color == ourColor){
+            a = ourGoalMaskA;
+            b = ourGoalMaskB;
+            board = ourBitBoard;
+            numA = ourNumInGoalA;
+            numB = ourNumInGoalB;
+        }else{
+            a = opponentGoalMaskA;
+            b = opponentGoalMaskB;
+            board = opponentBitBoard;
+            numA = opponentNumInGoalA;
+            numB = opponentNumInGoalB;
         }
-        if (piecesInGoalB > 1){
-            sum -= ((piecesInGoalB-1)*3);
+        if (numA > 1){
+            sum -= ((numA-1)*3);
+        }
+        if (numB > 1){
+            sum -= ((numB-1)*3);
         }
 
-        if (piecesInGoalA == 0 || piecesInGoalB == 0){
+        if (numA == 0 || numB == 0){
             sum/=2;
         }
         return sum;
+    }
+
+    public int score(){
+        return score(ourColor) - score(opponentColor);
     }
 
     //==========================================================================
