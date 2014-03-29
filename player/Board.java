@@ -698,6 +698,56 @@ public class Board{
         return false;
     }
 
+
+    public boolean isValidMove(Move m, int color){
+        int toX,toY,fromX,fromY;
+        int pieceCount = (color == ourColor ? ourPieceCount : opponentPieceCount);
+
+        switch (m.moveKind){
+        case Move.ADD:
+            toX = m.x1;
+            toY = m.y1;
+            //check that indexes are valid
+            if (! isValidIndex(toX, toY)){
+                return false;
+            }
+            //check that destination square is empty
+            if (pieceArray[toX][toY] != null){
+                return false;
+            }
+            //check for correct piece count
+            if (pieceCount >= 10){
+                return false;
+            }
+
+            return true;
+
+        case Move.STEP:
+            toX = m.x1;
+            toY = m.y1;
+            fromX = m.x2;
+            fromY = m.y2;
+            //check that destination indexes are valid
+            if (! (isValidIndex(toX, toY) && isValidIndex(fromX, fromY))){
+                return false;
+            }
+            //check that destination square is empty
+            if (pieceArray[toX][toY] != null){
+                return false;
+            }
+            //make sure there is a piece to move
+            if (pieceArray[fromX][fromY] == null){
+                return false;
+            }
+
+            //check for correct piece count
+            if (pieceCount < 10){
+                return false;
+            }
+        }
+
+        return true;
+    }
     /*
      * returns list of all valid moves available for color, meaning
      * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
