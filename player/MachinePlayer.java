@@ -138,6 +138,49 @@ public class MachinePlayer extends Player {
             }
         }
     }
+    /** use ForceMove to setup the board described by BOARDSTRING
+     */
+    public void forceBoard(String boardString){
+        int whiteCount=0, blackCount=0;
+        Move m;
+        boardString = boardString.toLowerCase();
+        if (boardString.length() != 64){
+            System.out.println("Error --Board.Board(int, String)-- invalid board string:\n"+boardString);
+        }
+        char[] chars = boardString.toCharArray();
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+                switch (boardString.charAt(y*8 + x)){
+                case ' ' :
+                    continue;
+                case 'x': case 'b':
+                    m = new Move(x, y);
+                    if (ourColor == black){
+                        forceMove(m);
+                    }else{
+                        opponentMove(m);
+                    }
+                    blackCount++;
+                    continue;
+                case 'o': case 'w':
+                    m = new Move(x,y);
+                    if (ourColor == white){
+                        forceMove(m);
+                    }else{
+                        opponentMove(m);
+                    }
+                    whiteCount++;
+                    continue;
+                default:
+                    System.out.println("Error - Board.Board(int, String)- invalid char");
+                }
+            }
+        }
+        if (whiteCount > 10 || blackCount > 10){
+            System.out.println("Error - Board.Board(int, String) - constructed illegal board");
+        }
+    }
+
 
     public static void main(String[] args){
 
