@@ -188,7 +188,8 @@ public class Board{
             toX = move.x1 + 1;
             toY = move.y1 + 1;
 
-            bitRep = getBitRep(toX-1, toY-1);
+            long toBitRep = getBitRep(toX-1, toY-1);
+            long fromBitRep = pieceArray[fromX][fromY].bitRep;
 
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
@@ -198,22 +199,32 @@ public class Board{
                 //remove old location
                 ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 //add new location
-                ourBitBoard |= bitRep;
-                //increment counter if in a goal
-                if ((bitRep & ourGoalMaskA) != 0){
+                ourBitBoard |= toBitRep;
+                //increment counter if moveing to a goal
+                if ((toBitRep & ourGoalMaskA) != 0){
                     ourNumInGoalA++;
-                }else if ((bitRep & ourGoalMaskB) != 0){
+                }else if ((toBitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB++;
                 }
-
+                //decrease counter is removing frm a goal
+                if ((fromBitRep & ourGoalMaskA) != 0){
+                    ourNumInGoalA--;
+                }else if ((fromBitRep & ourGoalMaskB) != 0){
+                    ourNumInGoalB--;
+                }
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
-                opponentBitBoard |= bitRep;
+                opponentBitBoard |= toBitRep;
 
-                if ((bitRep & opponentGoalMaskA) != 0){
+                if ((toBitRep & opponentGoalMaskA) != 0){
                     opponentNumInGoalA++;
-                }else if ((bitRep & opponentGoalMaskB) != 0){
+                }else if ((toBitRep & opponentGoalMaskB) != 0){
                     opponentNumInGoalB++;
+                }
+                if ((fromBitRep & opponentGoalMaskA) != 0){
+                    opponentNumInGoalA--;
+                }else if ((fromBitRep & opponentGoalMaskB) != 0){
+                    opponentNumInGoalB--;
                 }
             }
             Piece p = pieceArray[fromX][fromY];
