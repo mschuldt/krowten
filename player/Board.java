@@ -832,6 +832,50 @@ public class Board{
         return opponentPieceCount;
     }
 
+    private int runLength(Piece currentPiece, long memberPieces,
+                               int m, int b, int length){
+        int newM, newB;
+        int len= 0;
+        PieceList pl = connectedPieces(currentPiece);
+        if (pl == null){
+            return length;
+        }
+        for (Piece piece : pl){
+            if (piece.x == currentPiece.x){
+                newM = 10;
+                newB = piece.x;
+            }else{
+                newM = (piece.y - currentPiece.y)/(piece.x - currentPiece.x);
+                newB = piece.y - newM*piece.x;
+            }
+            if ((newM == m) && (newB == b)){
+                continue; //on the same line
+            }
+
+            if ((piece.bitRep & memberPieces) != 0){
+                continue; // we have already visited this piece
+            }
+
+            len += runLength(piece, memberPieces | currentPiece.bitRep, newM, newB, 1);
+        }
+        return length + len;
+    }
+
+    //returns the length of the partial network starting with STARTPIECE
+    public int runLength(Piece startPiece){
+
+        long bitBoard, goalA, goalB;
+
+        if (startPiece.color == ourColor){
+            goalA = ourGoalMaskA;
+            goalB = ourGoalMaskB;
+        }else{
+            goalA = opponentGoalMaskA;
+            goalB = opponentGoalMaskB;
+        }
+        return runLength(startPiece, goalA | goalB ,11, 60, 1);
+    }
+
     //? interface change:
     //    MachinePlayer.scoreBoard(Board B, Player P)
     //    -> Baord.score(int color);
