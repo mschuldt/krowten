@@ -1587,10 +1587,24 @@ public class Board{
                 AList<Move> moves = validMoves(color);
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
+                int nBad = 0;
+                for (Move mm : moves){
+                    if (! isValidMove(mm, color)){
+                        nBad++;
+                        pb.mark(mm.x1, mm.x2);
+                    }
+                }
+                if (nBad > 0){
+                    messages.add("found " + nBad + " disagreements(marked)");
+                }else{
+                    messages.add("all moves are ok");
+                    pb.mark(moves);
+                }
+
                 // for (Move move : moves){
                 //     System.out.print(locStr(move.x1, move.y1));
                 // }
-                pb.mark(moves);
+
                 break;
 
             case "pieceat": case "pa": //Piece At    //ok
