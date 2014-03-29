@@ -1736,6 +1736,16 @@ public class Board{
             case "evaluate": case "eval":case "score":
                 messages.add(colorStr(color)+ " board score: " + score(color));
                 break;
+            case "choosemove": case "cm":
+                if (player == null){
+                    messages.add("Error: player is unknown");
+                    break;
+                }
+                Move move = player.chooseMove();
+                pb.mark(move.x1, move.y1);
+                messages.add(colorStr(ourColor) + " player choose move: " + move);
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
