@@ -876,6 +876,30 @@ public class Board{
         return runLength(startPiece, goalA | goalB ,11, 60, 1);
     }
 
+    int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
+                                 {-3,-3, 2,-1,  2, 1, 0,-4},
+                                 {-4,-3,-1,-3, -1,-1, 0,-3},
+                                 {-2,-3, 4,-3,  4, 1, 0,-3},
+                                 {-4,-3,-3,-3, -3,-1, 0,-4},
+                                 {-2,-2, 3,-3,  3, 1, 0,-3},
+                                 {-4,-2, 0,-3,  0,-1, 0,-3},
+                                 {0 , 0, 0, 0,  0, 0, 0, 0}};
+
+    //return the sum of the square values of each piece
+    private int squareScoreSum(int color){
+        int sum= 0;
+        if (color == white){
+            for (Piece p : getPieces(white)){
+                sum += whiteSquareValues[p.y][p.x];
+            }
+        }else{
+            for (Piece p : getPieces(black)){
+                sum += whiteSquareValues[p.x][p.y];
+            }
+        }
+        return sum;
+    }
+
     //? interface change:
     //    MachinePlayer.scoreBoard(Board B, Player P)
     //    -> Baord.score(int color);
