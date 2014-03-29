@@ -701,7 +701,15 @@ public class Board{
 
     public boolean isValidMove(Move m, int color){
         int toX,toY,fromX,fromY;
-        int pieceCount = (color == ourColor ? ourPieceCount : opponentPieceCount);
+        int pieceCount;
+        long goal;
+        if (color == ourColor){
+            pieceCount = ourPieceCount;
+            goal = opponentGoalMask;
+        }else{
+            pieceCount = opponentPieceCount;
+            goal = ourGoalMask;
+        }
 
         switch (m.moveKind){
         case Move.ADD:
@@ -709,20 +717,34 @@ public class Board{
             toY = m.y1;
             //check that indexes are valid
             if (! isValidIndex(toX, toY)){
+                System.out.println("invalid index");
                 return false;
             }
             //check that destination square is empty
-            if (pieceArray[toX][toY] != null){
+            if (pieceArray[toX+1][toY+1] != null){
+                System.out.println("destination is full");
+                System.out.println(locStr(toX,toY));
                 return false;
             }
             //check for correct piece count
             if (pieceCount >= 10){
+                System.out.println("to many pieces");
                 return false;
             }
-
+            //make sure not to move into opponents goal
+            if ((getBitRep(toX, toY) & goal) != 0){
+                System.out.println("in opponents goal");
+                return false;
+            }
+            //check that no illegal cluster will form
+            if (formsIllegalCluster(m, color)){
+                System.out.println("forms cluster");
+                return false;
+            }
             return true;
 
         case Move.STEP:
+            System.out.println(">>>Step move");
             toX = m.x1;
             toY = m.y1;
             fromX = m.x2;
@@ -732,16 +754,26 @@ public class Board{
                 return false;
             }
             //check that destination square is empty
-            if (pieceArray[toX][toY] != null){
+            if (pieceArray[toX+1][toY+1] != null){
                 return false;
             }
             //make sure there is a piece to move
-            if (pieceArray[fromX][fromY] == null){
+            if (pieceArray[fromX+1][fromY+1] == null){
                 return false;
             }
 
             //check for correct piece count
             if (pieceCount < 10){
+                return false;
+            }
+
+            //make sure not to move into opponents goal
+            if ((getBitRep(toX, toY) & goal) != 0){
+                return false;
+            }
+
+            //check that no illegal cluster will form
+            if (formsIllegalCluster(m, color)){
                 return false;
             }
         }
