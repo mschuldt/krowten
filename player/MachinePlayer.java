@@ -61,6 +61,7 @@ public class MachinePlayer extends Player {
             myBest.score = beta;
         }
         AList<Move> allValidMoves = board.validMoves(side);
+        //is it possible to not have any valid moves?
         myBest.move = allValidMoves.get(0);
 
         for (Move m : allValidMoves){

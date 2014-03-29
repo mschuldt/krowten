@@ -698,7 +698,6 @@ public class Board{
         return false;
     }
 
-
     public boolean isValidMove(Move m, int color){
         int toX,toY,fromX,fromY;
         int pieceCount;
@@ -717,34 +716,28 @@ public class Board{
             toY = m.y1;
             //check that indexes are valid
             if (! isValidIndex(toX, toY)){
-                System.out.println("invalid index");
                 return false;
             }
             //check that destination square is empty
             if (pieceArray[toX+1][toY+1] != null){
-                System.out.println("destination is full");
                 System.out.println(locStr(toX,toY));
                 return false;
             }
             //check for correct piece count
             if (pieceCount >= 10){
-                System.out.println("to many pieces");
                 return false;
             }
             //make sure not to move into opponents goal
             if ((getBitRep(toX, toY) & goal) != 0){
-                System.out.println("in opponents goal");
                 return false;
             }
             //check that no illegal cluster will form
             if (formsIllegalCluster(m, color)){
-                System.out.println("forms cluster");
                 return false;
             }
             return true;
 
         case Move.STEP:
-            System.out.println(">>>Step move");
             toX = m.x1;
             toY = m.y1;
             fromX = m.x2;
@@ -863,11 +856,7 @@ public class Board{
     //    MachinePlayer.scoreBoard(Board B, Player P)
     //    -> Baord.score(int color);
     //
-    /**
-       Temporary evaluation function so we can test the rest of the program.
-       Just sum the connections of all the pieces of a given color
-    */
-    //? since we are minimizing the opponents moves, do we really need 'color' here
+
     public int score(int color){
 
         int sum=0;
