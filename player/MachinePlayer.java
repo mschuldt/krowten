@@ -181,6 +181,9 @@ public class MachinePlayer extends Player {
         }
     }
 
+    public void interactiveDebug(){
+        board.interactiveDebug(this);
+    }
 
     public static void main(String[] args){
 
