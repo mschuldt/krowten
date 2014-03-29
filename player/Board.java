@@ -890,8 +890,12 @@ public class Board{
             sum += connectedPieces(p).length();
             adjacent = adjacentPieces(p, color);
             if (adjacent.length() ==0){
-                sum+=3;
+                sum+=1;
             }
+        }
+        for (Piece piece : getStartGoalPieces(color)){
+            sum+=2*runLength(piece);
+            //System.out.println("run length = " + runLength(piece));
         }
 
         long a,b,board;
@@ -911,10 +915,13 @@ public class Board{
             numB = opponentNumInGoalB;
         }
         if (numA > 1){
-            sum -= ((numA-1)*3);
+            sum -= ((numA-1)*10);
         }
         if (numB > 1){
-            sum -= ((numB-1)*3);
+            sum -= ((numB-1)*10);
+        }
+        if (sum<0){
+            sum=0;
         }
 
         if (numA == 0 || numB == 0){
