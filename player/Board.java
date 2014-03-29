@@ -887,17 +887,23 @@ public class Board{
         PieceList pieces = getPieces(color);
         PieceList adjacent;
         for (Piece p: pieces){
+            //sum the total connections
             sum += connectedPieces(p).length();
+            //give points for pieces with no other adjacent pieces
             adjacent = adjacentPieces(p, color);
             if (adjacent.length() ==0){
-                sum+=1;
+                sum+=4;
             }
         }
+        //give points for partial networks
         for (Piece piece : getStartGoalPieces(color)){
             sum+=2*runLength(piece);
             //System.out.println("run length = " + runLength(piece));
         }
 
+        //TODO: make a map of most desirable spots
+
+        //try to prevent more then one piece in each goal
         long a,b,board;
         boolean inA,inB;
         int numA, numB;
