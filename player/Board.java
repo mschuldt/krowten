@@ -928,11 +928,51 @@ public class Board{
         return true;
     }
 
+    public boolean verifyGoalCount(){
+        boolean ok = true;
+        Piece p;
+        int ourA=0,ourB=0,oppA=0,oppB=0;
+        for (int x = 0; x<8; x++){
+            for (int y = 0; y<8; y++){
+                p = getPiece(x, y);
+                if (p != null && p != edge){
+                    if ((p.bitRep & ourGoalMaskA) != 0){
+                        ourA++;
+                    }else if ((p.bitRep & ourGoalMaskB) != 0){
+                        ourB++;
+                    }else if ((p.bitRep & opponentGoalMaskA) != 0){
+                        oppA++;
+                    }else if ((p.bitRep & opponentGoalMaskB) != 0){
+                        oppB++;
+                    }
+                }
+            }
+        }
+        if (ourA != ourNumInGoalA){
+            System.out.println("incorrect value for `ourNumInGoalA' expect: "+ ourA + " got: "+ ourNumInGoalA);
+            ok = false;
+        }
+        if (ourB != ourNumInGoalB){
+            System.out.println("incorrect value for `ourNumInGoalB' expect: "+ ourB + " got: "+ ourNumInGoalB);
+            ok = false;
+        }
+        if (oppA != opponentNumInGoalA){
+            System.out.println("incorrect value for `opponentNumInGoalA' expect: "+ oppA + " got: "+ opponentNumInGoalA);
+            ok = false;
+        }
+        if (oppB != opponentNumInGoalB){
+            System.out.println("incorrect value for `opponentNumInGoalB' expect: "+ oppB + " got: "+ opponentNumInGoalB);
+            ok = false;
+        }
+        return ok;
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         return verifyBitBoards()
             && verifyGoals()
-            && verifyPieceCount();
+            && verifyPieceCount()
+            && verifyGoalCount();
     }
 
     //construct a board from a string representation of it.
