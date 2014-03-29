@@ -572,30 +572,11 @@ public class Board{
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
                                int m, int b, int depth, PrintBoard pb){ //printBoard is just for debugging
         int newM, newB;
-
-        // System.out.println("current piece:");
-        // System.out.println(bitBoardToString(currentPiece.bitRep));
-        // System.out.println("memberPieces:");
-        // System.out.println(bitBoardToString(memberPieces));
-
-        // System.out.println(pl.length() + " Connected pieces");
-        // long tmp = 0;
-        // for (Piece p : pl){
-        //     tmp |= p.bitRep;
-        // }
-        // System.out.println("connected pieces:");
-        // System.out.println(bitBoardToString(tmp));
-
         PieceList pl = connectedPieces(currentPiece);
         if (pl == null){
             return false;
         }
         for (Piece piece : pl){
-            //System.out.println("trying Piece: (" + piece.x +"," + piece.y + ")");
-            //System.out.println("network has " + depth + " pieces.");
-            //System.out.println("trying Piece:");
-            //System.out.println(bitBoardToString(piece.bitRep));
-
             if (piece.x == currentPiece.x){
                 newM = 10;
                 newB = piece.x;
@@ -603,39 +584,27 @@ public class Board{
                 newM = (piece.y - currentPiece.y)/(piece.x - currentPiece.x);
                 newB = piece.y - newM*piece.x;
             }
-
-            //System.out.println("m = "+ newM);
-            //System.out.println("b = "+ newB);
-
             if ((newM == m) && (newB == b)){
-                //System.out.println("on the same line");
                 continue; //on the same line
             }
-
             if ((piece.bitRep & goalmask) != 0){
                 if (depth >= 5){//5 because depth does not include this 'piece'
-                    //System.out.println("found network!");
-                    //System.out.println("end: (" + piece.x +"," + piece.y + ")");
                     pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                     return true;
                 }
-                //System.out.println("network, but < 6 pieces");
                 continue; //can't visit a goal piece until the end
             }
             if ((piece.bitRep & memberPieces) != 0){
-                //System.out.println("already visited");
                 continue; // we have already visited this piece
             }
-
             if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, goalmask, newM, newB, depth+1,pb)){
-                // System.out.println("==>(" + piece.x +"," + piece.y + ")");
-                // System.out.println("found network!!");
                 pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
                 return true;
             }
         }
         return false;
     }
+
     //this is just temporary to maintain the interface. the origonal has a printboard passed to it
     //so that it can draw the lines on it.
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces, int m, int b){
