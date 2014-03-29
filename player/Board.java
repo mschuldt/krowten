@@ -9,7 +9,8 @@ public class Board{
     int ourColor;
     int opponentColor;
     int ourPieceCount, opponentPieceCount;
-    int piecesInGoalA,piecesInGoalB;//our pieces
+    int ourNumInGoalA,ourNumInGoalB,
+        opponentNumInGoalA,opponentNumInGoalB;
 
     List<Piece> P = new List<Piece>();
     PieceList PP = new PieceList();
@@ -89,7 +90,9 @@ public class Board{
             System.out.println("Board.Board(int) -- Error: invalid color");
         }
         ourPieceCount =  opponentPieceCount = 0;
-        piecesInGoalA = piecesInGoalB = 0;
+        ourNumInGoalA = ourNumInGoalB = 0;
+        opponentNumInGoalA = opponentNumInGoalB = 0;
+
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
 
@@ -154,11 +157,6 @@ public class Board{
             toX = move.x1 + 1;
             toY = move.y1 + 1;
             bitRep = getBitRep(toX-1, toY-1);
-            if ((bitRep & ourGoalMaskA) != 0){
-                piecesInGoalA++;
-            }else if ((bitRep & ourGoalMaskB) != 0){
-                piecesInGoalB++;
-            }
 
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
@@ -166,10 +164,20 @@ public class Board{
             if (color == ourColor){
                 ourBitBoard |= bitRep;
                 ourPieceCount++;
+                if ((bitRep & ourGoalMaskA) != 0){
+                    ourNumInGoalA++;
+                }else if ((bitRep & ourGoalMaskB) != 0){
+                    ourNumInGoalB++;
+                }
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }else{
                 opponentBitBoard |= bitRep;
                 opponentPieceCount++;
+                if ((bitRep & opponentGoalMaskA) != 0){
+                    opponentNumInGoalA++;
+                }else if ((bitRep & opponentGoalMaskB) != 0){
+                    opponentNumInGoalB++;
+                }
                 assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }
             pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
@@ -183,11 +191,6 @@ public class Board{
 
             bitRep = getBitRep(toX-1, toY-1);
 
-            if ((bitRep & ourGoalMaskA) != 0){
-                piecesInGoalA++;
-            }else if ((bitRep & ourGoalMaskB) != 0){
-                piecesInGoalB++;
-            }
             assert pieceArray[toX][toY] == null : "square is already full";
             assert pieceArray[fromX][fromY] != null : "square is empty";
             assert pieceArray[fromX][fromY].color == color : "cannot move opponents piece";
@@ -197,10 +200,22 @@ public class Board{
                 ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 //add new location
                 ourBitBoard |= bitRep;
+                //increment counter if in a goal
+                if ((bitRep & ourGoalMaskA) != 0){
+                    ourNumInGoalA++;
+                }else if ((bitRep & ourGoalMaskB) != 0){
+                    ourNumInGoalB++;
+                }
 
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 opponentBitBoard |= bitRep;
+
+                if ((bitRep & opponentGoalMaskA) != 0){
+                    opponentNumInGoalA++;
+                }else if ((bitRep & opponentGoalMaskB) != 0){
+                    opponentNumInGoalB++;
+                }
             }
             Piece p = pieceArray[fromX][fromY];
             pieceArray[toX][toY] = p;
@@ -274,21 +289,29 @@ public class Board{
             assert p != edge : "cannot undo: piece is an edge";
 
             long bitRep = p.bitRep;
-            if ((bitRep & ourGoalMaskA) != 0){
-                piecesInGoalA--;
-            }else if ((bitRep & ourGoalMaskB) != 0){
-                piecesInGoalB--;
-            }
+
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
                 ourPieceCount--;
 
+                if ((bitRep & ourGoalMaskA) != 0){
+                    ourNumInGoalA--;
+                }else if ((bitRep & ourGoalMaskB) != 0){
+                    ourNumInGoalB--;
+                }
             }else{
                 opponentBitBoard ^= p.bitRep;
                 opponentPieceCount--;
+
+                if ((bitRep & opponentGoalMaskA) != 0){
+                    opponentNumInGoalA--;
+                }else if ((bitRep & opponentGoalMaskB) != 0){
+                    opponentNumInGoalB--;
+                }
             }
             pieceArray[x][y] = null;
             break;
+
         case Move.STEP :
             int toX = move.x2 + 1,
                 toY = move.y2 + 1,
@@ -301,23 +324,35 @@ public class Board{
             assert p != null : "square is empty";
 
             long fromBitRep = p.bitRep;
-            if ((fromBitRep & ourGoalMaskA) != 0){
-                piecesInGoalA--;
-            }else if ((fromBitRep & ourGoalMaskB) != 0){
-                piecesInGoalB--;
-            }
-            if ((toBitRep & ourGoalMaskA) != 0){
-                piecesInGoalA++;
-            }else if ((toBitRep & ourGoalMaskB) != 0){
-                piecesInGoalB++;
-            }
 
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
                 ourBitBoard |= toBitRep;
+
+                if ((fromBitRep & ourGoalMaskA) != 0){
+                    ourNumInGoalA--;
+                }else if ((fromBitRep & ourGoalMaskB) != 0){
+                    ourNumInGoalB--;
+                }
+                if ((toBitRep & ourGoalMaskA) != 0){
+                    ourNumInGoalA++;
+                }else if ((toBitRep & ourGoalMaskB) != 0){
+                    ourNumInGoalB++;
+                }
             }else{
                 opponentBitBoard ^= p.bitRep;
                 opponentBitBoard |= toBitRep;
+
+                if ((fromBitRep & opponentGoalMaskA) != 0){
+                    opponentNumInGoalA--;
+                }else if ((fromBitRep & opponentGoalMaskB) != 0){
+                    opponentNumInGoalB--;
+                }
+                if ((toBitRep & opponentGoalMaskA) != 0){
+                    opponentNumInGoalA++;
+                }else if ((toBitRep & opponentGoalMaskB) != 0){
+                    opponentNumInGoalB++;
+                }
             }
             p.bitRep = toBitRep;
             p.x = toX-1;
