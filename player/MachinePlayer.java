@@ -187,5 +187,17 @@ public class MachinePlayer extends Player {
 
     public static void main(String[] args){
 
+        MachinePlayer p = new MachinePlayer(white);
+        p.forceBoard("        " +
+                     "        " +
+                     "        " +
+                     "o ox  x " +
+                     "  ox    " +
+                     "o    x  " +
+                     "    ox  " +
+                     "        "
+                     );
+
+        p.interactiveDebug();
     }
 }

@@ -19,8 +19,7 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
-    boolean verifyAll = false; //when true, run this.verify() after every move
-
+    boolean verifyAll = true; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -2466,15 +2465,14 @@ public class Board{
 
     public static void main(String[] args){
         Board b = new Board(black,
-                            "  x     " +
-                            "   xo x " +
-                            " o   x o" +
-                            "o  xo o " +
-                            "  x     " +
-                            " o   o  " +
-                            " ox  xo " +
-                            "   x    "
-
+                            "        " +
+                            "  o     " +
+                            "        " +
+                            "o ox  x " +
+                            "  ox    " +
+                            "o    x  " +
+                            "    ox  " +
+                            "        "
                             );
 
         PrintBoard pb = b.toPrintBoard();
