@@ -33,4 +33,16 @@ public class PieceList extends AList<Piece>{
             addIfColor(p, color);
         }
     }
+
+    public boolean containsPiece(long bitRep){
+        for (int i=0;i < len;i++){
+            if (array[i].bitRep == bitRep){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean containsPiece(Piece p){
+        return p != null && containsPiece(p.bitRep);
+    }
 }
