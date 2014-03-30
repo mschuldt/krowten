@@ -658,19 +658,37 @@ public class Board{
         int x = m.x1;
         int y = m.y1;
         int numNeighbors;
+        //since we are no longer doing the actual move, in the case that the move
+        //is a step move we need to account for the case in which the location
+        //we are moving the the piece from is also part of the adjacent pieces
+        //the the square we are testing
+        boolean stepMove = (m.moveKind == Move.STEP);
+        long originBitRep=0;
+        if (stepMove){
+            originBitRep = getBitRep(m.x2, m.y2);
+        }
 
         if (this.pieceAt(x,y)){
             return false; // for now... probably need to throw an error, but isValidMove will also take care of it
         }
         PieceList neighbors = this.adjacentPieces(x, y, color); // get neighboring pieces of (presumably) the same color
         numNeighbors = neighbors.length();
+        if (stepMove && neighbors.containsPiece(originBitRep)){
+            numNeighbors--;
+        }
         if (numNeighbors >1){
             return true;
         }
         if (numNeighbors == 1){
             Piece oneNeighbor = neighbors.get(0);
+            if (stepMove && oneNeighbor.bitRep == originBitRep){
+                oneNeighbor = neighbors.get(1);
+            }
             PieceList moreNeighbors = this.adjacentPieces(oneNeighbor);
             int moreNumNeighbors = moreNeighbors.length();
+            if (stepMove && moreNeighbors.containsPiece(originBitRep)){
+                moreNumNeighbors--;
+            }
             if (moreNumNeighbors >0){
                 return true;
             }
