@@ -1418,6 +1418,27 @@ public class Board{
         return ret;
     }
 
+    private void clearBoard(){
+        ourBitBoard = opponentBitBoard = 0;
+        ourPieceCount =  opponentPieceCount = 0;
+        ourNumInGoalA = ourNumInGoalB = 0;
+        opponentNumInGoalA = opponentNumInGoalB = 0;
+        pieceArray = new Piece[10][10];//the easy way
+        for (int x = 0; x < 10; x++){
+            pieceArray[x][0] = edge;
+            pieceArray[x][9] = edge;
+        }
+
+        for (int y = 0; y < 10; y++){
+            pieceArray[0][y] = edge;
+            pieceArray[9][y] = edge;
+        }
+
+        pieceArray[1][1] = edge;
+        pieceArray[8][1] = edge;
+        pieceArray[1][8] = edge;
+        pieceArray[8][8] = edge;
+    }
     private String colorStr(int color){
         switch (color){
         case 0: return "black";
