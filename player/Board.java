@@ -2111,7 +2111,7 @@ public class Board{
                     System.out.println(pb.toString());
                     System.out.println("white moved: " + m1);
 
-                    if (player1.board.hasNetwork(white)){
+                    if (player1.board.hasNetwork(white,pb)){
                         messages.add("white wins");
                         break;
                     }
@@ -2125,7 +2125,7 @@ public class Board{
                     System.out.println(pb.toString());
                     System.out.println("black moved: " + m2);
 
-                    if (player1.board.hasNetwork(black)){
+                    if (player1.board.hasNetwork(black, pb)){
                         messages.add("black wins");
                         break;
                     }
