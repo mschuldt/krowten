@@ -47,10 +47,15 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        if (board.hasNetwork(side)){
-            myBest.score = (side == ourColor ? 50000 : -50000);//temp values for testing
+        if (board.hasNetwork(ourColor)){
+            myBest.score = 10000+100*depth; //temp values for testing
             return myBest;
         }
+        if (board.hasNetwork(opponentColor)){
+            myBest.score = -10000 - 100*depth;
+            return myBest;
+        }
+
         if (depth == 0){
             myBest.score = board.score();
             return myBest;
