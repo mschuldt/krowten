@@ -2002,6 +2002,12 @@ public class Board{
                 messages.add(colorStr(ourColor) + " player choose move: " + move);
                 break;
 
+            case "clearboard":
+                clearBoard();
+                history = new AList<Move>(100);
+                messages.add("cleared the board");
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
