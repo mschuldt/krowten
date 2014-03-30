@@ -2276,7 +2276,9 @@ public class Board{
     private boolean runGeneratedTests(){
         boolean ok = true;
         for (BoardTest test : BoardTest.tests){
-            ok = (ok && runGeneratedTest(test));
+            if (! runGeneratedTest(test)){
+                ok = false;
+            }
         }
         return ok;
     }
