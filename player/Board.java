@@ -1963,33 +1963,9 @@ public class Board{
                 break;
 
             case "maketest": case "createtest": case "mt":
-                BoardTest test = new BoardTest(1);
-
-                //test.boardString is written to file, test.board is read from file
-                //it is provided here to that this test can also be run
-                //in this round with 'runtests'
-                test.boardString = toBoardString();
-                test.board = toBoardString(true);
-                test.whiteBB = (ourColor == white? ourBitBoard : opponentBitBoard);
-                test.blackBB = (ourColor == black? ourBitBoard : opponentBitBoard);
-                test.whiteClustersBB = clustersBB(white);
-                test.blackClustersBB = clustersBB(black);
-                test.whiteLegalMovesBB = legalMovesBB(white);
-                test.blackLegalMovesBB = legalMovesBB(black);
-                test.whiteConnectedPieces = connectedPiecesBB(white);
-                test.blackConnectedPieces = connectedPiecesBB(black);
-                test.whiteNetwork = hasNetwork(white);
-                test.blackNetwork = hasNetwork(black);
-                test.whiteNumPieces = ourColor == white? ourPieceCount: opponentPieceCount;
-                test.blackNumPieces = ourColor == black? ourPieceCount: opponentPieceCount;
-                test.passedBitBoardTests = verifyBitBoards();
-                test.passedGoalTests = verifyGoals();
-                test.passedPieceCountTests = verifyPieceCount();
+                BoardTest test = makeTest(writer);
 
                 messages.add(test.toString());
-
-                writer.println(test.toString());
-                writer.flush();
 
                 if (compareToTest(test)){
                     messages.add("(Test is OK)");
@@ -2167,6 +2143,36 @@ public class Board{
         for (String line: lines){
             messages.add(line);
         }
+    }
+
+    //make a test that tests the current state of the board
+    //save it to OUTFILE and return it
+    private BoardTest makeTest(PrintWriter outFile){
+        BoardTest test = new BoardTest(1);
+        //test.boardString is written to file, test.board is read from file
+        //it is provided here to that this test can also be run
+        //in this round with 'runtests'
+        test.boardString = toBoardString();
+        test.board = toBoardString(true);
+        test.whiteBB = (ourColor == white? ourBitBoard : opponentBitBoard);
+        test.blackBB = (ourColor == black? ourBitBoard : opponentBitBoard);
+        test.whiteClustersBB = clustersBB(white);
+        test.blackClustersBB = clustersBB(black);
+        test.whiteLegalMovesBB = legalMovesBB(white);
+        test.blackLegalMovesBB = legalMovesBB(black);
+        test.whiteConnectedPieces = connectedPiecesBB(white);
+        test.blackConnectedPieces = connectedPiecesBB(black);
+        test.whiteNetwork = hasNetwork(white);
+        test.blackNetwork = hasNetwork(black);
+        test.whiteNumPieces = ourColor == white? ourPieceCount: opponentPieceCount;
+        test.blackNumPieces = ourColor == black? ourPieceCount: opponentPieceCount;
+        test.passedBitBoardTests = verifyBitBoards();
+        test.passedGoalTests = verifyGoals();
+        test.passedPieceCountTests = verifyPieceCount();
+
+        outFile.println(test.toString());
+        outFile.flush();
+        return test;
     }
 
     private boolean miscTests(){
