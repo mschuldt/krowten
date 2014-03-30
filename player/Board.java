@@ -399,7 +399,7 @@ public class Board{
      *
      * The list returned does not include PIECE, just the ones around it,
      * so the returned list ranges in length from 0 to 8.
-
+     *
      * Unusual conditions:
      *  if (x,y) is not a valid location on the board, then this
      *  method will likely cause the program to crash.
@@ -1027,7 +1027,6 @@ public class Board{
         long[] memberPieces = {0};
         long br = 0;
 
-
         PieceList goalPieces = getStartGoalPieces(color);
         if (goalPieces.length() > 0){
             for (Piece p: goalPieces){
@@ -1044,7 +1043,6 @@ public class Board{
                 sum+= 3*runLength(p, memberPieces);
             }
         }
-
 
         //try to prevent more then one piece in each goal
         /*
@@ -1082,8 +1080,6 @@ public class Board{
 
         return sum;
     }
-
-
 
     public int score(){
         return score(ourColor) - score(opponentColor);
@@ -1311,7 +1307,6 @@ public class Board{
         }
 
     }
-
 
     //returns a string that evaluates to a string used to reconstruct
     //this board. For use with the Board.Board(int, String) constructor
