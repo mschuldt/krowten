@@ -1261,8 +1261,16 @@ public class Board{
     //       " x      " +
     //       "        ")
     //
+
+    //
     public Board (int color, String boardString){
         this(color);
+        setupFromBoardString(boardString);
+    }
+
+    //clear current board and set it up from BOARDSTRING
+    public void setupFromBoardString(String boardString){
+        clearBoard();
         int whiteCount=0, blackCount=0;
         Move m;
         boardString = boardString.toLowerCase();
@@ -1301,7 +1309,9 @@ public class Board{
         if (whiteCount > 10 || blackCount > 10){
             System.out.println("Error - Board.Board(int, String) - constructed illegal board");
         }
+
     }
+
 
     //returns a string that evaluates to a string used to reconstruct
     //this board. For use with the Board.Board(int, String) constructor
