@@ -2007,6 +2007,49 @@ public class Board{
                 messages.add("cleared the board");
                 break;
 
+            case "rungame": case "rg":
+                clearBoard();
+                MachinePlayer player1 = new MachinePlayer(white);
+                MachinePlayer player2 = new MachinePlayer(black);
+                Move m1, m2;
+                while (true){
+                    m1 =  player1.chooseMove();
+                    history.add(m1);
+                    player2.opponentMove(m1);
+                    move(m1,white);
+
+                    pb = toPrintBoard();
+                    System.out.println(pb.toString());
+                    System.out.println("white moved: " + m1);
+
+                    if (player1.board.hasNetwork(white)){
+                        messages.add("white wins");
+                        break;
+                    }
+
+                    m2 =  player2.chooseMove();
+                    history.add(m2);
+                    player1.opponentMove(m2);
+                    move(m2, black);
+
+                    pb = toPrintBoard();
+                    System.out.println(pb.toString());
+                    System.out.println("black moved: " + m2);
+
+                    if (player1.board.hasNetwork(black)){
+                        messages.add("black wins");
+                        break;
+                    }
+
+                    if (!player1.board.verify()){
+                        System.out.println("player 1 has a corrupted board");
+                    }
+                    if (!player2.board.verify()){
+                        System.out.println("player 2 has a corrupted board");
+                    }
+                }
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
