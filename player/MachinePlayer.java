@@ -49,14 +49,19 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-        if (board.hasNetwork(ourColor)){
-            //            System.out.println("we have a network");
-            myBest.score = 10000+100*depth; //temp values for testing
-            return myBest;
-        }
+
+        //check if opponent has a network first to prevent
+        //us from unblocking an opponent network to create our own
+        //TODO: how to prevent the opponent from making this mistake?
         if (board.hasNetwork(opponentColor)){
             //            System.out.println("opponent has a network");
             myBest.score = -10000 - 100*depth;
+            return myBest;
+        }
+
+        if (board.hasNetwork(ourColor)){
+            //            System.out.println("we have a network");
+            myBest.score = 10000+100*depth; //temp values for testing
             return myBest;
         }
 
