@@ -2021,6 +2021,28 @@ public class Board{
                 messages.add(bitBoardToString(tst.whiteBB | tst.blackBB));
                 break;
 
+            case "setuptest": //setup board as it is in a test
+                try{
+                    id = Integer.parseInt(arg1);
+                }catch(NumberFormatException err){
+                    messages.add("Invalid number: '"+ arg1 +"'");
+                    break;
+                }
+                if (id < 0) {
+                    messages.add("Invalid test id. Must be > 0");
+                    break;
+                }
+                BoardTest tst2 = getTest(id);
+                if (tst2 == null){
+                    messages.add("No test with id = "+ id);
+                    break;
+                }
+                setupFromBoardString(tst2.board);
+                messages.add("board setup from test "+ id);
+                input = "print";
+                fakeInput = true;
+                break;
+
             case "piececount": case "numpieces":
                 messages.add("piece count:");
                 messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
