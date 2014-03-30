@@ -2043,6 +2043,31 @@ public class Board{
                 fakeInput = true;
                 break;
 
+            case "_remakealltests":
+                //this should be avoided when possible,
+                //if it is used, it might be a good idea to diff the tests
+                //just be be sure that only the corrupted bits have changed
+                String currentBoard = toBoardString(true);
+                int testcount=0;
+                int failedcount =0;
+                BoardTest test2=null;
+                for (BoardTest t : BoardTest.tests){
+                    setupFromBoardString(t.board);
+                    test2 = makeTest(writer);
+                    if (!compareToTest(test2)){
+                        messages.add("generated test failed: \n" + test2.boardString);
+                        failedcount++;
+                    }
+                    testcount++;
+                }
+                messages.add("re-generated " + testcount + " tests");
+                if (failedcount > 0){
+                    messages.add(failedcount + " tests failed immediate testing");
+                }
+                setupFromBoardString(currentBoard);
+                pb = toPrintBoard();
+                break;
+
             case "piececount": case "numpieces":
                 messages.add("piece count:");
                 messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
