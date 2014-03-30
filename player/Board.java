@@ -977,7 +977,7 @@ public class Board{
             for (Piece p: goalPieces){
                 br = p.bitRep;
                 memberPieces[0]= (memberPieces[0] | br);
-                sum+=2*runLength(goalPieces.pop(), memberPieces);
+                sum+=3*runLength(goalPieces.pop(), memberPieces);
             }
         }
 
@@ -985,7 +985,7 @@ public class Board{
             br = p.bitRep;
             if ((memberPieces[0] & br) == 0){
                 memberPieces[0]= (memberPieces[0] | br);
-                sum+= runLength(p, memberPieces);
+                sum+= 3*runLength(p, memberPieces);
             }
         }
 
@@ -1459,14 +1459,13 @@ public class Board{
     public void interactiveDebug(MachinePlayer player){
         loadGeneratedTests();
         BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
-        AList<Move> history = new AList<Move>(100);
+        AList<Move> history = new AList<Move>(300);
         String input = "";
         String[] splitInput = null;
         int nArgs = 0;
         String command = "";
         int color = ourColor;
         PrintBoard pb = toPrintBoard();
-
         boolean showNumbers = true;
         boolean loop = true;
         //set to true when the single arg is a valid index

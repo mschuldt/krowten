@@ -16,6 +16,9 @@ public class MachinePlayer extends Player {
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
+        if (color != white && color != black){
+            System.out.println("ERROR: invalid color: " + color);
+        }
         ourColor = color;
         opponentColor = 1 - color;
         board = new Board(color);
@@ -74,11 +77,19 @@ public class MachinePlayer extends Player {
             board.move(m,side);
             reply = minimax(1 - side, alpha, beta, depth - 1);
             board.unMove(m);
-            if (side == ourColor && (reply.score > myBest.score)){
+            // if (depth == searchDepth){
+            //     System.out.println("move " +m + "has score = " + reply.score);
+            // }
+            if ((side == ourColor) && (reply.score > myBest.score)){
+                // if (depth == searchDepth){
+                //     System.out.println("found better move");
+                //     System.out.println("  old move: " + myBest.move);
+                //     System.out.println("  new move: " + m);
+                // }
                 myBest.move = m;
                 myBest.score = reply.score;
                 alpha = reply.score;
-            } else if (side == opponentColor && (reply.score < myBest.score)){
+            } else if ((side == opponentColor) && (reply.score < myBest.score)){
                 myBest.move = m;
                 myBest.score = reply.score;
                 beta = reply.score;
@@ -117,31 +128,35 @@ public class MachinePlayer extends Player {
     }
 
     public static void runGame(){
+
         MachinePlayer p1 = new MachinePlayer(white);
         MachinePlayer p2 = new MachinePlayer(black);
         Move m1, m2;
+        int winner=0;
         while (true){
             m1 =  p1.chooseMove();
             System.out.println("player 1 moved: " + m1);
             p2.opponentMove(m1);
 
+            if (p1.board.hasNetwork(white)){
+                System.out.println("player 1(white) wins");
+                break;
+            }
+
             m2 =  p2.chooseMove();
             System.out.println("player 2 moved: " + m2);
             p1.opponentMove(m2);
+
+            if (p1.board.hasNetwork(black)){
+                System.out.println("player 2(black) wins");
+                break;
+            }
 
             if (!p1.board.verify()){
                 System.out.println("player 1 has a corrupted board");
             }
             if (!p2.board.verify()){
                 System.out.println("player 2 has a corrupted board");
-            }
-            if (p1.board.hasNetwork(white)){
-                System.out.println("player 1(white) wins");
-                break;
-            }
-            if (p1.board.hasNetwork(black)){
-                System.out.println("player 2(black) wins");
-                break;
             }
         }
     }
@@ -194,7 +209,7 @@ public class MachinePlayer extends Player {
 
     public static void main(String[] args){
 
-        MachinePlayer p = new MachinePlayer(white);
+        MachinePlayer p = new MachinePlayer(black);
         // p.forceBoard("        " +
         //              "        " +
         //              "        " +
@@ -204,15 +219,25 @@ public class MachinePlayer extends Player {
         //              "    ox  " +
         //              "        "
         //              );
-        p.forceBoard("        " +
-                     "ox  ox  " +
-                     "        " +
-                     "o oxo x " +
-                     "  ox  o " +
-                     "o    x  " +
-                     " xo  x  " +
-                     "  x     ");
+        // p.forceBoard("        " +
+        //              "ox  o   " +
+        //              "        " +
+        //              "o  xo x " +
+        //              "  ox  o " +
+        //              "o       " +
+        //              " xo  x  " +
+        //              "  x     ");
 
+        p.forceBoard("   x    " +
+                     "oxo   o " +
+                     " x xox  " +
+                     " oo o   " +
+                     " x x    " +
+                     "oxoxo   " +
+                     "        " +
+                     " x      ");
+
+        //runGame();
         p.interactiveDebug();
     }
 }
