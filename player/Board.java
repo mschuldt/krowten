@@ -1002,9 +1002,7 @@ public class Board{
     //
 
     public int score(int color){
-        if (hasNetwork(color)){
-            System.out.println("a Board with a network is being evaluated");
-        }
+        assert ! hasNetwork(color): "Board.score: board has a network";
 
         int sum=squareScoreSum(color);
         PieceList pieces = getPieces(color);
