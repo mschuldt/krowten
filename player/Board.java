@@ -2703,7 +2703,7 @@ public class Board{
         test.blackBB = 2305843026461213760L;
         test.whiteClustersBB = 5095213795818963712L;
         test.blackClustersBB = 13237264624174L;
-        test.whiteLegalMovesBB = 2260630400673792L;
+        test.whiteLegalMovesBB = 53442418360822528L;
         test.blackLegalMovesBB = 6790390780671295504L;
         test.whiteConnectedPieces = new long[] {0L,25165824L,35184372224000L,18579547754594304L,1073741824L,0L,0L,0L,0L};
         test.blackConnectedPieces = new long[] {0L,2305843009213710336L,525376L,17246978048L,0L,0L,0L,0L,0L};
@@ -2729,7 +2729,7 @@ public class Board{
         test.blackBB = 586593868781209604L;
         test.whiteClustersBB = 7390923705936611072L;
         test.blackClustersBB = 1592035774727759482L;
-        test.whiteLegalMovesBB = 2260630266454016L;
+        test.whiteLegalMovesBB = 43309319132653312L;
         test.blackLegalMovesBB = 6917617400888164352L;
         test.whiteConnectedPieces = new long[] {0L,25169920L,18612532835123200L,2200365432832L,0L,0L,0L,0L,0L};
         test.blackConnectedPieces = new long[] {0L,9007199256854528L,576460752303425540L,1125917220929536L,0L,0L,0L,0L,0L};
@@ -2755,7 +2755,7 @@ public class Board{
         test.blackBB = 586593868781209604L;
         test.whiteClustersBB = 7390923705936611072L;
         test.blackClustersBB = 1592035774727759482L;
-        test.whiteLegalMovesBB = 2260630266454016L;
+        test.whiteLegalMovesBB = 43309319132653312L;
         test.blackLegalMovesBB = 6917617400888164352L;
         test.whiteConnectedPieces = new long[] {0L,25169920L,18612532835123200L,2200365432832L,0L,0L,0L,0L,0L};
         test.blackConnectedPieces = new long[] {0L,9007199256854528L,576460752303425540L,1125917220929536L,0L,0L,0L,0L,0L};
@@ -2781,8 +2781,8 @@ public class Board{
         test.blackBB = 586593868781210116L;
         test.whiteClustersBB = 7390923705936610560L;
         test.blackClustersBB = 1592035774727824762L;
-        test.whiteLegalMovesBB = 2260630266454016L;
-        test.blackLegalMovesBB = 6917617400888164352L;
+        test.whiteLegalMovesBB = 43309319132652800L;
+        test.blackLegalMovesBB = 8509639981474521210L;
         test.whiteConnectedPieces = new long[] {0L,25169920L,18612532835123200L,2200365432832L,0L,0L,0L,0L,0L};
         test.blackConnectedPieces = new long[] {0L,9007199256854528L,576460752303423488L,1125917086714372L,134217728L,0L,0L,0L,0L};
         test.whiteNetwork = true;
@@ -2807,8 +2807,8 @@ public class Board{
         test.blackBB = 577591067572980228L;
         test.whiteClustersBB = 7399926507144840448L;
         test.blackClustersBB = 1592031376681313658L;
-        test.whiteLegalMovesBB = 2260630266454016L;
-        test.blackLegalMovesBB = 6926624600142905344L;
+        test.whiteLegalMovesBB = 52312120340882688L;
+        test.blackLegalMovesBB = 8516395337965903994L;
         test.whiteConnectedPieces = new long[] {0L,598134350680064L,18016597801304064L,1073741824L,0L,0L,0L,0L,0L};
         test.blackConnectedPieces = new long[] {0L,2113536L,577591050256777216L,17179871748L,134217728L,0L,0L,0L,0L};
         test.whiteNetwork = false;
