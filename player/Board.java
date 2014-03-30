@@ -1997,7 +1997,7 @@ public class Board{
                 messages.add("Tests failed. Board is broken. Time to cry");
                 break;
 
-            case "showtest": case "st":
+            case "showtest": case "findtest": case "gettest": case "st":
                 int id = 0;
                 try{
                     id = Integer.parseInt(arg1);
