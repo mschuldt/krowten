@@ -718,19 +718,22 @@ public class Board{
             }
             //check that destination square is empty
             if (pieceArray[toX+1][toY+1] != null){
-                System.out.println(locStr(toX,toY));
+                System.out.println("invalid add move: piece at " + locStr(toX,toY));
                 return false;
             }
             //check for correct piece count
             if (pieceCount >= 10){
+                System.out.println("invalid add move: piece count >= 10" );
                 return false;
             }
             //make sure not to move into opponents goal
             if ((getBitRep(toX, toY) & goal) != 0){
+                System.out.println("invalid add move: adding to opponents goal" );
                 return false;
             }
             //check that no illegal cluster will form
             if (formsIllegalCluster(m, color)){
+                System.out.println("invalid add move: forms illegal cluster" );
                 return false;
             }
             return true;
@@ -741,30 +744,46 @@ public class Board{
             fromX = m.x2;
             fromY = m.y2;
             //check that destination indexes are valid
-            if (! (isValidIndex(toX, toY) && isValidIndex(fromX, fromY))){
+            if (! isValidIndex(toX, toY)){
+                System.out.println("invalid step move: invalid destination index" + locStr(toX,toY));
+                return false;
+            }
+            if (! isValidIndex(fromX, fromY)){
+                System.out.println("invalid step move: invalid origin index" + locStr(fromX,fromY));
                 return false;
             }
             //check that destination square is empty
             if (pieceArray[toX+1][toY+1] != null){
+                System.out.println("invalid step move: destination square is full" + locStr(toX,toY));
                 return false;
             }
             //make sure there is a piece to move
             if (pieceArray[fromX+1][fromY+1] == null){
+                System.out.println("invalid step move: origin square is empty" + locStr(toX,toY));
                 return false;
             }
 
             //check for correct piece count
             if (pieceCount < 10){
+                System.out.println("invalid step move: piece count < 10");
                 return false;
             }
 
             //make sure not to move into opponents goal
             if ((getBitRep(toX, toY) & goal) != 0){
+                System.out.println("invalid step move: moving into opponents goal");
                 return false;
             }
 
             //check that no illegal cluster will form
             if (formsIllegalCluster(m, color)){
+                System.out.println("invalid step move: forming illegal cluster");
+                // System.out.println("ourBitBoord:");
+                // System.out.println(bitBoardToString(ourBitBoard));
+                // System.out.println("opponentBitBoord:");
+                // System.out.println(bitBoardToString(opponentBitBoard));
+                // System.out.println("Board: ");
+                System.out.println(toBoardString());
                 return false;
             }
         }
