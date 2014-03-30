@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class AList<T> implements Iterable<T>{
     protected T[] array;
-    private int len, maxSize;
+    protected int len, maxSize;
 
     //we have Java's retardation to thank for this
     @SuppressWarnings("unchecked")
