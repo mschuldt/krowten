@@ -1,5 +1,4 @@
 /* MachinePlayer.java */
-
 package player;
 
 /**
@@ -20,7 +19,7 @@ public class MachinePlayer extends Player {
         ourColor = color;
         opponentColor = 1 - color;
         board = new Board(color);
-        searchDepth = 4;//TODO: determine suitable default
+        searchDepth = 3;//TODO: determine suitable default
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -35,7 +34,7 @@ public class MachinePlayer extends Player {
     public Move chooseMove() {
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
-        board.move(bestMove.move,ourColor); //TODO: does minimax always return a valid move?
+        board.move(bestMove.move, ourColor); //TODO: does minimax always return a valid move?
         return bestMove.move;
     }
 
@@ -48,10 +47,12 @@ public class MachinePlayer extends Player {
         Best myBest = new Best();
         Best reply;
         if (board.hasNetwork(ourColor)){
+            //            System.out.println("we have a network");
             myBest.score = 10000+100*depth; //temp values for testing
             return myBest;
         }
         if (board.hasNetwork(opponentColor)){
+            //            System.out.println("opponent has a network");
             myBest.score = -10000 - 100*depth;
             return myBest;
         }
@@ -194,15 +195,23 @@ public class MachinePlayer extends Player {
     public static void main(String[] args){
 
         MachinePlayer p = new MachinePlayer(white);
+        // p.forceBoard("        " +
+        //              "        " +
+        //              "        " +
+        //              "o ox  x " +
+        //              "  ox    " +
+        //              "o    x  " +
+        //              "    ox  " +
+        //              "        "
+        //              );
         p.forceBoard("        " +
+                     "ox  ox  " +
                      "        " +
-                     "        " +
-                     "o ox  x " +
-                     "  ox    " +
+                     "o oxo x " +
+                     "  ox  o " +
                      "o    x  " +
-                     "    ox  " +
-                     "        "
-                     );
+                     " xo  x  " +
+                     "  x     ");
 
         p.interactiveDebug();
     }

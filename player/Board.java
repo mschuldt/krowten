@@ -869,10 +869,11 @@ public class Board{
         return opponentPieceCount;
     }
 
-    private int runLength(Piece currentPiece, long memberPieces,
+    private int runLength(Piece currentPiece, long[] memberPieces,
                                int m, int b, int length){
         int newM, newB;
         int len= 0;
+        long members = memberPieces[0];
         PieceList pl = connectedPieces(currentPiece);
         if (pl == null){
             return length;
@@ -889,17 +890,18 @@ public class Board{
                 continue; //on the same line
             }
 
-            if ((piece.bitRep & memberPieces) != 0){
+            if ((piece.bitRep & members) != 0){
                 continue; // we have already visited this piece
             }
 
-            len += runLength(piece, memberPieces | currentPiece.bitRep, newM, newB, 1);
+            memberPieces[0] = (members | currentPiece.bitRep);
+            len += runLength(piece, memberPieces, newM, newB, 1);
         }
         return length + len;
     }
 
     //returns the length of the partial network starting with STARTPIECE
-    public int runLength(Piece startPiece){
+    public int runLength(Piece startPiece,long[] memberPieces){
 
         long bitBoard, goalA, goalB;
 
@@ -910,7 +912,8 @@ public class Board{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
         }
-        return runLength(startPiece, goalA | goalB ,11, 60, 1);
+        memberPieces[0] = (memberPieces[0] | goalA | goalB);
+        return runLength(startPiece, memberPieces ,11, 60, 1);
     }
 
     int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
@@ -943,28 +946,52 @@ public class Board{
     //
 
     public int score(int color){
+        if (hasNetwork(color)){
+            System.out.println("a Board with a network is being evaluated");
+        }
 
-        int sum=0;
+        int sum=squareScoreSum(color);
         PieceList pieces = getPieces(color);
         PieceList adjacent;
         for (Piece p: pieces){
             //sum the total connections
-            sum += connectedPieces(p).length();
+            //  sum += connectedPieces(p).length();
             //give points for pieces with no other adjacent pieces
             adjacent = adjacentPieces(p, color);
             if (adjacent.length() ==0){
-                sum+=4;
+                sum+=3;
             }
         }
         //give points for partial networks
-        for (Piece piece : getStartGoalPieces(color)){
-            sum+=2*runLength(piece);
-            //System.out.println("run length = " + runLength(piece));
+        // for (Piece piece : getStartGoalPieces(color)){
+        //     sum+=1.5*runLength(piece);
+        //     //System.out.println("run length = " + runLength(piece));
+        // }
+
+        long[] memberPieces = {0};
+        long br = 0;
+
+
+        PieceList goalPieces = getStartGoalPieces(color);
+        if (goalPieces.length() > 0){
+            for (Piece p: goalPieces){
+                br = p.bitRep;
+                memberPieces[0]= (memberPieces[0] | br);
+                sum+=2*runLength(goalPieces.pop(), memberPieces);
+            }
         }
 
-        //TODO: make a map of most desirable spots
+        for (Piece p : getPieces(color)){
+            br = p.bitRep;
+            if ((memberPieces[0] & br) == 0){
+                memberPieces[0]= (memberPieces[0] | br);
+                sum+= runLength(p, memberPieces);
+            }
+        }
+
 
         //try to prevent more then one piece in each goal
+        /*
         long a,b,board;
         boolean inA,inB;
         int numA, numB;
@@ -991,14 +1018,20 @@ public class Board{
             sum=0;
         }
 
+        //make sure they have a piece in each goal
         if (numA == 0 || numB == 0){
             sum/=2;
         }
+        */
+
         return sum;
     }
 
+
+
     public int score(){
         return score(ourColor) - score(opponentColor);
+
     }
 
     //==========================================================================
@@ -1626,7 +1659,7 @@ public class Board{
                 }
                 break;
 
-            case "adjacent": case "around": case "surround": case "s": //ok
+            case "adjacent": case "around": case "surround": //ok
                 if (arg1isRef){
                     pb.mark(adjacentPieces(argX1, argY1));
                 }
@@ -1926,17 +1959,21 @@ public class Board{
                 messages.add(bitBoardToString(tst.whiteBB | tst.blackBB));
                 break;
 
-            case "piececount":
+            case "piececount": case "numpieces":
                 messages.add("piece count:");
                 messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
                 messages.add("black: "+(ourColor==black? ourPieceCount: opponentPieceCount));
                 break;
-            case "evaluate": case "eval":case "score":
-                messages.add(colorStr(color)+ " board score: " + score(color));
+            case "evaluate": case "eval":case "score": case "s":
+                messages.add("(" +colorStr(ourColor)+ ") board score: " + score());
                 break;
             case "choosemove": case "cm":
                 if (player == null){
                     messages.add("Error: player is unknown");
+                    break;
+                }
+                if (hasNetwork(ourColor)){
+                    messages.add("we already won");
                     break;
                 }
                 Move move = player.chooseMove();
