@@ -2602,32 +2602,6 @@ public class Board{
 
         test = new BoardTest(1);
         test.board =
-            "      x " +
-            "  x o x " +
-            " o x   o" +
-            "o x o o " +
-            "  x     " +
-            " o   o  " +
-            " o    o " +
-            "     x  ";
-        test.whiteBB = 18614733225725952L;
-        test.blackBB = 2305843026461213760L;
-        test.whiteClustersBB = 5095213795818963712L;
-        test.blackClustersBB = 13237264624174L;
-        test.whiteLegalMovesBB = 2260630400673792L;
-        test.blackLegalMovesBB = 6790390780671295504L;
-        test.whiteConnectedPieces = new long[] {0L,25165824L,35184372224000L,18579547754594304L,1073741824L,0L,0L,0L,0L};
-        test.blackConnectedPieces = new long[] {0L,2305843009213710336L,525376L,17246978048L,0L,0L,0L,0L,0L};
-        test.whiteNetwork = true;
-        test.blackNetwork = false;
-        test.whiteNumPieces = 10;
-        test.blackNumPieces = 7;
-        test.passedBitBoardTests = true;
-        test.passedGoalTests = true;
-        test.passedPieceCountTests = true;
-
-        test = new BoardTest(1);
-        test.board =
             "  x     " +
             "   xo x " +
             " o   x o" +
