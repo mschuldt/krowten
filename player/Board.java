@@ -19,7 +19,7 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
-    boolean verifyAll = true; //when true, run this.verify() after every move
+    boolean verifyAll = false; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -1015,7 +1015,7 @@ public class Board{
             //give points for pieces with no other adjacent pieces
             adjacent = adjacentPieces(p, color);
             if (adjacent.length() ==0){
-                sum+=3;
+                sum+=5;
             }
         }
         //give points for partial networks

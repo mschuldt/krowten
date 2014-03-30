@@ -22,7 +22,7 @@ public class MachinePlayer extends Player {
         ourColor = color;
         opponentColor = 1 - color;
         board = new Board(color);
-        searchDepth = 3;//TODO: determine suitable default
+        searchDepth = 4;//TODO: determine suitable default
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -214,16 +214,16 @@ public class MachinePlayer extends Player {
 
     public static void main(String[] args){
 
-        MachinePlayer p = new MachinePlayer(black);
-        // p.forceBoard("        " +
-        //              "        " +
-        //              "        " +
-        //              "o ox  x " +
-        //              "  ox    " +
-        //              "o    x  " +
-        //              "    ox  " +
-        //              "        "
-        //              );
+        MachinePlayer p = new MachinePlayer(white);
+        p.forceBoard("        " +
+                     "        " +
+                     "        " +
+                     "o ox  x " +
+                     "  ox    " +
+                     "o    x  " +
+                     "    ox  " +
+                     "        "
+                     );
         // p.forceBoard("        " +
         //              "ox  o   " +
         //              "        " +
@@ -233,14 +233,14 @@ public class MachinePlayer extends Player {
         //              " xo  x  " +
         //              "  x     ");
 
-        p.forceBoard("   x    " +
-                     "oxo   o " +
-                     " x xox  " +
-                     " oo o   " +
-                     " x x    " +
-                     "oxoxo   " +
-                     "        " +
-                     " x      ");
+        // p.forceBoard("   x    " +
+        //              "oxo   o " +
+        //              " x xox  " +
+        //              " oo o   " +
+        //              " x x    " +
+        //              "oxoxo   " +
+        //              "        " +
+        //              " x      ");
 
         //runGame();
         p.interactiveDebug();
