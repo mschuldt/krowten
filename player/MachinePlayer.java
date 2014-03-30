@@ -48,7 +48,7 @@ public class MachinePlayer extends Player {
         Best myBest = new Best();
         Best reply;
         if (board.hasNetwork(side)){
-            myBest.score = (side == ourColor ? 100000 : -100000);//temp values for testing
+            myBest.score = (side == ourColor ? 50000 : -50000);//temp values for testing
             return myBest;
         }
         if (depth == 0){
