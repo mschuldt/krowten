@@ -786,6 +786,12 @@ public class Board{
                 System.out.println(toBoardString());
                 return false;
             }
+
+            //check that the move does not move to the same spot
+            if (m.x1 == m.x2 && m.y1 == m.y2){
+                System.out.println("invalid step move: moving to same spot");
+                return false;
+            }
         }
 
         return true;
