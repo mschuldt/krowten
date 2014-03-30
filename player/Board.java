@@ -2772,32 +2772,6 @@ public class Board{
         test.passedGoalTests = true;
         test.passedPieceCountTests = true;
 
-        test = new BoardTest(1);
-        test.board =
-            "  x     " +
-            " x xo x " +
-            " o   x o" +
-            "o  xo o " +
-            "  x     " +
-            " ox  o  " +
-            " ox   o " +
-            "   x    ";
-        test.whiteBB = 18614733225725952L;
-        test.blackBB = 577591067572980228L;
-        test.whiteClustersBB = 7399926507144840448L;
-        test.blackClustersBB = 1592031376681313658L;
-        test.whiteLegalMovesBB = 2260630266454016L;
-        test.blackLegalMovesBB = 6926624600142905344L;
-        test.whiteConnectedPieces = new long[] {0L,598134350680064L,18016597801304064L,1073741824L,0L,0L,0L,0L,0L};
-        test.blackConnectedPieces = new long[] {0L,2113536L,577591050256777216L,17179871748L,134217728L,0L,0L,0L,0L};
-        test.whiteNetwork = false;
-        test.blackNetwork = false;
-        test.whiteNumPieces = 10;
-        test.blackNumPieces = 10;
-        test.passedBitBoardTests = true;
-        test.passedGoalTests = true;
-        test.passedPieceCountTests = true;
-
     }
 
     public static void main(String[] args){
