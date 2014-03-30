@@ -36,7 +36,7 @@ public class PieceList extends AList<Piece>{
 
     public boolean containsPiece(long bitRep){
         for (int i=0;i < len;i++){
-            if (array[i].bitRep == bitRep){
+            if (get(i).bitRep == bitRep){
                 return true;
             }
         }
