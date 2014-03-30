@@ -1768,9 +1768,14 @@ public class Board{
                 //idea: use transposition table from last move to help order the moves
             case "verify": case "valid": case "v": //ok
                 if (verify()){
-                    messages.add("Everything seems OK.");
+                    messages.add("Everything verified ok.");
                 }else{
-                    messages.add("Board is corrupted.");
+                    messages.add("Board failed to validate.");
+                }
+                if (runGeneratedTests()){
+                    messages.add("All tests pass");
+                }else{
+                    messages.add("Test(s) failed");
                 }
                 break;
 
