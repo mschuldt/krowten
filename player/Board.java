@@ -746,22 +746,33 @@ public class Board{
         if (this.pieceAt(x,y)){
             return false; // for now... probably need to throw an error, but isValidMove will also take care of it
         }
-        PieceList neighbors = this.adjacentPieces(x, y, color); // get neighboring pieces of (presumably) the same color
-        numNeighbors = neighbors.length();
-        if (stepMove && neighbors.containsPiece(originBitRep)){
+        //PieceList neighbors = this.adjacentPieces(x, y, color); // get neighboring pieces of (presumably) the same color
+
+        updateAdjacentPiecesList(x, y, color);
+
+
+        numNeighbors = adjacentPieceList.length();
+        if (stepMove && adjacentPieceList.containsPiece(originBitRep)){
             numNeighbors--;
         }
         if (numNeighbors >1){
             return true;
         }
         if (numNeighbors == 1){
-            Piece oneNeighbor = neighbors.get(0);
+            Piece oneNeighbor = adjacentPieceList.get(0);
             if (stepMove && oneNeighbor.bitRep == originBitRep){
-                oneNeighbor = neighbors.get(1);
+                oneNeighbor = adjacentPieceList.get(1);
+                //TODO: will there always be another?
             }
+
+            //TODO: this does not work for some reason...
             PieceList moreNeighbors = this.adjacentPieces(oneNeighbor);
+            //updateAdjacentPiecesList(oneNeighbor.x, oneNeighbor.y, oneNeighbor.color);
+            //int moreNumNeighbors = adjacentPieceList.length();
             int moreNumNeighbors = moreNeighbors.length();
-            if (stepMove && moreNeighbors.containsPiece(originBitRep)){
+            if (stepMove &&
+                //adjacentPieceList.containsPiece(originBitRep)){
+                moreNeighbors.containsPiece(originBitRep)){
                 moreNumNeighbors--;
             }
             if (moreNumNeighbors >0){
