@@ -1,5 +1,8 @@
 /* MachinePlayer.java */
+// javac -g -cp ../ ../player/*.java ../list/*.java
+
 package player;
+import dict.*;
 
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
@@ -11,7 +14,10 @@ public class MachinePlayer extends Player {
     int ourColor, opponentColor;
     public static final int white = 1;
     public static final int black = 0;
+    int count=0;
 
+    //at depth hash table can have over 280393 items
+    HashTableChained ht = new HashTableChained(300000);
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
@@ -22,7 +28,7 @@ public class MachinePlayer extends Player {
         ourColor = color;
         opponentColor = 1 - color;
         board = new Board(color);
-        searchDepth = 4;//TODO: determine suitable default
+        searchDepth = 3;//TODO: determine suitable default
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -35,6 +41,9 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
+        ht.makeEmpty();
+        System.out.println("hash table has " + count + " items");
+        count=0;
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
         board.move(bestMove.move, ourColor); //TODO: does minimax always return a valid move?
@@ -78,26 +87,51 @@ public class MachinePlayer extends Player {
         //is it possible to not have any valid moves?
         myBest.move = allValidMoves.get(0);
 
+        long hashCode=0;
+        Entry entry;
+        int score=0;
+        long ourBoard, oppBoard;
         for (Move m : allValidMoves){
+
             board.move(m,side);
-            reply = minimax(1 - side, alpha, beta, depth - 1);
+
+            ///***  memoization code
+            hashCode = board.hash();
+            ourBoard = board.getOurBitBoard();
+            oppBoard = board.getOpponentBitBoard();
+            entry = ht.find(hashCode, ourBoard, oppBoard);
+            if (entry != null){
+                score = entry.score;
+            }else{
+                reply = minimax(1 - side, alpha, beta, depth - 1);
+                score = reply.score;
+                ht.insert(hashCode, score, ourBoard, oppBoard);
+                count++;
+            }
+
+
+            ////*** normal code
+            //reply = minimax(1 - side, alpha, beta, depth - 1);
+            //score = reply.score;
+
+
             board.unMove(m);
             // if (depth == searchDepth){
             //     System.out.println("move " +m + "has score = " + reply.score);
             // }
-            if ((side == ourColor) && (reply.score > myBest.score)){
+            if ((side == ourColor) && (score > myBest.score)){
                 // if (depth == searchDepth){
                 //     System.out.println("found better move");
                 //     System.out.println("  old move: " + myBest.move);
                 //     System.out.println("  new move: " + m);
                 // }
                 myBest.move = m;
-                myBest.score = reply.score;
-                alpha = reply.score;
-            } else if ((side == opponentColor) && (reply.score < myBest.score)){
+                myBest.score = score;
+                alpha = score;
+            } else if ((side == opponentColor) && (score < myBest.score)){
                 myBest.move = m;
-                myBest.score = reply.score;
-                beta = reply.score;
+                myBest.score = score;
+                beta = score;
             }
             if (alpha >= beta){
                 return myBest;
@@ -242,7 +276,7 @@ public class MachinePlayer extends Player {
         //              "        " +
         //              " x      ");
 
-        //runGame();
-        p.interactiveDebug();
+        runGame();
+        //p.interactiveDebug();
     }
 }
