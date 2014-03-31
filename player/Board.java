@@ -19,6 +19,8 @@ public class Board{
 
     PieceList pieces;
 
+    Move m = new Move(0,0);
+
     boolean verifyAll = false; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
@@ -855,6 +857,67 @@ public class Board{
 
         return true;
     }
+
+    private void setMove(Move m, int x1, int y1){
+        m.x1 = x1;
+        m.y1 = y1;
+        m.moveKind = Move.ADD;
+    }
+
+    private void setMove(Move m, int x1, int y1, int x2, int y2){
+        m.x1 = x1;
+        m.y1 = y1;
+        m.x2 = x2;
+        m.y2 = y2;
+        m.moveKind = Move.STEP;
+    }
+
+    //like validMoves but does not allocate any memory
+    public void validMoves2(int color, MoveList mList){
+        mList.clear();
+
+        int numPieces = getNumPieces(color);
+        PieceList pieces = getPieces(color);
+        //AList<Move> mList = new AList<Move>(440);
+        int x_lower, y_lower, x_upper, y_upper;
+        if (color == black) {
+            x_lower = 1;
+            x_upper = 6;
+            y_lower = 0;
+            y_upper = 7;
+        } else { // white
+            x_lower = 0;
+            x_upper = 7;
+            y_lower = 1;
+            y_upper = 6;
+        }
+        if (numPieces < 10) { //ADD moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        setMove(m, x, y);
+                        if (!formsIllegalCluster(m, color)){
+                            mList.add(x, y);
+                        }
+                    }
+                }
+            }
+        } else {                      // STEP moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        for (Piece p : pieces){
+                            setMove(m, x, y, p.x, p.y);
+                            if (!formsIllegalCluster(m, color)){
+                                mList.add(x, y, p.x, p.y);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /*
      * returns list of all valid moves available for color, meaning
      * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise

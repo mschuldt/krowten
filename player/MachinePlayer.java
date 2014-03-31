@@ -16,6 +16,7 @@ public class MachinePlayer extends Player {
     public static final int black = 0;
     int count=0;
 
+    MoveList[] movesLists;
     //at depth hash table can have over 280393 items
     HashTableChained ht = new HashTableChained(300000);
 
@@ -29,6 +30,11 @@ public class MachinePlayer extends Player {
         opponentColor = 1 - color;
         board = new Board(color);
         searchDepth = 3;//TODO: determine suitable default
+
+        movesLists = new MoveList[searchDepth+1];
+        for (int i = 0; i <= searchDepth; i++){
+            movesLists[i] = new MoveList();
+        }
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -82,7 +88,11 @@ public class MachinePlayer extends Player {
         }else{
             myBest.score = beta;
         }
-        AList<Move> allValidMoves = board.validMoves(side);
+
+        //AList<Move> allValidMoves = board.validMoves(side);
+        MoveList allValidMoves = movesLists[depth];
+        board.validMoves2(side, allValidMoves);
+
         //is it possible to not have any valid moves?
         myBest.move = allValidMoves.get(0);
 
@@ -267,7 +277,7 @@ public class MachinePlayer extends Player {
         //              "        " +
         //              " x      ");
 
-        runGame();
-        //p.interactiveDebug();
+        //runGame();
+        p.interactiveDebug();
     }
 }
