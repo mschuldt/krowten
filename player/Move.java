@@ -19,7 +19,7 @@ public class Move {
   public final static int STEP = 2;
 
   public int moveKind;  // ADD, STEP, or QUIT.
-                        
+
   public int x1;        // If moveKind == ADD, then x1, y1 are the new
   public int y1;        //   position in which a chip is being added;
   public int x2;        //   x2, y2 are unused.
@@ -28,7 +28,7 @@ public class Move {
                         //   of the chip.
                         // If moveKind == QUIT, then x1, x2, y1, y2 are unused.
 
-  // Construct a step move. 
+  // Construct a step move.
   public Move(int xx1, int yy1, int xx2, int yy2) {
     moveKind = STEP;
     x1 = xx1;
@@ -37,14 +37,14 @@ public class Move {
     y2 = yy2;
   }
 
-  // Construct an add move. 
+  // Construct an add move.
   public Move(int x, int y) {
     moveKind = ADD;
     x1 = x;
     y1 = y;
   }
 
-  // Construct a quit move. 
+  // Construct a quit move.
   public Move() {
     moveKind = QUIT;
   }
