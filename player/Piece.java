@@ -4,6 +4,8 @@ public class Piece{
     public int color, x, y;
     public long bitRep; //binary representation
 
+    public Piece up,down,left,right,rightUp,rightDown, leftUp,leftDown;
+
     public Piece(){}
 
     public Piece (int _color, long _bitRep, int _x, int _y){
