@@ -41,8 +41,9 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
-        ht.makeEmpty();
-        System.out.println("hash table has " + count + " items");
+        //ht.makeEmpty();
+        //System.out.println("hash table has " + count + " items");
+
         count=0;
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
@@ -96,23 +97,23 @@ public class MachinePlayer extends Player {
             board.move(m,side);
 
             ///***  memoization code
-            hashCode = board.hash();
-            ourBoard = board.getOurBitBoard();
-            oppBoard = board.getOpponentBitBoard();
-            entry = ht.find(hashCode, ourBoard, oppBoard);
-            if (entry != null){
-                score = entry.score;
-            }else{
-                reply = minimax(1 - side, alpha, beta, depth - 1);
-                score = reply.score;
-                ht.insert(hashCode, score, ourBoard, oppBoard);
-                count++;
-            }
+            // hashCode = board.hash();
+            // ourBoard = board.getOurBitBoard();
+            // oppBoard = board.getOpponentBitBoard();
+            // entry = ht.find(hashCode, ourBoard, oppBoard);
+            // if (entry != null){
+            //     score = entry.score;
+            // }else{
+            //     reply = minimax(1 - side, alpha, beta, depth - 1);
+            //     score = reply.score;
+            //     ht.insert(hashCode, score, ourBoard, oppBoard);
+            //     count++;
+            // }
 
 
             ////*** normal code
-            //reply = minimax(1 - side, alpha, beta, depth - 1);
-            //score = reply.score;
+            reply = minimax(1 - side, alpha, beta, depth - 1);
+            score = reply.score;
 
 
             board.unMove(m);
