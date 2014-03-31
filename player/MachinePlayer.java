@@ -64,13 +64,11 @@ public class MachinePlayer extends Player {
         //us from unblocking an opponent network to create our own
         //TODO: how to prevent the opponent from making this mistake?
         if (board.hasNetwork(opponentColor)){
-            //            System.out.println("opponent has a network");
             myBest.score = -10000 - 100*depth;
             return myBest;
         }
 
         if (board.hasNetwork(ourColor)){
-            //            System.out.println("we have a network");
             myBest.score = 10000+100*depth; //temp values for testing
             return myBest;
         }
@@ -117,15 +115,7 @@ public class MachinePlayer extends Player {
 
 
             board.unMove(m);
-            // if (depth == searchDepth){
-            //     System.out.println("move " +m + "has score = " + reply.score);
-            // }
             if ((side == ourColor) && (score > myBest.score)){
-                // if (depth == searchDepth){
-                //     System.out.println("found better move");
-                //     System.out.println("  old move: " + myBest.move);
-                //     System.out.println("  new move: " + m);
-                // }
                 myBest.move = m;
                 myBest.score = score;
                 alpha = score;
