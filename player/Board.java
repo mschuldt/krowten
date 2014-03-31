@@ -17,6 +17,8 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
+    PieceList pieces;
+
     boolean verifyAll = false; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
@@ -126,6 +128,11 @@ public class Board{
         pieceArray[8][1] = edge;
         pieceArray[1][8] = edge;
         pieceArray[8][8] = edge;
+
+        pieces = new PieceList(20);
+        for (int i = 0; i < 20; i++){
+            pieces.add(new Piece());
+        }
     }
 
     //returns the binary representation of the piece at (X, Y)
@@ -177,8 +184,11 @@ public class Board{
                 }
                 assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
             }
-            pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
+
+            //pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
+            pieceArray[toX][toY] = pieces.pop().set(color, bitRep, move.x1, move.y1);
             break;
+
         case Move.STEP :
             int fromX = move.x2 + 1,
                 fromY = move.y2 + 1;
@@ -317,6 +327,7 @@ public class Board{
                     opponentNumInGoalB--;
                 }
             }
+            pieces.add(pieceArray[x][y]);
             pieceArray[x][y] = null;
             break;
 
