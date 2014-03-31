@@ -12,8 +12,6 @@ public class Board{
     int ourNumInGoalA,ourNumInGoalB,
         opponentNumInGoalA,opponentNumInGoalB;
 
-    List<Piece> P = new List<Piece>();
-    PieceList PP = new PieceList();
     public static final int white = 1;
     public static final int black = 0;
     long ourBitBoard = 0;
