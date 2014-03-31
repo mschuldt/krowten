@@ -17,31 +17,30 @@ public class MachinePlayer extends Player {
     int count=0;
 
     MoveList[] movesLists;
-    //at depth hash table can have over 280393 items
+    //at depth 4 hash table can have over 280393 items
     HashTableChained ht = new HashTableChained(300000);
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
+        this(color, 3);//TODO: determine suitable default
+    }
+
+    // Creates a machine player with the given color and search depth.  Color is
+    // either 0 (black) or 1 (white).  (White has the first move.)
+    public MachinePlayer(int color, int searchDepth) {
         if (color != white && color != black){
             System.out.println("ERROR: invalid color: " + color);
         }
         ourColor = color;
         opponentColor = 1 - color;
         board = new Board(color);
-        searchDepth = 3;//TODO: determine suitable default
+        this.searchDepth = searchDepth;
 
         movesLists = new MoveList[searchDepth+1];
         for (int i = 0; i <= searchDepth; i++){
             movesLists[i] = new MoveList();
         }
-    }
-
-    // Creates a machine player with the given color and search depth.  Color is
-    // either 0 (black) or 1 (white).  (White has the first move.)
-    public MachinePlayer(int color, int searchDepth) {
-        this(color);
-        this.searchDepth = searchDepth;
     }
 
     // Returns a new move by "this" player.  Internally records the move (updates
