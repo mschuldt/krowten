@@ -18,6 +18,7 @@ public class Board{
     long opponentBitBoard = 0;
 
     PieceList pieces;
+    PieceList adjacentPieceList;
 
     Move m = new Move(0,0);
 
@@ -135,6 +136,8 @@ public class Board{
         for (int i = 0; i < 20; i++){
             pieces.add(new Piece());
         }
+
+        adjacentPieceList = new PieceList(8);
     }
 
     //returns the binary representation of the piece at (X, Y)
@@ -466,6 +469,17 @@ public class Board{
     //TODO: interface docs
     public PieceList adjacentPieces(Piece piece, int color){
         return adjacentPieces(piece.x, piece.y, color);
+
+    }
+
+    public void updateAdjacentPiecesList(int x, int y, int color){
+        x++; y++; //mbs
+        adjacentPieceList.clear();
+        for (int xAdj = -1; xAdj <= 1; xAdj++){
+            for (int yAdj = -1; yAdj <= 1; yAdj++){
+                adjacentPieceList.addIfColor(pieceArray[x+xAdj][y+yAdj], color);
+            }
+        }
     }
 
     /** Board.pieceAt(int,int) returns true if a piece is located
