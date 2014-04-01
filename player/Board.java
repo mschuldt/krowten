@@ -2568,6 +2568,34 @@ public class Board{
                 }
                 break;
 
+            case "matrixadd": case "madd":
+                if (arg1isRef){
+                    Piece newPiece = new Piece(color,
+                                         getBitRep(argX1, argY1),
+                                         argX1, argY1);
+                    addToMatrix(newPiece);
+                    messages.add(newPiece + " was created and added to the matrix");
+                }else{
+                    messages.add("Invalid arg: " + arg1);
+                }
+                break;
+            case "vnotmatrix": //verify not in matrix
+                if (arg1isRef){
+                    if (!pieceAt(argX1, argY1)){
+                        messages.add("no piece at " + locStr(argX1, argY1));
+                        break;
+                    }
+                    p = getPiece(argX1, argY1);
+                    if (verifyNotInMatrix(p)){
+                        messages.add(p + " is NOT in the matrix");
+                    }else{
+                        messages.add(p + " is in the matrix");
+                    }
+
+                }else{
+                    messages.add("Invalid arg: " + arg1);
+                }
+                break;
             case "print":
                 break;
             case "exit": case "quit": case "done":
