@@ -550,17 +550,13 @@ public class Board{
             }
             curr.rightDown = p;
         }
-
     }
 
     //remove a piece from the linked matrix
     private void removeFromMatrix(Piece p){
-        System.out.println("removing " + p);
         //remove from row
         if (p.left == null){
-            if (p.right == null){
-                rows[p.y] = null;
-            }
+            rows[p.y] = p.right; //removing first piece
         }else{
             p.left.right = p.right;
         }
@@ -569,9 +565,7 @@ public class Board{
         }
         //remove from column
         if (p.up == null){
-            if (p.down == null){
-                columns[p.x] = null;
-            }
+            columns[p.x] = p.down;
         }else{
             p.up.down = p.down;
         }
@@ -580,26 +574,23 @@ public class Board{
         }
 
         //remove from forward diagonal
-        if (p.leftDown == null){
-            if (p.rightUp == null){
-                fDiagonals[p.y+p.x] = null;
-            }
+        if (p.rightUp == null){
+            fDiagonals[p.y+p.x] = p.leftDown;
         }else{
-            p.leftDown.rightUp = p.rightUp;
-        }
-        if (p.rightUp != null){
             p.rightUp.leftDown = p.leftDown;
         }
-        //remove from backward diagonal
-        if (p.rightDown == null){
-            if (p.leftUp == null){
-                bDiagonals[p.y-p.x+6] = null;
-            }
-        }else{
-            p.rightDown.leftUp = p.leftUp;
+        if (p.leftDown != null){
+            p.leftDown.rightUp = p.rightUp;
         }
-        if (p.leftUp != null){
+        //remove from backward diagonal
+        if (p.leftUp == null){
+            bDiagonals[p.y-p.x+6] = p.rightDown;
+
+        }else{
             p.leftUp.rightDown = p.rightDown;
+        }
+        if (p.rightDown != null){
+            p.rightDown.leftUp = p.leftUp;
         }
 
         p.left = p.right = p.up = p.down = null;
