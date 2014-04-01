@@ -1677,7 +1677,13 @@ public class Board{
         ourPieceCount =  opponentPieceCount = 0;
         ourNumInGoalA = ourNumInGoalB = 0;
         opponentNumInGoalA = opponentNumInGoalB = 0;
+        ourPieces.clear();
+        opponentPieces.clear();
         pieceArray = new Piece[10][10];//the easy way
+        rows = new Piece[8];
+        columns = new Piece[8];
+        fDiagonals = new Piece[14];
+        bDiagonals = new Piece[14];
         for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
             pieceArray[x][9] = edge;
