@@ -1587,6 +1587,8 @@ public class Board{
     public boolean verifyMatrix(int color){
         boolean ok = true;
         PieceList connections;
+        long visited;
+        //check that all pieces are correctly linked
         for (Piece p : color == ourColor ? ourPieces : opponentPieces){
             connections = connectedPieces(p);
             Piece[] matrixConnections = {p.up,
@@ -1604,6 +1606,75 @@ public class Board{
                     ok = false;
                     System.out.println(connect + " does not have proper matrix connections");
                 }
+            }
+        }
+        //check that all pieces in the matrix are on the board
+        visited = 0;
+        start1:
+        for (Piece p : rows){
+            while (p != null){
+                if ((visited & p.bitRep) != 0){
+                    System.out.println("matrix loop detected!");
+                    ok = false;
+                    break start1;
+                }
+                if (! pieceAt(p.x, p.y)){
+                    ok = false;
+                    System.out.println(p +" should not be in the matrix(row)");
+                }
+                visited |= p.bitRep;
+                p = p.right;
+            }
+        }
+        visited = 0;
+        start2:
+        for (Piece p : columns){
+            while (p != null){
+                if ((visited & p.bitRep) != 0){
+                    System.out.println("matrix loop detected!");
+                    ok = false;
+                    break start2;
+                }
+                if (! pieceAt(p.x, p.y)){
+                    ok = false;
+                    System.out.println(p +" should not be in the matrix(column)");
+                }
+                visited |= p.bitRep;
+                p = p.down;
+            }
+        }
+        visited = 0;
+        start3:
+        for (Piece p : fDiagonals){
+            while (p != null){
+                if ((visited & p.bitRep) != 0){
+                    System.out.println("matrix loop detected!");
+                    ok = false;
+                    break start3;
+                }
+                if (! pieceAt(p.x, p.y)){
+                    ok = false;
+                    System.out.println(p +" should not be in the matrix(fDiagonal)");
+                }
+                visited |= p.bitRep;
+                p = p.leftDown;
+            }
+        }
+        visited = 0;
+        start4:
+        for (Piece p : bDiagonals){
+            while (p != null){
+                if ((visited & p.bitRep) != 0){
+                    System.out.println("matrix loop detected!");
+                    ok = false;
+                    break start4;
+                }
+                if (! pieceAt(p.x, p.y)){
+                    ok = false;
+                    System.out.println(p +" should not be in the matrix(bDiagonal");
+                }
+                visited |= p.bitRep;
+                p = p.rightDown;
             }
         }
         return ok;
