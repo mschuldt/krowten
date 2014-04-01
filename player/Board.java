@@ -2017,6 +2017,30 @@ public class Board{
                         messages.add("  Color = " + colorStr(p.color));
                         messages.add("  bitRep = " + p.bitRep);
                         messages.add("  x,y = " + p.x + "," + p.y);
+                        if (p.up != null){
+                            messages.add("  up = " +p.up);
+                        }
+                        if (p.down != null){
+                            messages.add("  down = " +p.down);
+                        }
+                        if (p.left != null){
+                            messages.add("  left = " +p.left);
+                        }
+                        if (p.right != null){
+                            messages.add("  right = " +p.right);
+                        }
+                        if (p.rightUp != null){
+                            messages.add("  rightUp = " +p.rightUp);
+                        }
+                        if (p.rightDown != null){
+                            messages.add("  rightDown = " +p.rightDown);
+                        }
+                        if (p.leftUp != null){
+                            messages.add("  leftUp = " +p.leftUp);
+                        }
+                        if (p.leftDown != null){
+                            messages.add("  leftDown = " +p.leftDown);
+                        }
                     }
                 }else{
                     messages.add("Invalid arg: " + arg1);
