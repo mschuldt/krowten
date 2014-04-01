@@ -1982,6 +1982,14 @@ public class Board{
                     messages.add("Test(s) failed");
                 }
                 break;
+            case "verify-": //verifications without running tests
+                if (verify()){
+                    messages.add("Everything verified ok.");
+                }else{
+                    messages.add("Board failed to validate.");
+                }
+                break;
+
 
             case "invalid": case "illegal": case "i": //invalid moves
                 messages.add("Not Implemented");
