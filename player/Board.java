@@ -450,6 +450,111 @@ public class Board{
         }
     }
 
+    // //add P to linked Piece list PIECES.
+    // //P is added so that its x and y fields are in the appropriate order
+    // private void addToLinkedPieceList(Piece pieces, Piece p){
+
+    // }
+
+    //add a piece to the linked matrix
+    private void addToMatrix(Piece p){
+        Piece curr = null;
+        int x = p.x;
+        int y = p.y;
+        //correct: left, up
+
+        //add to row
+        curr = rows[y];
+        if (curr == null){
+            rows[y] = p;
+        }else if(curr.x > p.x){ //add to front
+            p.right = curr;
+            curr.left = p;
+            rows[y] = p;
+        }
+        else{ //add to middle or end
+            while (curr.right != null && curr.right.x < x){
+                curr = curr.right;
+            }
+            assert curr.right == null || curr.right.x != x
+                : "a piece already exists in the matrix (row)";
+            p.left = curr;
+            p.right = curr.right;
+            if (curr.right != null){
+                curr.right.left = p;
+            }
+            curr.right = p;
+        }
+
+        //add to column
+        curr = columns[x];
+        if (curr == null){
+            columns[x] = p;
+        }else if(curr.y >  p.y){
+            p.down = curr;
+            curr.up = p;
+            columns[x] = p;
+        }else{
+            while (curr.down != null && curr.down.y < y){
+                curr = curr.down;
+            }
+            assert curr.down == null || curr.down.y != y
+                : "a piece already exists in the matrix (column)";
+            p.up = curr;
+            p.down = curr.down;
+            if (curr.down != null){
+                curr.down.up = p;
+            }
+            curr.down = p;
+        }
+
+        //add to forward diagonal
+        curr = fDiagonals[x+y];
+        if (curr == null){
+            fDiagonals[x+y] = p;
+        }else if(curr.y >  p.y){
+            p.leftDown = curr;
+            curr.rightUp = p;
+            fDiagonals[x+y] = p;
+        }else{
+            while (curr.leftDown != null && curr.leftDown.x > x){
+                curr = curr.leftDown;
+            }
+            assert curr.leftDown == null || curr.leftDown.x != x
+                : "a piece already exists in the matrix (forward diagonal)";
+            p.rightUp = curr;
+            p.leftDown = curr.leftDown;
+            if (curr.leftDown != null){
+                curr.leftDown.rightUp = p;
+            }
+            curr.leftDown = p;
+        }
+
+        //add to backward diagonal
+        curr = bDiagonals[y-x+6];
+        if (curr == null){
+            bDiagonals[y-x+6] = p;
+        }else if(curr.y >  p.y){
+            p.rightDown = curr;
+            curr.leftUp = p;
+            bDiagonals[y-x+6] = p;
+        }else{
+            while (curr.rightDown != null && curr.rightDown.x < x){
+                curr = curr.rightDown;
+            }
+            assert curr.rightDown == null || curr.rightDown.x != x
+                : "a piece already exists in the matrix (forward diagonal)";
+            p.leftUp = curr;
+            p.rightDown = curr.rightDown;
+            if (curr.rightDown != null){
+                curr.rightDown.leftUp = p;
+            }
+            curr.rightDown = p;
+        }
+
+    }
+
+
     //return the hash of the current board
     public long hash(){
         return ((ourBitBoard % 1073741789) << 31) | (opponentBitBoard % 1073741789);
