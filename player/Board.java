@@ -1680,10 +1680,15 @@ public class Board{
         ourPieces.clear();
         opponentPieces.clear();
         pieceArray = new Piece[10][10];//the easy way
+        pieces = new PieceList(20);
         rows = new Piece[8];
         columns = new Piece[8];
         fDiagonals = new Piece[14];
         bDiagonals = new Piece[14];
+        for (int i = 0; i < 20; i++){
+            pieces.add(new Piece());
+        }
+
         for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
             pieceArray[x][9] = edge;
