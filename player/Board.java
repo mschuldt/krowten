@@ -1903,6 +1903,7 @@ public class Board{
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
         boolean showBitBoards = true;
+        String lastInput = "print";
         Move m = null;
 
         //keeping track of messages this way is allows us to print the board before the
@@ -1940,8 +1941,12 @@ public class Board{
                 }
                 if (input.equals("")){
                     input = "print";
+                }else if (input.equals(".")){
+                    input = lastInput;
+                    System.out.println(">>>> " + input);
                 }
             }
+            lastInput = input;
             fakeInput = false;
             inhibitBoardPrint = false;
             splitInput = input.split("[ ]+");
