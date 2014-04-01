@@ -1594,7 +1594,7 @@ public class Board{
                     && connect.color == color
                     && !connections.containsPiece(connect)){
                     ok = false;
-                    System.out.println(connect + " does not have proper matrix connections");
+                    System.out.println(p + " is connected to "+ connect + " in the matrix but not on the board");
                 }
             }
         }
