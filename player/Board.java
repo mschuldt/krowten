@@ -1428,11 +1428,13 @@ public class Board{
 
     //verify that all internal state is valid
     public boolean verify(){
-        return verifyBitBoards()
-            && verifyGoals()
-            && verifyPieceCount()
-            && verifyGoalCount()
-            && verifyMatrix();
+        boolean ok = true;
+        ok = verifyBitBoards() && ok;
+        ok = verifyGoals() && ok;
+        ok = verifyPieceCount() && ok;
+        ok = verifyGoalCount() && ok;
+        ok = verifyMatrix() && ok;
+        return ok;
     }
 
     //construct a board from a string representation of it.
