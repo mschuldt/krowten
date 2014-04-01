@@ -2549,6 +2549,16 @@ public class Board{
                 }
                 break;
 
+            case "matrixremove": case "mremove":
+                if (arg1isRef){
+                    p = getPiece(argX1, argY1);
+                    removeFromMatrix(p);
+                    messages.add(p + " was removed from the matrix");
+                }else{
+                    messages.add("Invalid arg: " + arg1);
+                }
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
