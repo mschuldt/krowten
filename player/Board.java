@@ -2362,10 +2362,28 @@ public class Board{
                 }
                 break;
 
+            case "ourpieces":
+                messages.add(colorStr(ourColor) + " has " + ourPieces.length() + " pieces:");
+                for (Piece _p : ourPieces){
+                    messages.add(""+ _p);
+                }
+                break;
+
+            case "opponentpieces": case "opppieces": case "opieces":
+                messages.add(colorStr(opponentColor) + " has " + opponentPieces.length() + " pieces:");
+                for (Piece ___p : opponentPieces){
+                    messages.add(""+ ___p);
+                }
+                break;
+
             case "print":
                 break;
             case "exit": case "quit": case "done":
                 loop = false;
+                break;
+
+            case "printmatrix":
+                System.out.println("todo");
                 break;
 
             default:
