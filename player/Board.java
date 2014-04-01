@@ -384,7 +384,6 @@ public class Board{
                 pp = opponentPieces.pop();
                 assert pp == p : "pop removed wrong piece from `opponentPieces'";
             }
-            p = pieceArray[x][y];
             pieces.add(p);
             removeFromMatrix(p);
             pieceArray[x][y] = null;
