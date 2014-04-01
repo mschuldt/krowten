@@ -6,8 +6,16 @@ import java.io.*;
 
 public class Board{
     Piece[][] pieceArray;
-    int ourColor;
-    int opponentColor;
+
+    Piece ourGoalListA, ourGoalListB;
+    Piece opponentGoalListA, opponentGoalListB;
+    Piece[] rows;
+    Piece[] columns;
+    //forward and backward diagonals (think forward/backward slash)
+    Piece[] fDiagonals;
+    Piece[] bDiagonals;
+
+    int ourColor, opponentColor;
     int ourPieceCount, opponentPieceCount;
     int ourNumInGoalA,ourNumInGoalB,
         opponentNumInGoalA,opponentNumInGoalB;
@@ -17,12 +25,15 @@ public class Board{
     long ourBitBoard = 0;
     long opponentBitBoard = 0;
 
-    PieceList pieces;
+    PieceList pieces; //all unused pieces
+    PieceList ourPieces;
+    PieceList opponentPieces;
+
     PieceList adjacentPieceList;
 
     Move m = new Move(0,0);
 
-    boolean verifyAll = false; //when true, run this.verify() after every move
+    boolean verifyAll = true; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -100,22 +111,6 @@ public class Board{
 
         pieceArray = new Piece[10][10];
 
-        //NOTE: if this goal mask assignment is changed, then
-        //      code in getStartGoalPieces must be updated.
-        if (ourColor == 1){ //white's goals are on the left and right
-            ourGoalMaskA = leftGoalMask;
-            ourGoalMaskB = rightGoalMask;
-            opponentGoalMaskA = lowerGoalMask;
-            opponentGoalMaskB = upperGoalMask;
-        }else{
-            ourGoalMaskA = lowerGoalMask;
-            ourGoalMaskB = upperGoalMask;
-            opponentGoalMaskA = leftGoalMask;
-            opponentGoalMaskB = rightGoalMask;
-        }
-
-        ourGoalMask = (ourGoalMaskA | ourGoalMaskB);
-        opponentGoalMask = (opponentGoalMaskA | opponentGoalMaskB);
 
         for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
@@ -132,12 +127,51 @@ public class Board{
         pieceArray[1][8] = edge;
         pieceArray[8][8] = edge;
 
+        ourPieces = new PieceList(10);
+        opponentPieces = new PieceList(10);
+
         pieces = new PieceList(20);
         for (int i = 0; i < 20; i++){
             pieces.add(new Piece());
         }
 
         adjacentPieceList = new PieceList(8);
+        rows = new Piece[8];
+        columns = new Piece[8];
+        fDiagonals = new Piece[14];
+        bDiagonals = new Piece[14];
+
+        Piece ourGoalListA, ourGoalListB;
+        Piece oppoentGoalListA, oppoentGoalListB;
+
+
+        //NOTE: if this goal mask assignment is changed, then
+        //      code in getStartGoalPieces must be updated.
+        if (ourColor == white){ //white's goals are on the left and right
+            ourGoalMaskA = leftGoalMask;
+            ourGoalMaskB = rightGoalMask;
+            opponentGoalMaskA = lowerGoalMask;
+            opponentGoalMaskB = upperGoalMask;
+            //remember these are backwards because of the goal mask confusion
+            ourGoalListA = columns[7];
+            ourGoalListB = columns[0];
+            opponentGoalListA = rows[0];
+            opponentGoalListB = rows[7];
+        }else{
+            ourGoalMaskA = lowerGoalMask;
+            ourGoalMaskB = upperGoalMask;
+            opponentGoalMaskA = leftGoalMask;
+            opponentGoalMaskB = rightGoalMask;
+
+            ourGoalListA = rows[0];
+            ourGoalListB = rows[7];
+            opponentGoalListA = columns[7];
+            opponentGoalListB = columns[0];
+        }
+
+        ourGoalMask = (ourGoalMaskA | ourGoalMaskB);
+        opponentGoalMask = (opponentGoalMaskA | opponentGoalMaskB);
+
     }
 
     //returns the binary representation of the piece at (X, Y)
@@ -161,11 +195,13 @@ public class Board{
     public void move(Move move, int color){
         int toX, toY;
         long bitRep;
+        Piece p;
         switch (move.moveKind){
         case Move.ADD :
             toX = move.x1 + 1;
             toY = move.y1 + 1;
             bitRep = getBitRep(toX-1, toY-1);
+            p = pieces.pop().set(color, bitRep, move.x1, move.y1);
 
             //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
@@ -179,6 +215,9 @@ public class Board{
                     ourNumInGoalB++;
                 }
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+
+                ourPieces.add(p);
+
             }else{
                 opponentBitBoard |= bitRep;
                 opponentPieceCount++;
@@ -188,10 +227,14 @@ public class Board{
                     opponentNumInGoalB++;
                 }
                 assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+
+                opponentPieces.add(p);
             }
 
             //pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
-            pieceArray[toX][toY] = pieces.pop().set(color, bitRep, move.x1, move.y1);
+
+            pieceArray[toX][toY] = p;
+            addToMatrix(p);
             break;
 
         case Move.STEP :
@@ -240,12 +283,14 @@ public class Board{
                     opponentNumInGoalB--;
                 }
             }
-            Piece p = pieceArray[fromX][fromY];
+            p = pieceArray[fromX][fromY];
+            removeFromMatrix(p);
             pieceArray[toX][toY] = p;
             p.bitRep = getBitRep(toX-1, toY-1);
             p.x = toX-1;
             p.y = toY-1;
             pieceArray[fromX][fromY] = null;
+            addToMatrix(p);
             break;
         case Move.QUIT :
             //TODO
@@ -302,6 +347,7 @@ public class Board{
      */
     void unMove(Move move){
         Piece p = null;
+        Piece pp = null;
         switch (move.moveKind){
         case Move.ADD :
             int x = move.x1 + 1,
@@ -322,6 +368,10 @@ public class Board{
                 }else if ((bitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB--;
                 }
+
+                pp = ourPieces.pop();
+                assert pp == p : "pop removed wrong piece from `ourPieces'";
+
             }else{
                 opponentBitBoard ^= p.bitRep;
                 opponentPieceCount--;
@@ -331,8 +381,12 @@ public class Board{
                 }else if ((bitRep & opponentGoalMaskB) != 0){
                     opponentNumInGoalB--;
                 }
+                pp = opponentPieces.pop();
+                assert pp == p : "pop removed wrong piece from `opponentPieces'";
             }
-            pieces.add(pieceArray[x][y]);
+            p = pieceArray[x][y];
+            pieces.add(p);
+            removeFromMatrix(p);
             pieceArray[x][y] = null;
             break;
 
@@ -378,12 +432,15 @@ public class Board{
                     opponentNumInGoalB++;
                 }
             }
+            removeFromMatrix(p);
             p.bitRep = toBitRep;
             p.x = toX-1;
             p.y = toY-1;
             pieceArray[toX][toY] = p;
+            addToMatrix(p);
             pieceArray[fromX][fromY] = null;
             break;
+
         case Move.QUIT :
             //TODO
             break;
