@@ -2556,6 +2556,10 @@ public class Board{
 
             case "matrixremove": case "mremove":
                 if (arg1isRef){
+                    if (!pieceAt(argX1, argY1)){
+                        messages.add("no piece at " + locStr(argX1, argY1));
+                        break;
+                    }
                     p = getPiece(argX1, argY1);
                     removeFromMatrix(p);
                     messages.add(p + " was removed from the matrix");
