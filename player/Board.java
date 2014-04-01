@@ -1417,9 +1417,11 @@ public class Board{
                                          p.leftUp,
                                          p.leftDown};
             for (Piece connect : matrixConnections){
-                if (connect != null && !connections.containsPiece(connect)){
+                if (connect != null
+                    && connect.color == color
+                    && !connections.containsPiece(connect)){
                     ok = false;
-                    System.out.println(connect + "does not have proper matrix connections");
+                    System.out.println(connect + " does not have proper matrix connections");
                 }
             }
         }
