@@ -2313,7 +2313,7 @@ public class Board{
                 messages.add(colorStr(ourColor) + " player choose move: " + move);
                 break;
 
-            case "clearboard":
+            case "clearboard": case "clear":
                 clearBoard();
                 history = new AList<Move>(100);
                 messages.add("cleared the board");
