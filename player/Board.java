@@ -1388,12 +1388,40 @@ public class Board{
         return ok;
     }
 
+    public boolean verifyMatrix(){
+        return verifyMatrix(white) && verifyMatrix(black);
+    }
+
+    public boolean verifyMatrix(int color){
+        boolean ok = true;
+        PieceList connections;
+        for (Piece p : color == ourColor ? ourPieces : opponentPieces){
+            connections = connectedPieces(p);
+            Piece[] matrixConnections = {p.up,
+                                         p.down,
+                                         p.left,
+                                         p.right,
+                                         p.rightUp,
+                                         p.rightDown,
+                                         p.leftUp,
+                                         p.leftDown};
+            for (Piece connect : matrixConnections){
+                if (connect != null && !connections.containsPiece(connect)){
+                    ok = false;
+                    System.out.println(connect + "does not have proper matrix connections");
+                }
+            }
+        }
+        return ok;
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         return verifyBitBoards()
             && verifyGoals()
             && verifyPieceCount()
-            && verifyGoalCount();
+            && verifyGoalCount()
+            && verifyMatrix();
     }
 
     //construct a board from a string representation of it.
