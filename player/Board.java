@@ -1346,6 +1346,17 @@ public class Board{
             System.out.println("getPieces(black).length() != getNumPieces(black)");
             ok = false;
         }
+
+        //check piece lists
+        if (ourPieceCount != ourPieces.length()){
+            System.out.println("`ourPieceCount' and `ourPieces.length()' do not match");
+            ok = false;
+        }
+        if (opponentPieceCount != opponentPieces.length()){
+            System.out.println("`opponentPieceCount' and `opponentPieces.length()' do not match");
+            ok = false;
+        }
+
         return true;
     }
 
