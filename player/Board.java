@@ -543,7 +543,7 @@ public class Board{
                 curr = curr.rightDown;
             }
             assert curr.rightDown == null || curr.rightDown.x != x
-                : "a piece already exists in the matrix (forward diagonal)";
+                : "a piece already exists in the matrix (backward diagonal)";
             p.leftUp = curr;
             p.rightDown = curr.rightDown;
             if (curr.rightDown != null){
