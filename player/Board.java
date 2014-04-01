@@ -554,6 +554,59 @@ public class Board{
 
     }
 
+    //remove a piece from the linked matrix
+    private void removeFromMatrix(Piece p){
+        System.out.println("removing " + p);
+        //remove from row
+        if (p.left == null){
+            if (p.right == null){
+                rows[p.y] = null;
+            }
+        }else{
+            p.left.right = p.right;
+        }
+        if (p.right != null){
+            p.right.left = p.left;
+        }
+        //remove from column
+        if (p.up == null){
+            if (p.down == null){
+                columns[p.x] = null;
+            }
+        }else{
+            p.up.down = p.down;
+        }
+        if (p.down != null){
+            p.down.up = p.up;
+        }
+
+        //remove from forward diagonal
+        if (p.leftDown == null){
+            if (p.rightUp == null){
+                fDiagonals[p.y+p.x] = null;
+            }
+        }else{
+            p.leftDown.rightUp = p.rightUp;
+        }
+        if (p.rightUp != null){
+            p.rightUp.leftDown = p.leftDown;
+        }
+        //remove from backward diagonal
+        if (p.rightDown == null){
+            if (p.leftUp == null){
+                bDiagonals[p.y-p.x+6] = null;
+            }
+        }else{
+            p.rightDown.leftUp = p.leftUp;
+        }
+        if (p.leftUp != null){
+            p.leftUp.rightDown = p.rightDown;
+        }
+
+        p.left = p.right = p.up = p.down = null;
+        p.leftUp = p.leftDown = p.rightUp = p.rightDown = null;
+    }
+
 
     //return the hash of the current board
     public long hash(){
