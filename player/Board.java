@@ -605,6 +605,29 @@ public class Board{
 
         p.left = p.right = p.up = p.down = null;
         p.leftUp = p.leftDown = p.rightUp = p.rightDown = null;
+
+        assert verifyNotInMatrix(p) : "failed to remove " + p + "from matrix";
+    }
+
+    private boolean verifyNotInMatrix(Piece p){
+        return verifyNotInMatrix(p, black) && verifyNotInMatrix(p, white);
+    }
+    private boolean verifyNotInMatrix(Piece piece, int color){
+        Piece p = null;
+        for (int i=0; i< 20; i++){
+            p = pieces.get(i);//TODO: should have a legitimate way of doing this
+            if (p == piece.left
+                || p == piece.right
+                || p == piece.up
+                || p == piece.down
+                || p == piece.rightUp
+                || p == piece.leftUp
+                || p == piece.rightDown
+                || p == piece.leftDown){
+                return false;
+            }
+        }
+        return true;
     }
 
 
