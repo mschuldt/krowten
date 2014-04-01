@@ -1926,7 +1926,7 @@ public class Board{
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
         boolean showBitBoards = true;
-        String lastInput = "print";
+        String lastCommand = "print";
         Move m = null;
 
         //keeping track of messages this way is allows us to print the board before the
@@ -1964,17 +1964,17 @@ public class Board{
                 }
                 if (input.equals("")){
                     input = "print";
-                }else if (input.equals(".")){
-                    input = lastInput;
-                    System.out.println(">>>> " + input);
                 }
             }
-            lastInput = input;
             fakeInput = false;
             inhibitBoardPrint = false;
             splitInput = input.split("[ ]+");
             nArgs = splitInput.length -1;
             command = splitInput[0];
+            if (command.equals(".")){
+                command = lastCommand;
+            }
+            lastCommand = command;
             arg1isRef = false;
             arg2isRef = false;
             arg1 = arg2 = "<none>";
@@ -1996,7 +1996,6 @@ public class Board{
                 }
                 arg2 = splitInput[2];
             }
-
             switch(command.toLowerCase()){
 
             case "help": case "h":
