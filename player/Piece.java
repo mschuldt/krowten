@@ -4,6 +4,7 @@ public class Piece{
     public int color, x, y;
     public long bitRep; //binary representation
 
+    //these are fields used by the matrix representation
     public Piece up,down,left,right,rightUp,rightDown, leftUp,leftDown;
 
     public Piece(){}
