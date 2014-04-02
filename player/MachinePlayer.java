@@ -2,7 +2,6 @@
 // javac -g -cp ../ ../player/*.java ../list/*.java
 
 package player;
-import dict.*;
 
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
@@ -14,12 +13,8 @@ public class MachinePlayer extends Player {
     int ourColor, opponentColor;
     public static final int white = 1;
     public static final int black = 0;
-    int count=0;
-    int generation;
 
     MoveList[] movesLists;
-    //at depth 4 hash table can have over 280393 items
-    HashTableChained ht = new HashTableChained(30000);
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
@@ -42,20 +37,14 @@ public class MachinePlayer extends Player {
         for (int i = 0; i <= searchDepth; i++){
             movesLists[i] = new MoveList();
         }
-        generation = 0;
     }
 
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
-        //ht.makeEmpty();
-        generation++;
-        System.out.println("hash table has " + count + " items");
-
-        count=0;
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
-        board.move(bestMove.move, ourColor); //TODO: does minimax always return a valid move?
+        board.move(bestMove.move, ourColor); //does minimax always return a valid move?
         return bestMove.move;
     }
 
@@ -95,44 +84,13 @@ public class MachinePlayer extends Player {
         MoveList allValidMoves = movesLists[depth];
         board.validMoves2(side, allValidMoves);
 
-        //is it possible to not have any valid moves?
         myBest.move = allValidMoves.get(0);
 
-        long hashCode=0;
-        Entry entry;
         int score=0;
-        long ourBoard, oppBoard;
         for (Move m : allValidMoves){
-
-            board.move(m,side);
-
-            ///***  memoization code
-
-            if (depth < 2){
-                hashCode = board.hash();
-                ourBoard = board.getOurBitBoard();
-                oppBoard = board.getOpponentBitBoard();
-                entry = ht.find(hashCode, ourBoard, oppBoard, generation);
-                if (entry != null){
-                    score = entry.score;
-                    //System.out.println("found!");
-                }else{
-                    reply = minimax(1 - side, alpha, beta, depth - 1);
-                    score = reply.score;
-                    ht.insert(hashCode, score, ourBoard, oppBoard, generation);
-                    count++;
-                }
-            }else{
-                reply = minimax(1 - side, alpha, beta, depth - 1);
-                score = reply.score;
-            }
-
-
-            ////*** normal code
-            //reply = minimax(1 - side, alpha, beta, depth - 1);
-            //score = reply.score;
-
-
+            board.move(m, side);
+            reply = minimax(1 - side, alpha, beta, depth - 1);
+            score = reply.score;
             board.unMove(m);
             if ((side == ourColor) && (score > myBest.score)){
                 myBest.move = m;
