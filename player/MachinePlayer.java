@@ -48,7 +48,7 @@ public class MachinePlayer extends Player {
     public Move chooseMove() {
         int depth = searchDepth;
         if (depth == VAR_DEPTH){
-            if (board.getNumPieces(ourColor) < 8){
+            if (board.getNumPieces(ourColor) < 10-STEP_DEPTH){
                 depth = ADD_DEPTH;
             }else{
                 depth = STEP_DEPTH;
