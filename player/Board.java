@@ -108,7 +108,6 @@ public class Board{
 
         pieceArray = new Piece[10][10];
 
-
         for (int x = 0; x < 10; x++){
             pieceArray[x][0] = edge;
             pieceArray[x][9] = edge;
@@ -137,7 +136,6 @@ public class Board{
         columns = new Piece[8];
         fDiagonals = new Piece[14];
         bDiagonals = new Piece[14];
-
 
         //NOTE: if this goal mask assignment is changed, then
         //      code in getStartGoalPieces must be updated.
@@ -602,7 +600,6 @@ public class Board{
         }
         return true;
     }
-
 
     //return the hash of the current board
     public long hash(){
@@ -1170,7 +1167,6 @@ public class Board{
         return null;
     }
 
-
     public PieceList getPieces(int color){
         if (color == ourColor){
             return ourPieces;
@@ -1207,7 +1203,7 @@ public class Board{
     }
 
     private int runLength(Piece currentPiece, long[] memberPieces,
-                               int m, int b, int length){
+                          int m, int b, int length){
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
@@ -2177,7 +2173,6 @@ public class Board{
                 }
                 break;
 
-
             case "invalid": case "illegal": case "i": //invalid moves
                 messages.add("Not Implemented");
                 break;
@@ -2593,8 +2588,8 @@ public class Board{
             case "matrixadd": case "madd":
                 if (arg1isRef){
                     Piece newPiece = new Piece(color,
-                                         getBitRep(argX1, argY1),
-                                         argX1, argY1);
+                                               getBitRep(argX1, argY1),
+                                               argX1, argY1);
                     addToMatrix(newPiece);
                     messages.add(newPiece + " was created and added to the matrix");
                 }else{
