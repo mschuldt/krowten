@@ -1195,6 +1195,10 @@ public class Board{
         return pieces;
     }
 
+    /**
+     * Board.getNumPieces(int) returns the number of pieces
+     * of COLOR on the board
+     */
     public int getNumPieces(int color){
         if (color == ourColor){
             return ourPieceCount;
@@ -1202,6 +1206,7 @@ public class Board{
         return opponentPieceCount;
     }
 
+    //TODO: docs
     private int runLength(Piece currentPiece, long[] memberPieces,
                           int m, int b, int length){
         int newM, newB;
