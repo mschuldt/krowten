@@ -45,4 +45,34 @@ public class PieceList extends AList<Piece>{
     public boolean containsPiece(Piece p){
         return p != null && containsPiece(p.bitRep);
     }
+
+    public PieceList shuffled(){//for testing
+        PieceList newList = new PieceList(len);
+        if (len==0){
+            return newList;
+        }
+
+        Piece tmp=null;
+        int i=0;
+
+        int max = len*3;
+        while (true){
+            i++;
+            tmp = get(get(i%len).x*(get(i%len).y +13/*must be prime*/) % len);
+            if (! newList.containsPiece(tmp)){
+                newList.add(tmp);
+            }
+            if (newList.length() == len || i > max){
+                break;
+            }
+        }
+        if (newList.length() < len){
+            for (Piece p : this){
+                if (! newList.containsPiece(p)){
+                    newList.add(p);
+                }
+            }
+        }
+        return newList;
+    }
 }
