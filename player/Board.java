@@ -927,68 +927,6 @@ public class Board{
         return false; //does not have at lease one piece in each goal
     }
 
-    //version of hasNetwork that takes a printBoard so that it can draw the network lines on it
-    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
-                               int m, int b, int depth, PrintBoard pb){
-        int newM, newB;
-        PieceList pl = connectedPieces(currentPiece);
-        if (pl == null){
-            return false;
-        }
-        for (Piece piece : pl){
-            if (piece.x == currentPiece.x){
-                newM = 10;
-                newB = piece.x;
-            }else{
-                newM = (piece.y - currentPiece.y)/(piece.x - currentPiece.x);
-                newB = piece.y - newM*piece.x;
-            }
-            if ((newM == m) && (newB == b)){
-                continue; //on the same line
-            }
-            if ((piece.bitRep & goalmask) != 0){
-                if (depth >= 5){//5 because depth does not include this 'piece'
-                    pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
-                    return true;
-                }
-                continue; //can't visit a goal piece until the end
-            }
-            if ((piece.bitRep & memberPieces) != 0){
-                continue; // we have already visited this piece
-            }
-            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, goalmask, newM, newB, depth+1,pb)){
-                pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean hasNetwork(int color, PrintBoard pb){
-        if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
-            return false;
-        }
-        long bitBoard, goalA, goalB;
-
-        if (color == ourColor){
-            bitBoard = ourBitBoard;
-            goalA = ourGoalMaskA;
-            goalB = ourGoalMaskB;
-        }else{
-            bitBoard = opponentBitBoard;
-            goalA = opponentGoalMaskA;
-            goalB = opponentGoalMaskB;
-        }
-
-        if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
-            for (Piece piece : getStartGoalPieces(color)){
-                if (hasNetwork(piece, bitBoard, goalB, goalA, 11, 60,1, pb)){ //11x+60: just an impossible line
-                    return true;
-                }
-            }
-        }
-        return false; //does not have at lease one piece in each goal
-    }
-
     /**
      *  formsIllegalCluster returns true if Move m will result in a cluster of 3 or more pieces
      */
@@ -1681,6 +1619,70 @@ public class Board{
         ok = verifyMatrix() && ok;
         return ok;
     }
+
+
+    //version of hasNetwork that takes a printBoard so that it can draw the network lines on it
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
+                               int m, int b, int depth, PrintBoard pb){
+        int newM, newB;
+        PieceList pl = connectedPieces(currentPiece);
+        if (pl == null){
+            return false;
+        }
+        for (Piece piece : pl){
+            if (piece.x == currentPiece.x){
+                newM = 10;
+                newB = piece.x;
+            }else{
+                newM = (piece.y - currentPiece.y)/(piece.x - currentPiece.x);
+                newB = piece.y - newM*piece.x;
+            }
+            if ((newM == m) && (newB == b)){
+                continue; //on the same line
+            }
+            if ((piece.bitRep & goalmask) != 0){
+                if (depth >= 5){//5 because depth does not include this 'piece'
+                    pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
+                    return true;
+                }
+                continue; //can't visit a goal piece until the end
+            }
+            if ((piece.bitRep & memberPieces) != 0){
+                continue; // we have already visited this piece
+            }
+            if (hasNetwork(piece, bitBoard, memberPieces | currentPiece.bitRep, goalmask, newM, newB, depth+1,pb)){
+                pb.drawLine(currentPiece.x, currentPiece.y, piece.x, piece.y);
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasNetwork(int color, PrintBoard pb){
+        if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
+            return false;
+        }
+        long bitBoard, goalA, goalB;
+
+        if (color == ourColor){
+            bitBoard = ourBitBoard;
+            goalA = ourGoalMaskA;
+            goalB = ourGoalMaskB;
+        }else{
+            bitBoard = opponentBitBoard;
+            goalA = opponentGoalMaskA;
+            goalB = opponentGoalMaskB;
+        }
+
+        if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
+            for (Piece piece : getStartGoalPieces(color)){
+                if (hasNetwork(piece, bitBoard, goalB, goalA, 11, 60,1, pb)){ //11x+60: just an impossible line
+                    return true;
+                }
+            }
+        }
+        return false; //does not have at lease one piece in each goal
+    }
+
 
     //construct a board from a string representation of it.
     //'x' for black pieces, 'o' for white piece (case does not matter).
