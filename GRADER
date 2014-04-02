@@ -19,25 +19,53 @@ code together, you may not change partners without the permission of the
 instructor.
 ===============================================================================
 Does your program compile without errors?
-
+   yes
 
 Have you tested your program on the 61B lab machines?
-
+   yes
 
 Did you successfully implement game tree search?  Did you successfully
 implement alpha-beta pruning?  Are there any limitations on it?  What is the
 default number of search levels set by the one-parameter MachinePlayer
 constructor (or is it a variable-depth search)?
+   We successfully implement game tree search and alpha-beta pruning. There are no limitation.
+   By default there is a variable number of search levels.
+   Depth 3 for add moves and 2 for step moves.
 
 
 Describe your board evaluation function in some detail.
+   points are given for various attributes that where deemed beneficial.
+  
+   first points are given based on their position on the board. These points
+   are predetermined and stored int the array `whiteSquareValues'.They do not
+   change throughout the game.
+   The values for the black pieces are taken from the same array, just indexed
+   differently.
+   The main purpose for this is to help position the initial few pieces in
+   dominant positions.
+   
+   points are given when pieces have no adjacent pieces, this is done to
+   encourage spreading and help prevent future cluster.
+  
+   The most influential source of points is the summing of partial networks.
+   The method that does this, Board.runLength(), works in a similar way
+   to the normal network detection method except that it does not care
+   how long the network is. It returns the total length of path
+   starting from a given piece. It will follow all the branches
+   as long as they could be part of a network (must turn, no repeats).
+  
+   the influence of the partial networks is weighted to better overcome
+   the effect of less important sources of points
 
 
 Does your MachinePlayer use any special method of choosing the first few moves?
+   Not really. The points allocated from `whiteSquareValues' as described in the
+   answer to the last question determine the placement of the first few moves.
+   This is not really special in the sense that the effect is present throughout
+   the game, however it is only relevant to the placement of pieces in the beginning.
 
 
 Is there anything else the graders should know to help them read your project?
-
 
 
 Describe the classes, modules, and interfaces you designed before and while you
