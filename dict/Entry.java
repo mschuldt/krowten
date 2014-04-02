@@ -12,4 +12,7 @@ public class Entry {
         ourBitBoard = ourBoard;
         opponentBitBoard = opponentBoard;
     }
+    public String toString(){
+        return "<entry: " +score + " (" + ourBitBoard + " . " + opponentBitBoard + ")>";
+    }
 }
