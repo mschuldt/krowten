@@ -14,8 +14,8 @@ public class MachinePlayer extends Player {
     public static final int white = 1;
     public static final int black = 0;
     private static final int VAR_DEPTH = -1;
-    private static final int ADD_DEPTH = 3;
-    private static final int STEP_DEPTH = 2;
+    private static final int ADD_DEPTH = 4;
+    private static final int STEP_DEPTH = 3;
 
     MoveList[] movesLists;
 
