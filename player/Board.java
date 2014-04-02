@@ -1202,17 +1202,30 @@ public class Board{
         return opponentPieceCount;
     }
 
-    //TODO: docs
+    //this is a helper for Board.runLength(Piece, long[])
     private int runLength(Piece currentPiece, long[] memberPieces,
                           int m, int b, int length){
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
-        PieceList pl = connectedPieces(currentPiece);
-        if (pl == null){
-            return length;
-        }
+        //PieceList pl = connectedPieces(currentPiece);
+        Piece[] pl = {currentPiece.up,
+                      currentPiece.down,
+                      currentPiece.left,
+                      currentPiece.right,
+                      currentPiece.leftUp,
+                      currentPiece.rightUp,
+                      currentPiece.leftDown,
+                      currentPiece.rightDown};
+
+        // if (pl == null){
+        //     return length;
+        // }
+
         for (Piece piece : pl){
+            if (piece == null || piece.color != currentPiece.color){
+                continue;
+            }
             if (piece.x == currentPiece.x){
                 newM = 10;
                 newB = piece.x;
