@@ -57,7 +57,7 @@ public class MachinePlayer extends Player {
 
         Best bestMove = minimax(ourColor, -100000, 100000, depth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
-        board.move(bestMove.move, ourColor); //does minimax always return a valid move?
+        board.move(bestMove.move, ourColor);
         return bestMove.move;
     }
 
@@ -70,9 +70,6 @@ public class MachinePlayer extends Player {
         Best myBest = new Best();
         Best reply;
 
-        //check if opponent has a network first to prevent
-        //us from unblocking an opponent network to create our own
-        //TODO: how to prevent the opponent from making this mistake?
         if (board.hasNetwork(opponentColor)){
             myBest.score = -10000 - 100*depth;
             return myBest;
@@ -239,24 +236,6 @@ public class MachinePlayer extends Player {
                      "    ox  " +
                      "        "
                      );
-        // p.forceBoard("        " +
-        //              "ox  o   " +
-        //              "        " +
-        //              "o  xo x " +
-        //              "  ox  o " +
-        //              "o       " +
-        //              " xo  x  " +
-        //              "  x     ");
-
-        // p.forceBoard("   x    " +
-        //              "oxo   o " +
-        //              " x xox  " +
-        //              " oo o   " +
-        //              " x x    " +
-        //              "oxoxo   " +
-        //              "        " +
-        //              " x      ");
-
         runGame();
         //p.interactiveDebug();
     }
