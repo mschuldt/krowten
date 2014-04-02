@@ -13,13 +13,16 @@ public class MachinePlayer extends Player {
     int ourColor, opponentColor;
     public static final int white = 1;
     public static final int black = 0;
+    private static final int VAR_DEPTH = -1;
+    private static final int ADD_DEPTH = 3;
+    private static final int STEP_DEPTH = 2;
 
     MoveList[] movesLists;
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
-        this(color, 4);//TODO: determine suitable default
+        this(color, VAR_DEPTH);
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -33,8 +36,9 @@ public class MachinePlayer extends Player {
         board = new Board(color);
         this.searchDepth = searchDepth;
 
-        movesLists = new MoveList[searchDepth+1];
-        for (int i = 0; i <= searchDepth; i++){
+        int depth = (searchDepth == VAR_DEPTH ? ADD_DEPTH : searchDepth);
+        movesLists = new MoveList[depth+1];
+        for (int i = 0; i <= depth; i++){
             movesLists[i] = new MoveList();
         }
     }
@@ -42,7 +46,16 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
-        Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
+        int depth = searchDepth;
+        if (depth == VAR_DEPTH){
+            if (board.getNumPieces(ourColor) < 8){
+                depth = ADD_DEPTH;
+            }else{
+                depth = STEP_DEPTH;
+            }
+        }
+
+        Best bestMove = minimax(ourColor, -100000, 100000, depth); //TODO: alpha, beta values ok?
         //make the move here instead of calling this.forceMove if we know that the move is valid
         board.move(bestMove.move, ourColor); //does minimax always return a valid move?
         return bestMove.move;
