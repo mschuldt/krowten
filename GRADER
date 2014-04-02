@@ -244,6 +244,12 @@ public PieceList connectedPieces(Piece piece){
 public boolean hasNetwork()
 
 
+/**
+* Board.getNumPieces(int) returns the number of pieces
+* of COLOR on the board
+*/
+public int getNumPieces(int color){
+    
 
 /*
 * of all valid Moves, preform a minimax tree search and return the Move
