@@ -5,32 +5,32 @@ package player;
 import java.io.*;
 
 public class Board{
-    Piece[][] pieceArray;
-    Piece[] rows;
-    Piece[] columns;
+    private Piece[][] pieceArray;
+    private Piece[] rows;
+    private Piece[] columns;
     //forward and backward diagonals (think forward/backward slash)
-    Piece[] fDiagonals;
-    Piece[] bDiagonals;
+    private Piece[] fDiagonals;
+    private Piece[] bDiagonals;
 
-    int ourColor, opponentColor;
-    int ourPieceCount, opponentPieceCount;
-    int ourNumInGoalA,ourNumInGoalB,
+    private int ourColor, opponentColor;
+    private int ourPieceCount, opponentPieceCount;
+    private int ourNumInGoalA,ourNumInGoalB,
         opponentNumInGoalA,opponentNumInGoalB;
 
     public static final int white = 1;
     public static final int black = 0;
-    long ourBitBoard = 0;
-    long opponentBitBoard = 0;
+    private long ourBitBoard = 0;
+    private long opponentBitBoard = 0;
 
-    PieceList pieces; //all unused pieces
-    PieceList ourPieces;
-    PieceList opponentPieces;
+    private PieceList pieces; //all unused pieces
+    private PieceList ourPieces;
+    private PieceList opponentPieces;
 
-    PieceList adjacentPieceList;
+    private PieceList adjacentPieceList;
 
     Move m = new Move(0,0);
 
-    boolean verifyAll = false; //when true, run this.verify() after every move
+    private static final boolean verifyAll = false; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -1300,6 +1300,7 @@ public class Board{
         for (Piece p: pieces){
             //sum the total connections
             //  sum += connectedPieces(p).length();
+
             //give points for pieces with no other adjacent pieces
             adjacent = adjacentPieces(p, color);
             if (adjacent.length() ==0){
