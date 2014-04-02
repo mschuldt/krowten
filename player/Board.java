@@ -187,7 +187,6 @@ public class Board{
             bitRep = getBitRep(toX-1, toY-1);
             p = pieces.pop().set(color, bitRep, move.x1, move.y1);
 
-            //TODO: asserts to check index validity
             assert pieceArray[toX][toY] == null : "square is already full";
 
             if (color == ourColor){
