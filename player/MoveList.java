@@ -9,7 +9,7 @@ package player;
 //amount of memory
 
 public class MoveList extends AList<Move>{
-    //add a piece to the back of this list if it is not null and not an edge piece
+
     public MoveList(){
         super(440);
         allocateMoves();

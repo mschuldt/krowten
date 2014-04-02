@@ -33,7 +33,7 @@ public class Board{
 
     Move m = new Move(0,0);
 
-    boolean verifyAll = true; //when true, run this.verify() after every move
+    boolean verifyAll = false; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long integer
@@ -701,7 +701,7 @@ public class Board{
     }
 
     public void updateAdjacentPiecesList(int x, int y, int color){
-        x++; y++; //mbs
+        x++; y++;
         adjacentPieceList.clear();
         for (int xAdj = -1; xAdj <= 1; xAdj++){
             for (int yAdj = -1; yAdj <= 1; yAdj++){
@@ -1143,6 +1143,7 @@ public class Board{
 
         int numPieces = getNumPieces(color);
         PieceList pieces = getPieces(color);
+
         //AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
         if (color == black) {
@@ -1242,7 +1243,6 @@ public class Board{
         }
         return opponentPieces;
     }
-
 
     /*
      *
@@ -2617,7 +2617,7 @@ public class Board{
                 messages.add("cleared the board");
                 break;
 
-            case "rungame": case "rg":
+            case "rungame": case "rg": //TODO: FIX: this is crashing
                 clearBoard();
                 MachinePlayer player1 = new MachinePlayer(white);
                 MachinePlayer player2 = new MachinePlayer(black);

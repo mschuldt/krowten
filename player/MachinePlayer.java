@@ -15,15 +15,16 @@ public class MachinePlayer extends Player {
     public static final int white = 1;
     public static final int black = 0;
     int count=0;
+    int generation;
 
     MoveList[] movesLists;
     //at depth 4 hash table can have over 280393 items
-    HashTableChained ht = new HashTableChained(300000);
+    HashTableChained ht = new HashTableChained(30000);
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
-        this(color, 3);//TODO: determine suitable default
+        this(color, 4);//TODO: determine suitable default
     }
 
     // Creates a machine player with the given color and search depth.  Color is
@@ -285,7 +286,7 @@ public class MachinePlayer extends Player {
         //              "        " +
         //              " x      ");
 
-        //runGame();
-        p.interactiveDebug();
+        runGame();
+        //p.interactiveDebug();
     }
 }

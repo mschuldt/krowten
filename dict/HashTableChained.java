@@ -31,7 +31,7 @@ public class HashTableChained {
      **/
     public HashTableChained(int sizeEstimate) {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
-        array = new HList[(int)numBuckets];
+        array = new HList[numBuckets];
         for (int i =0;i < numBuckets; i++){
             array[i] = new HList();
         }
