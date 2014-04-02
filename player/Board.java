@@ -1142,7 +1142,7 @@ public class Board{
         mList.clear();
 
         int numPieces = getNumPieces(color);
-        PieceList pieces = getPiecesSlow(color);
+        PieceList pieces = getPieces(color);
         //AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
         if (color == black) {
