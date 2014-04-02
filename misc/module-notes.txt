@@ -14,7 +14,7 @@ interfaces organized by class
 .. Best
 .. Piece
 ..... fields
-.. M: Board
+.. Board
 ..... constructor
 ..... move a piece
 ..... move an opponents piece
@@ -23,13 +23,13 @@ interfaces organized by class
 ..... get connected pieces
 ..... does a square contain a piece?
 ..... get a the piece at a location
-..... M: network finder
-..... M: determining whether a move is valid
-..... M: determining whether a move will result in the formation of a cluster >= 3
+..... network finder
+..... determining whether a move is valid
+..... determining whether a move will result in the formation of a cluster >= 3
 .. MachinePlayer
-..... M: performing minimax tree search
-..... M: generating a list of all valid moves
-..... M: board evaluation function
+..... performing minimax tree search
+..... generating a list of all valid moves
+..... board evaluation function
 ..... move opponents piece
 ..... force a move
 
@@ -102,7 +102,7 @@ fields
   int color int x int y
 
 
-M: Board
+Board
 ~~~~~~~~
 
 constructor
@@ -173,7 +173,7 @@ get a the piece at a location
   Piece getPiece(int x, int y);
 
 
-M: network finder
+network finder
 -----------------
 /*
 * returns true if Player P currently has at least one network of six or more pieces currently on the board.
@@ -181,7 +181,7 @@ M: network finder
   boolean hasNetwork(Player P);
   
   
-  M: determining whether a move is valid
+determining whether a move is valid
 --------------------------------------
 /*
 * returns true if and only if Player P can legally make Move M on Board B, meaning
@@ -194,7 +194,7 @@ M: network finder
   boolean isValidMove(Move M, int Color);
 
 
-M: determining whether a move will result in the formation of a cluster >= 3
+determining whether a move will result in the formation of a cluster >= 3
 ----------------------------------------------------------------------------
 /*
 * returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
@@ -202,11 +202,10 @@ M: determining whether a move will result in the formation of a cluster >= 3
   boolean formsIllegalCluster(Move M, int Color);
 
 
-
 MachinePlayer
 ~~~~~~~~~~~~~
 
-M: performing minimax tree search
+performing minimax tree search
 ---------------------------------
 /*
 * of all valid Moves, preform a minimax tree search and return the Move
@@ -215,7 +214,7 @@ M: performing minimax tree search
   public Move chooseMove();
 
 
-M: generating a list of all valid moves
+generating a list of all valid moves
 ---------------------------------------
 /*
 * for current Board B, returns an array of all valid Moves available to Player P.
@@ -223,9 +222,7 @@ M: generating a list of all valid moves
   Move[] validMoves(Board B, Player P);
 
 
-
-
-M: board evaluation function
+board evaluation function
 ----------------------------
 /*
 * evaluates Player P's pieces the current board and returns an estimated score based 
