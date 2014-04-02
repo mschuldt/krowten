@@ -2725,6 +2725,20 @@ public class Board{
                 System.out.println("todo");
                 break;
 
+            case "testshuffle":
+                PieceList shuffled = ourPieces.shuffled();
+                if (shuffled.length() != ourPieces.length()){
+                    messages.add("shuffled list has invalid length");
+                    break;
+                }
+                for (Piece p_ :ourPieces){
+                    if (! shuffled.containsPiece(p_)){
+                        messages.add("shuffled list does not contain all the pieces");
+                        break;
+                    }
+                }
+                messages.add("shuffled list is OK");
+                break;
             default:
                 messages.add("Invalid Command");
             }
