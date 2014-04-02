@@ -22,11 +22,11 @@ interfaces organized by class
 ..... does a square contain a piece?
 ..... get a the piece at a location
 ..... M: network finder
+..... M: determining whether a move is valid
+..... M: determining whether a move will result in the formation of a cluster >= 3
 .. MachinePlayer
 ..... M: performing minimax tree search
 ..... M: generating a list of all valid moves
-..... M: determining whether a move is valid
-..... M: determining whether a move will result in the formation of a cluster >= 3
 ..... M: board evaluation function
 ..... move opponents piece
 ..... force a move
@@ -100,21 +100,19 @@ unmove a piece
 get adjacent pieces
 -------------------
 /*
-* returns array of the 8 adjacent pieces by Piece P at (x, y) in the order
-* {nw, n, ne, w, e, sw, s, se}. If any position is invalid or does not contain
-* a piece, the corresponding adjacentPieces[i] == null.
+* returns list of the 8 adjacent pieces by Piece P at (x, y) in the order
+* {nw, n, ne, w, e, sw, s, se}. 
 */
-  Piece[] adjacentPieces(int x, int y); Piece[] adjacentPieces(Piece P);
+  PieceList adjacentPieces(int x, int y); PieceList adjacentPieces(Piece P);
 
 
 get connected pieces
 --------------------
 /*
 * returns array of the 8 pieces connected to Piece P at (x, y) in the order 
-* {nw, n, ne, w, e, sw, s, se}. Ignores empty locations in between. If a piece
-* is not connected in a direction, the corresponding connectedPieces[i] == null. 
+* {nw, n, ne, w, e, sw, s, se}. 
 */
-  Piece[] connectedPieces(Piece P); Piece[] connectedPieces(int x, int y);
+  PieceList connectedPieces(Piece P); PieceList connectedPieces(int x, int y);
 
 
 does a square contain a piece?
@@ -140,6 +138,28 @@ M: network finder
 * returns true if Player P currently has at least one network of six or more pieces currently on the board.
 */
   boolean hasNetwork(Player P);
+  
+  
+  M: determining whether a move is valid
+--------------------------------------
+/*
+* returns true if and only if Player P can legally make Move M on Board B, meaning
+* 1) P is placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+* 2) the location where the piece will be placed is a valid and legal location on the board 
+* (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+* and is not currently occupied by any piece including itself.
+* 3) there will not be any clusters >= 3 on the board after making the Move.
+*/
+  boolean isValidMove(Move M, int Color);
+
+
+M: determining whether a move will result in the formation of a cluster >= 3
+----------------------------------------------------------------------------
+/*
+* returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
+*/
+  boolean formsIllegalCluster(Move M, int Color);
+
 
 
 MachinePlayer
@@ -162,25 +182,6 @@ M: generating a list of all valid moves
   Move[] validMoves(Board B, Player P);
 
 
-M: determining whether a move is valid
---------------------------------------
-/*
-* returns true if and only if Player P can legally make Move M on Board B, meaning
-* 1) P is placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
-* 2) the location where the piece will be placed is a valid and legal location on the board 
-* (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
-* and is not currently occupied by any piece including itself.
-* 3) there will not be any clusters >= 3 on the board after making the Move.
-*/
-  boolean isValidMove(Board B, Move M, Player P);
-
-
-M: determining whether a move will result in the formation of a cluster >= 3
-----------------------------------------------------------------------------
-/*
-* returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
-*/
-  boolean formsIllegalCluster(Board B, Move M, Player P);
 
 
 M: board evaluation function
