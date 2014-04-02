@@ -1138,8 +1138,22 @@ public class Board{
         m.moveKind = Move.STEP;
     }
 
+    /*
+     * returns list of all valid moves available for color, meaning
+     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+     * 2) the location where the piece will be placed is a valid and legal location on the board
+     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+     * and is not currently occupied by any piece including itself.
+     * 3) there will not be any clusters >= 3 on the board after making the Move.
+     */
+    public MoveList validMoves(int color){
+        MoveList moves = new MoveList(440);
+        validMoves(color, moves);
+        return moves;
+    }
+
     //like validMoves but does not allocate any memory
-    public void validMoves2(int color, MoveList mList){
+    public MoveList validMoves(int color, MoveList mList){
         mList.clear();
 
         int numPieces = getNumPieces(color);
@@ -1183,58 +1197,7 @@ public class Board{
                 }
             }
         }
-    }
-
-    /*
-     * returns list of all valid moves available for color, meaning
-     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
-     * 2) the location where the piece will be placed is a valid and legal location on the board
-     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
-     * and is not currently occupied by any piece including itself.
-     * 3) there will not be any clusters >= 3 on the board after making the Move.
-     */
-    public AList<Move> validMoves(int color) {
-        int numPieces = getNumPieces(color);
-        PieceList pieces = getPieces(color);
-        AList<Move> mList = new AList<Move>(440);
-        int x_lower, y_lower, x_upper, y_upper;
-        if (color == black) {
-            x_lower = 1;
-            x_upper = 6;
-            y_lower = 0;
-            y_upper = 7;
-        } else { // white
-            x_lower = 0;
-            x_upper = 7;
-            y_lower = 1;
-            y_upper = 6;
-        }
-        if (numPieces < 10) { //ADD moves
-            for (int x = x_lower; x <= x_upper; x++) {
-                for (int y = y_lower; y <= y_upper; y++) {
-                    if (!pieceAt(x, y)) {
-                        Move m = new Move(x, y);
-                        if (!formsIllegalCluster(m, color)){
-                            mList.add(m);
-                        }
-                    }
-                }
-            }
-        } else {                      // STEP moves
-            for (int x = x_lower; x <= x_upper; x++) {
-                for (int y = y_lower; y <= y_upper; y++) {
-                    if (!pieceAt(x, y)) {
-                        for (Piece p : pieces){
-                            Move m = new Move(x, y, p.x, p.y);
-                            if (!formsIllegalCluster(m, color)){
-                                mList.add(m);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return mList;
+        return null;
     }
 
 
@@ -1344,6 +1307,7 @@ public class Board{
         return sum;
     }
 
+    //TODO
     //? interface change:
     //    MachinePlayer.scoreBoard(Board B, Player P)
     //    -> Baord.score(int color);
