@@ -1235,6 +1235,15 @@ public class Board{
         return mList;
     }
 
+
+    public PieceList getPieces(int color){
+        if (color == ourColor){
+            return ourPieces;
+        }
+        return opponentPieces;
+    }
+
+
     /*
      *
      */
