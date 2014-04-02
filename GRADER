@@ -92,6 +92,35 @@ project.  Your design of classes and interfaces will be worth 10% of your
 grade.
 
 
+CLASSES USED:
+MachinePlayer
+   methods for choosing a move using minimax and alpha-beta pruning
+   also contains some test code.
+Board
+   most of the code. board representation, methods for working with pieces
+   network detection, board evaluation, extensive test code
+Piece
+   represents a piece, stores it's attributes like position on board, color etc.
+Best
+   used by minimax, holds best score and move so far
+AList
+   a list data structure organized around an array, it can be cleared in constant
+   time and is intended to be reused after it is initialized.
+AListIterator
+   for making the AList objects iterable
+PieceList
+   a subclass of AList with helpfull methods for dealing with pieces
+MoveList
+   a subclass of AList with helpfull methods for dealing with moves
+   it allows for storing moves without having to create new Move instances.
+BoardTest
+   a class that holds a board and all the expected properties/attributes of it
+PrintBoard
+   a textual representation of a board used for debugging. it allows such things
+   as drawing lines, numbering squares, marking squares, etc
+Cell
+ used by PrintBoard to represent a single square of the board.
+
 
 /** Board.Board(int) constructs a new board for player with color COLOR
 *  The board is initially empty
