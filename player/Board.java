@@ -831,6 +831,8 @@ public class Board{
         return lst;
     }
 
+    //this should be used over getStartGoalPieces because
+    //it avoids allocating memory
     private Piece getStartGoalList(int color){
         if (color == white){
             return columns[0];
@@ -1048,22 +1050,22 @@ public class Board{
             }
             //check that destination square is empty
             if (pieceArray[toX+1][toY+1] != null){
-                System.out.println("invalid add move: piece at " + locStr(toX,toY));
+                //System.out.println("invalid add move: piece at " + locStr(toX,toY));
                 return false;
             }
             //check for correct piece count
             if (pieceCount >= 10){
-                System.out.println("invalid add move: piece count >= 10" );
+                //System.out.println("invalid add move: piece count >= 10" );
                 return false;
             }
             //make sure not to move into opponents goal
             if ((getBitRep(toX, toY) & goal) != 0){
-                System.out.println("invalid add move: adding to opponents goal" );
+                //System.out.println("invalid add move: adding to opponents goal" );
                 return false;
             }
             //check that no illegal cluster will form
             if (formsIllegalCluster(m, color)){
-                System.out.println("invalid add move: forms illegal cluster" );
+                //System.out.println("invalid add move: forms illegal cluster" );
                 return false;
             }
             return true;
@@ -1075,51 +1077,46 @@ public class Board{
             fromY = m.y2;
             //check that destination indexes are valid
             if (! isValidIndex(toX, toY)){
-                System.out.println("invalid step move: invalid destination index" + locStr(toX,toY));
+                //System.out.println("invalid step move: invalid destination index" + locStr(toX,toY));
                 return false;
             }
             if (! isValidIndex(fromX, fromY)){
-                System.out.println("invalid step move: invalid origin index" + locStr(fromX,fromY));
+                //System.out.println("invalid step move: invalid origin index" + locStr(fromX,fromY));
                 return false;
             }
             //check that destination square is empty
             if (pieceArray[toX+1][toY+1] != null){
-                System.out.println("invalid step move: destination square is full" + locStr(toX,toY));
+                //System.out.println("invalid step move: destination square is full" + locStr(toX,toY));
                 return false;
             }
             //make sure there is a piece to move
             if (pieceArray[fromX+1][fromY+1] == null){
-                System.out.println("invalid step move: origin square is empty" + locStr(toX,toY));
+                //System.out.println("invalid step move: origin square is empty" + locStr(toX,toY));
                 return false;
             }
 
             //check for correct piece count
             if (pieceCount < 10){
-                System.out.println("invalid step move: piece count < 10");
+                //System.out.println("invalid step move: piece count < 10");
                 return false;
             }
 
             //make sure not to move into opponents goal
             if ((getBitRep(toX, toY) & goal) != 0){
-                System.out.println("invalid step move: moving into opponents goal");
+                //System.out.println("invalid step move: moving into opponents goal");
                 return false;
             }
 
             //check that no illegal cluster will form
             if (formsIllegalCluster(m, color)){
-                System.out.println("invalid step move: forming illegal cluster");
-                // System.out.println("ourBitBoord:");
-                // System.out.println(bitBoardToString(ourBitBoard));
-                // System.out.println("opponentBitBoord:");
-                // System.out.println(bitBoardToString(opponentBitBoard));
-                // System.out.println("Board: ");
-                System.out.println(toBoardString());
+                //System.out.println("invalid step move: forming illegal cluster");
+                //System.out.println(toBoardString());
                 return false;
             }
 
             //check that the move does not move to the same spot
             if (m.x1 == m.x2 && m.y1 == m.y2){
-                System.out.println("invalid step move: moving to same spot");
+                //System.out.println("invalid step move: moving to same spot");
                 return false;
             }
         }
@@ -1367,12 +1364,8 @@ public class Board{
                 sum+=5;
             }
         }
-        //give points for partial networks
-        // for (Piece piece : getStartGoalPieces(color)){
-        //     sum+=1.5*runLength(piece);
-        //     //System.out.println("run length = " + runLength(piece));
-        // }
 
+        //give points for partial networks
         long[] memberPieces = {0};
         long br = 0;
 
@@ -1392,41 +1385,6 @@ public class Board{
                 sum+= 3*runLength(p, memberPieces);
             }
         }
-
-        //try to prevent more then one piece in each goal
-        /*
-        long a,b,board;
-        boolean inA,inB;
-        int numA, numB;
-        if (color == ourColor){
-            a = ourGoalMaskA;
-            b = ourGoalMaskB;
-            board = ourBitBoard;
-            numA = ourNumInGoalA;
-            numB = ourNumInGoalB;
-        }else{
-            a = opponentGoalMaskA;
-            b = opponentGoalMaskB;
-            board = opponentBitBoard;
-            numA = opponentNumInGoalA;
-            numB = opponentNumInGoalB;
-        }
-        if (numA > 1){
-            sum -= ((numA-1)*10);
-        }
-        if (numB > 1){
-            sum -= ((numB-1)*10);
-        }
-        if (sum<0){
-            sum=0;
-        }
-
-        //make sure they have a piece in each goal
-        if (numA == 0 || numB == 0){
-            sum/=2;
-        }
-        */
-
         return sum;
     }
 
@@ -1436,7 +1394,13 @@ public class Board{
     }
 
     //==========================================================================
+    //==========================================================================
+    //==========================================================================
+    //==========================================================================
     // Verification and testing code ===========================================
+    //==========================================================================
+    //==========================================================================
+    //==========================================================================
     //==========================================================================
 
     private String locStr(int x, int y){
