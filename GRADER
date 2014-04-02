@@ -6,7 +6,7 @@ Login of student running submit: cs61b-ayn
 Second team member's name: Yalun Rao
 Second team member's login: cs61b-aum
 
-Third team member's name: Michelle Chen 
+Third team member's name: Michelle Chen
 Third team member's login: cs61b-axx
 
 IMPORTANT:  Once you've submitted Project 2 once, the same team member should
@@ -30,12 +30,12 @@ default number of search levels set by the one-parameter MachinePlayer
 constructor (or is it a variable-depth search)?
    We successfully implement game tree search and alpha-beta pruning. There are no limitation.
    By default there is a variable number of search levels.
-   Depth 3 for add moves and 2 for step moves.
+   Depth 4 for add moves and 3 for step moves.
 
 
 Describe your board evaluation function in some detail.
    points are given for various attributes that where deemed beneficial.
-  
+
    first points are given based on their position on the board. These points
    are predetermined and stored int the array `whiteSquareValues'.They do not
    change throughout the game.
@@ -43,20 +43,23 @@ Describe your board evaluation function in some detail.
    differently.
    The main purpose for this is to help position the initial few pieces in
    dominant positions.
-   
+
    points are given when pieces have no adjacent pieces, this is done to
    encourage spreading and help prevent future cluster.
-  
+
    The most influential source of points is the summing of partial networks.
    The method that does this, Board.runLength(), works in a similar way
    to the normal network detection method except that it does not care
    how long the network is. It returns the total length of path
    starting from a given piece. It will follow all the branches
    as long as they could be part of a network (must turn, no repeats).
-  
+
    the influence of the partial networks is weighted to better overcome
    the effect of less important sources of points
 
+   the final score is calculated by running the procedure described above
+   from the prospective of each player and then subtracting the score of
+   the opponent from our score.
 
 Does your MachinePlayer use any special method of choosing the first few moves?
    Not really. The points allocated from `whiteSquareValues' as described in the
@@ -121,8 +124,8 @@ PrintBoard
 Cell
  used by PrintBoard to represent a single square of the board.
 
- 
-LIST OF MODULES:
+
+LIST OF MODULES WITH AUTHORS:
    1. board representation (Michael)
    2. performing minimax tree search  (Michelle)
    3. generating a list of all valid moves (Helen)
@@ -131,11 +134,25 @@ LIST OF MODULES:
    6. network finder (Michael)
    7. board evaluation function (Michael)
 
-TODO:
- -list classes the module is implmenetd in
- -update the interface/prototype descriptions
- 
- 
+CLASSES MODULES ARE IMPLEMENTED IN:
+   1. board representation
+       Board
+   2. performing minimax tree search
+      MachinePlayer
+   3. generating a list of all valid moves
+      Board
+   4. determining whether a move is valid
+      Board
+   5. cluster detection
+      Board
+   6. network finder
+      Board
+   7. board evaluation function
+      Board
+
+
+===================================================================
+BOARD REPRESENTATION MODULE:
 
 /** Board.Board(int) constructs a new board for player with color COLOR
 *  The board is initially empty
@@ -178,9 +195,6 @@ public void opponentMove(Move move)
 
 
 /** Board.unMove(Move) reverses the effects of the move MOVE.
-*  MOVE must have been a move for the pieces of the player
-*  who owns this board, that is, the player whose color
-*  was passed to the initializer.
 *
 *  Unusual conditions:
 *  The behaviour of this method is not defined for the case
@@ -188,23 +202,25 @@ public void opponentMove(Move move)
 *
 *  @param move the move to reverse.
 */
-void unMove(Move move)
+public void unMove(Move move)
 
 
-
-/** Board.adjacentPieces(int,int) returns an array of pieces
-* that are adjacent to the pieces at coordinates (X,Y) on
-* the board.
+/** Board.adjacentPieces(int,int) returns a PieceList of
+* pieces that are adjacent to the pieces at coordinates
+* (X,Y) on the board.
 *
 * The x,y coordinates are indexed from the top left with x
 * increasing to the right and y increasing down.
 *
+*  If there is a piece at (x,y) then only adjacent pieces of the
+*  same color as it will be returned.
 *  If there is no piece at (x,y) but (x,y) is still a valid
-*  board location, then this method works as expected.
+*  board location, then all the pieces surrounding (x,y)
+*  of any color will be returned.
 *
 * The list returned does not include PIECE, just the ones around it,
 * so the returned list ranges in length from 0 to 8.
-
+*
 * Unusual conditions:
 *  if (x,y) is not a valid location on the board, then this
 *  method will likely cause the program to crash.
@@ -213,13 +229,33 @@ void unMove(Move move)
 *
 *  @param x the x-coordinate location of the square
 *  @param y the y-coordinate location of the square
+*  @parma color the color of the pieces to be returned
 *
-*  @returns an PieceList of pieces adjacent to location (x,y) on the board
+*  @returns an array of pieces adjacent to location (x,y) on the board
 */
+public PieceList adjacentPieces(int x, int y,int color)
 
 
-/** Board.adjacentPieces(Piece) returns a PieceList of pieces
-* that are adjacent to PIECE on the board
+/** Board.adjacentPieces(int,int) returns an array of pieces
+*  that are adjacent to location (X,Y) on the board
+*
+*  There must be a piece at (X, Y)
+*
+*  only the pieces of the same color as the piece at (X,Y)
+*  are returned.
+*
+*  @param x the x-coordinate location of the square
+*  @param y the y-coordinate location of the square
+*
+*  @returns an array of pieces adjacent to (X,Y) on the board
+*
+*/
+public PieceList adjacentPieces(int x, int y)
+
+
+/** Board.adjacentPieces(Piece) returns an array of pieces
+* that are adjacent to PIECE on the board and have the same color
+* as PIECE
 *
 * The list returned does not include PIECE, just the ones around it,
 * so the returned list ranges in length from 0 to 8.
@@ -232,7 +268,7 @@ void unMove(Move move)
 *
 *  @returns an array of pieces adjacent to PIECE on the board
 */
-public PieceList adjacentPieces(int x, int y)
+public PieceList adjacentPieces(Piece piece)
 
 
 /** Board.pieceAt(int,int) returns true if a piece is located
@@ -264,7 +300,14 @@ public boolean pieceAt(int x, int y)
 */
 public Piece getPiece(int x, int y)
 
-
+/** Board.getPieces(int) returns the pieces all pieces
+*  that have the same color as COLOR
+*
+*  @param color the color of pieces to return
+*
+*  @returns a PieceList with all pieces with the same color as COLOR
+*/
+public PieceList getPieces(int color)
 
 /** Board.connectedPieces(int, int) returns a list of all the pieces
 *   'connected' the the piece located at square (X,Y) on this board.
@@ -303,24 +346,15 @@ public PieceList connectedPieces(Piece piece){
 
 
 /**
-*  Board.hasNetwork() determines whether "this" Board has a valid
-*  network for player whose color is Board.color.
-*
-*  Unusual conditions:
-*  If the board contain illegal squares, the behavior of this
-*        method is undefined.
-*
-*  @return true if player whose color is 'this.color' has a winning network
-*          on 'this' GameBoard; false otherwise.
-**/
-public boolean hasNetwork()
-
-
-/**
 * Board.getNumPieces(int) returns the number of pieces
 * of COLOR on the board
+*
+* @param color the color of the pieces to count
+*
+* @returns the number of pieces that have the same color as COLOR
 */
 public int getNumPieces(int color){
+
 
 /** Board.hash() returns the hash of the current board.
 *  Explanation:
@@ -332,35 +366,39 @@ public int getNumPieces(int color){
 */
 public long hash(){
 
+
+===================================================================
+NETWORK DETECTION MODULE:
+
+/** Board.hasNetwork(int) return true if a valid network is formed by pieces
+*  of whose color is COLOR on "this" board.
+*
+*  Color must be equal to Board.white or Board.black
+*
+*  Unusual conditions:
+*  If the board contain illegal squares, the behavior of this
+*        method is undefined.
+*
+*  @param color the color of pieces to check for a network
+*
+*  @returns true if a network is formed by COLOR pieces, otherwise false.
+*/
+public boolean hasNetwork(int color)
+
+
+===================================================================
+MINIMAX SEARCH MODULE:
+
 /*
 * of all valid Moves, preform a minimax tree search and return the Move
 * which gives the Player the highest chance of winning.
 */
   public Move chooseMove();
 
-
-/*
-* returns list of all valid moves available, meaning
-* 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
-* 2) the location where the piece will be placed is a valid and legal location on the board 
-* (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
-* and is not currently occupied by any piece including itself.
-* 3) there will not be any clusters >= 3 on the board after making the Move.
-*/
-
-
-/*
-* returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
-*/
-  boolean formsIllegalCluster(Move M, int color);
-
-
-/*
-* evaluates Player P's pieces the current board and returns an estimated score based 
-*on current networks and goals, a higher score denoting a larger chance of winning the game.
-*/
-  int scoreBoard(Board B, Player P);
-
+/**
+* Minimax algorithm with alpha-beta pruning which returns a Best object with a score and Move
+**/
+public Best minimax(int side, int alpha, int beta, int depth)
 
 /*
 * makes Move m on this board for the opponent's piece, and returns true if successful.
@@ -372,3 +410,65 @@ public long hash(){
 * makes Move m on this board and returns true if successful.
 */
   public boolean forceMove(Move m);
+
+
+===================================================================
+VALID MOVES MODULE:
+
+/*
+* returns list of all valid moves available, meaning
+* 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+* 2) the location where the piece will be placed is a valid and legal location on the board
+* (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+* and is not currently occupied by any piece including itself.
+* 3) there will not be any clusters >= 3 on the board after making the Move.
+*/
+public MoveList validMoves(int color)
+
+
+/** Board.validMoves(int, MoveList) is just like Board.validMoves(int)
+*  except that it populates MLIST with the moves instead of
+*  returning a reference to a new MoveList.
+*
+*  Unusual Conditions:
+*   if the max size of MLIST is less then the number of moves found
+*   then the behavior of this method is undefined
+*
+*  @param color the color of the player whose moves are to be determined
+*  @param mList a MoveList that will be populated with the moves
+*/
+public MoveList validMoves(int color, MoveList mList)
+
+
+===================================================================
+VALID MOVE MODULE:
+
+/** Board.isValidMove returns a boolean value indicating if a given
+* move is valid
+*
+* @param m move to check for validity
+* @param color color of the player for which the move is intended
+*
+* @returns true if the move is valid, else false
+*/
+public boolean isValidMove(Move m, int color)
+
+
+===================================================================
+CLUSTER DETECTION MODULE:
+
+/*
+* returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
+*/
+  boolean formsIllegalCluster(Move M, int color);
+
+===================================================================
+BOARD EVALUATION MODULE:
+
+/** Board.score() returns value that represents how favorable 'this'
+* board is to the player who owns it -- that is, the player
+* whoses color was passed to the constructor of 'this' board.
+*
+* @returns a value representing the score of this board
+*/
+public int score()
