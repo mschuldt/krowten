@@ -901,9 +901,15 @@ public class Board{
         }
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
-            for (Piece piece : getStartGoalPieces(color)){
-                if (hasNetwork(piece, bitBoard, goalB, goalA, 11, 60,1)){ //11x+60: just an impossible line
+            Piece goalPiece = getStartGoalList(color);
+            while (goalPiece != null){
+                if (hasNetwork(goalPiece, bitBoard, goalB, goalA, 11, 60,1)){ //11x+60: just an impossible line
                     return true;
+                }
+                if (color == white){
+                    goalPiece = goalPiece.down;
+                }else{
+                    goalPiece = goalPiece.right;
                 }
             }
         }
