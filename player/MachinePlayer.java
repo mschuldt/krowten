@@ -90,7 +90,6 @@ public class MachinePlayer extends Player {
             myBest.score = beta;
         }
 
-        //AList<Move> allValidMoves = board.validMoves(side);
         MoveList allValidMoves = movesLists[depth];
         board.validMoves(side, allValidMoves);
 

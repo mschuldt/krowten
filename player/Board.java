@@ -577,7 +577,7 @@ public class Board{
     private boolean verifyNotInMatrix(Piece piece, int color){
         Piece p = null;
         for (int i=0; i< 20; i++){
-            p = pieces.get(i);//TODO: should have a legitimate way of doing this
+            p = pieces.get(i);
             if (p == piece.left
                 || p == piece.right
                 || p == piece.up
@@ -687,7 +687,7 @@ public class Board{
         return adjacentPieces(piece.x, piece.y, piece.color);
     }
 
-    //TODO: interface docs
+
     public PieceList adjacentPieces(Piece piece, int color){
         return adjacentPieces(piece.x, piece.y, color);
 
@@ -960,7 +960,6 @@ public class Board{
             Piece oneNeighbor = neighbors.get(0);
             if (stepMove && oneNeighbor.bitRep == originBitRep){
                 oneNeighbor = neighbors.get(1);
-                //TODO: will there always be another?
             }
 
             PieceList moreNeighbors = this.adjacentPieces(oneNeighbor);
@@ -1080,7 +1079,7 @@ public class Board{
         m.moveKind = Move.STEP;
     }
 
-    /*
+    /**
      * returns list of all valid moves available for color, meaning
      * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
      * 2) the location where the piece will be placed is a valid and legal location on the board
@@ -1248,7 +1247,10 @@ public class Board{
     }
 
     //returns the length of the partial network starting with STARTPIECE
-    public int runLength(Piece startPiece,long[] memberPieces){
+    //this is used internally by the evaluation function
+    //memberPieces is an array only so that its first element can
+    //be passed by reference
+    private int runLength(Piece startPiece,long[] memberPieces){
 
         long bitBoard, goalA, goalB;
 
@@ -1263,7 +1265,9 @@ public class Board{
         return runLength(startPiece, memberPieces ,11, 60, 1);
     }
 
-    int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
+    //this is used by the evaluation function to determine the
+    //values of piece positions
+    private int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
                                  {-3,-3, 2,-1,  2, 1, 0,-4},
                                  {-4,-3,-1,-3, -1,-1, 0,-3},
                                  {-2,-3, 4,-3,  4, 1, 0,-3},
@@ -1273,6 +1277,7 @@ public class Board{
                                  {0 , 0, 0, 0,  0, 0, 0, 0}};
 
     //return the sum of the square values of each piece
+    //used by the evaluation function
     private int squareScoreSum(int color){
         int sum= 0;
         if (color == white){
@@ -1478,7 +1483,6 @@ public class Board{
                 ok = false;
             }
         }
-        //TODO: check that all correct pieces are also in the piece lists
 
         return true;
     }
