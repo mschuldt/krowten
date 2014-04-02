@@ -601,7 +601,14 @@ public class Board{
         return true;
     }
 
-    //return the hash of the current board
+    /** Board.hash() returns the hash of the current board.
+     *  Explanation:
+     *   The number 1073741789 is the largest prime that fits in half
+     *   of a java 'long'. It is used to shrink the size of the bitboards
+     *   so that they can both fit in a 'long' without overlapping.
+     *   They are combined by shifting one of the boards left and ORing
+     *   them together.
+    */
     public long hash(){
         return ((ourBitBoard % 1073741789) << 31) | (opponentBitBoard % 1073741789);
     }
