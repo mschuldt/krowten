@@ -272,8 +272,7 @@ public class Board{
             addToMatrix(p);
             break;
         case Move.QUIT :
-            //TODO
-            break;
+            return;
         }
         if (verifyAll){
             verify();
@@ -415,8 +414,7 @@ public class Board{
             break;
 
         case Move.QUIT :
-            //TODO
-            break;
+            return;
         }
         if (verifyAll){
             verify();
