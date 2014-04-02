@@ -318,14 +318,14 @@ public class Board{
      *
      *  @param move the move to reverse.
      */
-    void unMove(Move move){
+    public void unMove(Move move){
         Piece p = null;
         Piece pp = null;
         switch (move.moveKind){
         case Move.ADD :
             int x = move.x1 + 1,
                 y = move.y1 + 1;
-            //TODO: asserts to check index validity
+
             p = pieceArray[x][y];
             assert p != null : "square should not be empty";
             assert p != edge : "cannot undo: piece is an edge";
