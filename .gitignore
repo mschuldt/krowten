@@ -1,4 +1,6 @@
 _*
 player/*.class
+dict/*.class
+list/*.class
 
 player/list
