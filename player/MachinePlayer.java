@@ -41,13 +41,15 @@ public class MachinePlayer extends Player {
         for (int i = 0; i <= searchDepth; i++){
             movesLists[i] = new MoveList();
         }
+        generation = 0;
     }
 
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
         //ht.makeEmpty();
-        //System.out.println("hash table has " + count + " items");
+        generation++;
+        System.out.println("hash table has " + count + " items");
 
         count=0;
         Best bestMove = minimax(ourColor, -100000, 100000, searchDepth); //TODO: alpha, beta values ok?
@@ -104,23 +106,30 @@ public class MachinePlayer extends Player {
             board.move(m,side);
 
             ///***  memoization code
-            // hashCode = board.hash();
-            // ourBoard = board.getOurBitBoard();
-            // oppBoard = board.getOpponentBitBoard();
-            // entry = ht.find(hashCode, ourBoard, oppBoard);
-            // if (entry != null){
-            //     score = entry.score;
-            // }else{
-            //     reply = minimax(1 - side, alpha, beta, depth - 1);
-            //     score = reply.score;
-            //     ht.insert(hashCode, score, ourBoard, oppBoard);
-            //     count++;
-            // }
+
+            if (depth < 2){
+                hashCode = board.hash();
+                ourBoard = board.getOurBitBoard();
+                oppBoard = board.getOpponentBitBoard();
+                entry = ht.find(hashCode, ourBoard, oppBoard, generation);
+                if (entry != null){
+                    score = entry.score;
+                    //System.out.println("found!");
+                }else{
+                    reply = minimax(1 - side, alpha, beta, depth - 1);
+                    score = reply.score;
+                    ht.insert(hashCode, score, ourBoard, oppBoard, generation);
+                    count++;
+                }
+            }else{
+                reply = minimax(1 - side, alpha, beta, depth - 1);
+                score = reply.score;
+            }
 
 
             ////*** normal code
-            reply = minimax(1 - side, alpha, beta, depth - 1);
-            score = reply.score;
+            //reply = minimax(1 - side, alpha, beta, depth - 1);
+            //score = reply.score;
 
 
             board.unMove(m);

@@ -19,7 +19,7 @@ public class HList {
      */
     protected HListNode head;
     protected int size;
-
+    protected int generation;
         /**
      *  newNode() calls the HListNode constructor.  Use this class to allocate
      *  new HListNodes rather than calling the HListNode constructor directly.
@@ -65,11 +65,18 @@ public class HList {
      *  @param entry is the entry to be inserted.
      *  Performance:  runs in O(1) time.
      */
-    public void add(Entry entry) {
-        HListNode node = newNode(entry, head, head.next);
-        node.next.prev = node;
-        head.next = node;
-        size++;
+    public void add(Entry entry,int gen){
+        if (gen == generation){
+            HListNode node = newNode(entry, head, head.next);
+            node.next.prev = node;
+            head.next = node;
+            size++;
+        }else{
+            HListNode node = newNode(entry, head, head);
+            head.prev = head.next = node;
+            size=1;
+            generation = gen;
+        }
     }
 
     /**
@@ -77,14 +84,16 @@ public class HList {
      * if none are found, return null
      * Performance:  runs in O(awesome) time.
      */
-    public HListNode find(long ourBoard, long oppBoard){
-        HListNode node = head.next;
-        while (node != head){
-            if (node.entry.ourBitBoard == ourBoard
-                && node.entry.opponentBitBoard == oppBoard){
-                return node;
+    public HListNode find(long ourBoard, long oppBoard, int gen){
+        if (gen == generation){
+            HListNode node = head.next;
+            while (node != head){
+                if (node.entry.ourBitBoard == ourBoard
+                    && node.entry.opponentBitBoard == oppBoard){
+                    return node;
+                }
+                node = node.next;
             }
-            node = node.next;
         }
         return null;
     }
@@ -264,8 +273,6 @@ public class HList {
         System.out.println("OK");
         return true;
     }
-
-
 
     public static void main(String[] args){
         HList l = new HList();

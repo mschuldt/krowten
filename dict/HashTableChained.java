@@ -134,11 +134,10 @@ public class HashTableChained {
      *  @param value an arbitrary object.
      *  @return an entry containing the key and value.
      **/
-    public Entry insert(long  hashCode, int score, long ourBoard, long oppBoard) {
-        // Replace the following line with your solution.
+    public Entry insert(long hashCode, int score, long ourBoard, long oppBoard, int gen) {
         Entry entry = new Entry(score, ourBoard, oppBoard);
         int index = compFunction(hashCode);
-        array[index].add(entry);
+        array[index].add(entry, gen);
         if (array[index].length() > 1){
             collisions++;
         }
@@ -157,8 +156,8 @@ public class HashTableChained {
      *  @return an entry containing the key and an associated value, or null if
      *          no entry contains the specified key.
      **/
-    public Entry find(long hashCode, long ourBoard, long oppBoard) { //test
-        HListNode node = array[compFunction(hashCode)].find(ourBoard, oppBoard);
+    public Entry find(long hashCode, long ourBoard, long oppBoard, int gen){ //test
+        HListNode node = array[compFunction(hashCode)].find(ourBoard, oppBoard, gen);
         return node == null ? null : node.entry;
     }
 
@@ -227,7 +226,5 @@ public class HashTableChained {
         System.out.println("getPrevPrime(Integer.MAX_VALUE) = " +ht.getPrevPrime(Integer.MAX_VALUE));
         System.out.println("getnextPrime(2147483644) = " +ht.getNextPrime(2147483644));
         System.out.println("getprevPrime(1) = " +ht.getPrevPrime(1));
-
     }
-
 }
