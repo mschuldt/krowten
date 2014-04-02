@@ -1142,7 +1142,7 @@ public class Board{
         mList.clear();
 
         int numPieces = getNumPieces(color);
-        PieceList pieces = getPieces(color);
+        PieceList pieces = getPiecesSlow(color);
         //AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
         if (color == black) {
@@ -1193,7 +1193,7 @@ public class Board{
      */
     public AList<Move> validMoves(int color) {
         int numPieces = getNumPieces(color);
-        PieceList pieces = getPieces(color);
+        PieceList pieces = getPiecesSlow(color);
         AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
         if (color == black) {
@@ -1238,7 +1238,7 @@ public class Board{
     /*
      *
      */
-    public PieceList getPieces(int color){
+    public PieceList getPiecesSlow(int color){
         PieceList pieces = new PieceList(10);
         Piece p = null;
         int i = 0;
@@ -1322,11 +1322,11 @@ public class Board{
     private int squareScoreSum(int color){
         int sum= 0;
         if (color == white){
-            for (Piece p : getPieces(white)){
+            for (Piece p : getPiecesSlow(white)){
                 sum += whiteSquareValues[p.y][p.x];
             }
         }else{
-            for (Piece p : getPieces(black)){
+            for (Piece p : getPiecesSlow(black)){
                 sum += whiteSquareValues[p.x][p.y];
             }
         }
@@ -1342,7 +1342,7 @@ public class Board{
         assert ! hasNetwork(color): "Board.score: board has a network";
 
         int sum=squareScoreSum(color);
-        PieceList pieces = getPieces(color);
+        PieceList pieces = getPiecesSlow(color);
         PieceList adjacent;
         for (Piece p: pieces){
             //sum the total connections
@@ -1371,7 +1371,7 @@ public class Board{
             }
         }
 
-        for (Piece p : getPieces(color)){
+        for (Piece p : getPiecesSlow(color)){
             br = p.bitRep;
             if ((memberPieces[0] & br) == 0){
                 memberPieces[0]= (memberPieces[0] | br);
@@ -1519,18 +1519,18 @@ public class Board{
         }
 
         //check piece count methods
-        PieceList wp = getPieces(white);
-        PieceList bp = getPieces(black);
+        PieceList wp = getPiecesSlow(white);
+        PieceList bp = getPiecesSlow(black);
         if (getNumPieces(white) != wp.length()){
-            System.out.println("getPieces(white).length() != getNumPieces(white)");
+            System.out.println("getPiecesSlow(white).length() != getNumPieces(white)");
             ok = false;
         }
         if (getNumPieces(black) != bp.length()){
-            System.out.println("getPieces(black).length() != getNumPieces(black)");
+            System.out.println("getPiecesSlow(black).length() != getNumPieces(black)");
             ok = false;
         }
 
-        //check piece lists
+        //check piece list sizes
         if (ourPieceCount != ourPieces.length()){
             System.out.println("`ourPieceCount' and `ourPieces.length()' do not match");
             ok = false;
@@ -1823,7 +1823,7 @@ public class Board{
     public long[] connectedPiecesBB(int color){
         long[] clusters = {0,0,0,0,0,0,0,0,0};
         int n = 0;
-        for (Piece p : getPieces(color)){
+        for (Piece p : getPiecesSlow(color)){
             clusters[connectedPieces(p).length()] |= p.bitRep;
         }
         return clusters;
@@ -2345,12 +2345,12 @@ public class Board{
 
             case "markall": //ok
                 int num= 0;
-                PieceList pLst = getPieces(black);
+                PieceList pLst = getPiecesSlow(black);
                 num+=pLst.length();
                 for (Piece p: pLst){
                     pb.mark(p);
                 }
-                pLst = pLst = getPieces(white);
+                pLst = pLst = getPiecesSlow(white);
                 num+=pLst.length();
                 for (Piece p: pLst){
                     pb.mark(p);
