@@ -6,9 +6,6 @@ import java.io.*;
 
 public class Board{
     Piece[][] pieceArray;
-
-    Piece ourGoalListA, ourGoalListB;
-    Piece opponentGoalListA, opponentGoalListB;
     Piece[] rows;
     Piece[] columns;
     //forward and backward diagonals (think forward/backward slash)
@@ -141,9 +138,6 @@ public class Board{
         fDiagonals = new Piece[14];
         bDiagonals = new Piece[14];
 
-        Piece ourGoalListA, ourGoalListB;
-        Piece oppoentGoalListA, oppoentGoalListB;
-
 
         //NOTE: if this goal mask assignment is changed, then
         //      code in getStartGoalPieces must be updated.
@@ -152,21 +146,11 @@ public class Board{
             ourGoalMaskB = rightGoalMask;
             opponentGoalMaskA = lowerGoalMask;
             opponentGoalMaskB = upperGoalMask;
-            //remember these are backwards because of the goal mask confusion
-            ourGoalListA = columns[7];
-            ourGoalListB = columns[0];
-            opponentGoalListA = rows[0];
-            opponentGoalListB = rows[7];
         }else{
             ourGoalMaskA = lowerGoalMask;
             ourGoalMaskB = upperGoalMask;
             opponentGoalMaskA = leftGoalMask;
             opponentGoalMaskB = rightGoalMask;
-
-            ourGoalListA = rows[0];
-            ourGoalListB = rows[7];
-            opponentGoalListA = columns[7];
-            opponentGoalListB = columns[0];
         }
 
         ourGoalMask = (ourGoalMaskA | ourGoalMaskB);
