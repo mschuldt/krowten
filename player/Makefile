@@ -1,7 +1,7 @@
 .PHONY: check-syntax
 
 all:
-	javac -g -cp ../ ../player/*.java ../list/*.java
+	javac -g -cp ../ ../player/*.java 
 
 check-syntax:
-	javac  -Xlint -cp ../ ../player/*.java ../list/*.java
+	javac  -Xlint -cp ../ ../player/*.java
