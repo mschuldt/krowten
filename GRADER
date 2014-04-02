@@ -121,6 +121,21 @@ PrintBoard
 Cell
  used by PrintBoard to represent a single square of the board.
 
+ 
+LIST OF MODULES:
+   1. board representation (Michael)
+   2. performing minimax tree search  (Michelle)
+   3. generating a list of all valid moves (Helen)
+   4. determining whether a move is valid (Helen)
+   5. cluster detection (Michelle)
+   6. network finder (Michael)
+   7. board evaluation function (Michael)
+
+TODO:
+ -list classes the module is implmenetd in
+ -update the interface/prototype descriptions
+ 
+ 
 
 /** Board.Board(int) constructs a new board for player with color COLOR
 *  The board is initially empty
