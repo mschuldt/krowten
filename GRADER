@@ -142,11 +142,11 @@ void unMove(Move move)
 *  @param x the x-coordinate location of the square
 *  @param y the y-coordinate location of the square
 *
-*  @returns an array of pieces adjacent to location (x,y) on the board
+*  @returns an PieceList of pieces adjacent to location (x,y) on the board
 */
 
 
-/** Board.adjacentPieces(Piece) returns an array of pieces
+/** Board.adjacentPieces(Piece) returns a PieceList of pieces
 * that are adjacent to PIECE on the board
 *
 * The list returned does not include PIECE, just the ones around it,
@@ -160,7 +160,7 @@ void unMove(Move move)
 *
 *  @returns an array of pieces adjacent to PIECE on the board
 */
-
+public PieceList adjacentPieces(int x, int y)
 
 
 /** Board.pieceAt(int,int) returns true if a piece is located
@@ -211,7 +211,7 @@ public Piece getPiece(int x, int y)
 *
 * @returns an array of pieces that are 'connected' to the one at (X,Y)
 */
-public Piece[] connectedPieces(int x, int y)
+public PieceList connectedPieces(int x, int y)
 
 
 
@@ -226,7 +226,7 @@ public Piece[] connectedPieces(int x, int y)
 
 * @returns an array of pieces that are 'connected' to PIECE
 */
-public Piece[] connectedPieces(Piece piece){
+public PieceList connectedPieces(Piece piece){
 
 
 
@@ -265,7 +265,7 @@ public boolean hasNetwork()
 /*
 * returns true if Player P making Move M on Board B will result in a cluster of 3 or more pieces.
 */
-  boolean formsIllegalCluster(Board B, Move M, Player P);
+  boolean formsIllegalCluster(Move M, int color);
 
 
 /*
