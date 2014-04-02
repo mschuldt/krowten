@@ -10,6 +10,6 @@ public class Entry {
     public Entry(int s, long ourBoard, long opponentBoard){
         score = s;
         ourBitBoard = ourBoard;
-        opponentBoard = opponentBitBoard;
+        opponentBitBoard = opponentBoard;
     }
 }
