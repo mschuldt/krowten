@@ -731,10 +731,7 @@ public class Board{
     /** Board.getPiece(int,int) returns the piece located at (X,Y)
      *  on this board.
      *
-     *  Unusual conditions:
-     *   If (x,y) is not a valid coordinate on board, then the
-     *   behavior of this method is undefined (and may likely
-     *   crash the program)
+     *   If (x,y) is not a valid coordinate on board, then return null
      *
      * @param x the x-coordinate of the piece to be returned
      * @param y the y-coordinate of the piece to be returned
@@ -742,7 +739,9 @@ public class Board{
      * @returns the piece located at (X,Y) on this board.
      */
     public Piece getPiece(int x, int y){
-        //TODO: bounds checking
+        if (x < 0 || y < 0 || y > 7 || x > 7){
+            return null;
+        }
         return pieceArray[x+1][y+1];
     }
     /** Board.connectedPieces(int, int) returns a list of all the pieces
