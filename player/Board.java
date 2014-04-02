@@ -1549,6 +1549,21 @@ public class Board{
             ok = false;
         }
 
+        //check that all pieces are in the piece lists
+        for (Piece p: getPiecesSlow(ourColor)){
+            if (!ourPieces.containsPiece(p)){
+                System.out.println(colorStr(ourColor)+" piece list does not contain piece:" + p);
+                ok = false;
+            }
+        }
+        for (Piece p: getPiecesSlow(opponentColor)){
+            if (!opponentPieces.containsPiece(p)){
+                System.out.println(colorStr(opponentColor)+"opponent piece list does not contain piece:" + p);
+                ok = false;
+            }
+        }
+        //TODO: check that all correct pieces are also in the piece lists
+
         return true;
     }
 
