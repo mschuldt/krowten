@@ -815,7 +815,7 @@ public class Board{
         return connectedPieces(piece.x, piece.y);
     }
 
-    //returns a piece from goalA
+    //returns a pieces from goalA
     private PieceList getStartGoalPieces(int color){
         Piece p = null;
         PieceList lst = new PieceList();
@@ -829,6 +829,13 @@ public class Board{
             }
         }
         return lst;
+    }
+
+    private Piece getStartGoalList(int color){
+        if (color == white){
+            return columns[0];
+        }
+        return rows[7];
     }
 
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
