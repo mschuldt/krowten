@@ -2892,7 +2892,7 @@ public class Board{
                 break;
 
             case "adjmasks": case "am": //adjacency masks
-                long one,two,three,four;
+                long one,two,three,four,cluster;
 
                 if (color == ourColor){
                     one = ourField_1;
@@ -2913,6 +2913,38 @@ public class Board{
                 messages.add(bitBoardToString(three));
                 messages.add("leval 4:");
                 messages.add(bitBoardToString(four));
+                break;
+
+            case "clustermasks": case "cmask": //adjacency masks
+                long cc1,cc2,cc3,cc4;
+
+                if (color == ourColor){
+                    cc1 = ourClusters_1;
+                    cc2 = ourClusters_2;
+                    cc3 = ourClusters_3;
+                    cc4 = ourClusters_4;
+                }else{
+                    cc1 = oppClusters_1;
+                    cc2 = oppClusters_2;
+                    cc3 = oppClusters_3;
+                    cc4 = oppClusters_4;
+                }
+                messages.add("leval 1:");
+                messages.add(bitBoardToString(cc1));
+                messages.add("leval 2:");
+                messages.add(bitBoardToString(cc2));
+                messages.add("leval 3:");
+                messages.add(bitBoardToString(cc3));
+                messages.add("leval 4:");
+                messages.add(bitBoardToString(cc4));
+                break;
+
+            case "checkadjacencymasks": case "cam": case "vam":
+                if (verifyAdjacencyBoards()){
+                    messages.add("Everything is OK.");
+                    break;
+                }
+                messages.add("Adjacency masks are corrupted");
                 break;
 
             case "testshuffle":
