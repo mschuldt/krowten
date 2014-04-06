@@ -1708,6 +1708,34 @@ public class Board{
     }
 
 
+    private boolean verifyAdjacencyBoards(){
+        MoveList ourMoves = validMoves(ourColor);
+        MoveList oppMoves = validMoves(opponentColor);
+        boolean ok = true;
+        long invalidSquares = (ourBitBoard | opponentBitBoard | ourField_2 | opponentGoalMask);
+
+        //check that moves are considered valid on the adjacency boards
+        for (Move move : ourMoves){
+            if ((getBitRep(move.x1,move.y1) & invalidSquares) != 0){
+                System.out.println("adjacency boards incorrectly claim a move(ours) is inavlid");
+                ok = false;
+            }
+        }
+
+        invalidSquares = (ourBitBoard | opponentBitBoard | oppField_2 | ourGoalMask);
+        for (Move move : oppMoves){
+            if ((getBitRep(move.x1,move.y1) & invalidSquares) != 0){
+                System.out.println("adjacency boards incorrectly claim a move(opponents) is inavlid");
+                ok = false;
+            }
+        }
+
+        //TODO: check that all moves generated with the adjacency boards
+        //      are also generated with the old way
+
+        return ok;
+    }
+
     private boolean verifyAdjacencyMasksHT(){
         boolean ok = true;
         for (int i=0;i < 63;i++){
