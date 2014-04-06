@@ -1111,20 +1111,8 @@ public class Board{
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
                                int m, int b, int depth){
         int newM, newB;
-        //PieceList pl = connectedPieces(currentPiece);
-        Piece[] pl = {currentPiece.up,
-                      currentPiece.down,
-                      currentPiece.left,
-                      currentPiece.right,
-                      currentPiece.leftUp,
-                      currentPiece.rightUp,
-                      currentPiece.leftDown,
-                      currentPiece.rightDown};
-        // if (pl == null){
-        //     return false;
-        // }
 
-        for (Piece piece : pl){
+        for (Piece piece : currentPiece.connected){
             if (piece == null || piece.color != currentPiece.color){
                 continue;
             }
@@ -1190,9 +1178,9 @@ public class Board{
                     return true;
                 }
                 if (color == white){
-                    goalPiece = goalPiece.down;
+                    goalPiece = goalPiece.connected[DOWN];
                 }else{
-                    goalPiece = goalPiece.right;
+                    goalPiece = goalPiece.connected[RIGHT];
                 }
             }
         }
