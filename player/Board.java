@@ -33,9 +33,11 @@ public class Board{
     //fields track how many pieces are adjacent to a given spot
     long ourField_1, ourField_2, ourField_3, ourField_4;
     long oppField_1, oppField_2, oppField_3, oppField_4;
+    long ourClusters_1, ourClusters_2, ourClusters_3, ourClusters_4;
+    long oppClusters_1, oppClusters_2, oppClusters_3, oppClusters_4;
 
 
-    private static final boolean verifyAll = false; //when true, run this.verify() after every move
+    private static final boolean verifyAll = true; //when true, run this.verify() after every move
 
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
@@ -98,6 +100,8 @@ public class Board{
 
         ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
         oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
+        ourClusters_1 =  ourClusters_2 =  ourClusters_3 = ourClusters_4 = 0;
+        oppClusters_1 =  oppClusters_2 =  oppClusters_3 = oppClusters_4 = 0;
 
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
@@ -215,6 +219,7 @@ public class Board{
     public void move(Move move, int color){
         int toX, toY;
         long bitRep,adjMask;
+        long cluster;
         Piece p;
         switch (move.moveKind){
         case Move.ADD :
@@ -235,6 +240,14 @@ public class Board{
                 }
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
 
+                if ((ourField_1 & bitRep) != 0){//just created a size 2 cluster
+                    cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
+                    ourClusters_4 |= (ourClusters_3 & cluster);
+                    ourClusters_3 |= (ourClusters_2 & cluster);
+                    ourClusters_2 |= (ourClusters_1 & cluster);
+                    ourClusters_1 |= cluster;
+                }
+
                 //add adjacent squares to adjacency fields
                 ourField_4 = ((ourField_3 & adjMask) | ourField_4);
                 ourField_3 = ((ourField_2 & adjMask) | ourField_3);
@@ -252,6 +265,14 @@ public class Board{
                     opponentNumInGoalB++;
                 }
                 assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+
+                if ((oppField_1 & bitRep) != 0){
+                    cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
+                    oppClusters_4 |= (oppClusters_3 & cluster);
+                    oppClusters_3 |= (oppClusters_2 & cluster);
+                    oppClusters_2 |= (oppClusters_1 & cluster);
+                    oppClusters_1 |= cluster;
+                }
 
                 oppField_4 = ((oppField_3 & adjMask) | oppField_4);
                 oppField_3 = ((oppField_2 & adjMask) | oppField_3);
@@ -294,12 +315,24 @@ public class Board{
                 }else if ((toBitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB++;
                 }
-                //decrease counter is removing frm a goal
+                //decrease counter is removing from a goal
                 if ((fromBitRep & ourGoalMaskA) != 0){
                     ourNumInGoalA--;
                 }else if ((fromBitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB--;
                 }
+
+                //remove source squares from cluster board
+                if ((ourField_1 & fromBitRep) != 0){
+                    //removing a piece that this adjacent to another
+                    cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
+                    ourClusters_1 ^= (cluster & ourClusters_1 & ~ourClusters_2);
+                    ourClusters_2 ^= (cluster & ourClusters_2 & ~ourClusters_3);
+                    ourClusters_3 ^= (cluster & ourClusters_3 & ~ourClusters_4);
+                    ourClusters_4 ^= (cluster & ourClusters_4);
+                }
+
+
                 //remove source adjacent squares to adjacency fields
 
                 // unset squares that overlap adj if the next level is unset
@@ -309,6 +342,16 @@ public class Board{
                 ourField_4 ^= (adjMask & ourField_4);
 
                 adjMask = getAdjMask(toX-1, toY-1);
+
+                // //add destination to cluster board
+                if ((ourField_1 & toBitRep) != 0){//just created a size 2 cluster
+                    cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
+                    ourClusters_4 |= (ourClusters_3 & cluster);
+                    ourClusters_3 |= (ourClusters_2 & cluster);
+                    ourClusters_2 |= (ourClusters_1 & cluster);
+                    ourClusters_1 |= cluster;
+                }
+
                 //add destination adjacent squares to adjacency fields
                 ourField_4 |= (ourField_3 & adjMask);
                 ourField_3 |= (ourField_2 & adjMask);
@@ -330,12 +373,28 @@ public class Board{
                     opponentNumInGoalB--;
                 }
 
+                if ((oppField_1 & fromBitRep) != 0){
+                    cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
+                    oppClusters_1 ^= (cluster & oppClusters_1 & ~oppClusters_2);
+                    oppClusters_2 ^= (cluster & oppClusters_2 & ~oppClusters_3);
+                    oppClusters_3 ^= (cluster & oppClusters_3 & ~oppClusters_4);
+                    oppClusters_4 ^= (cluster & oppClusters_4);
+                }
+
                 oppField_1 ^= (adjMask & oppField_1 & ~oppField_2);
                 oppField_2 ^= (adjMask & oppField_2 & ~oppField_3);
                 oppField_3 ^= (adjMask & oppField_3 & ~oppField_4);
                 oppField_4 ^= (adjMask & oppField_4);
 
                 adjMask = getAdjMask(toX-1, toY-1);
+
+                if ((oppField_1 & toBitRep) != 0){
+                    cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
+                    oppClusters_4 |= (oppClusters_3 & cluster);
+                    oppClusters_3 |= (oppClusters_2 & cluster);
+                    oppClusters_2 |= (oppClusters_1 & cluster);
+                    oppClusters_1 |= cluster;
+                }
 
                 oppField_4 |= (oppField_3 & adjMask);
                 oppField_3 |= (oppField_2 & adjMask);
@@ -2064,6 +2123,8 @@ public class Board{
         opponentNumInGoalA = opponentNumInGoalB = 0;
         ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
         oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
+        ourClusters_1 =  ourClusters_2 =  ourClusters_3 = ourClusters_4 = 0;
+        oppClusters_1 =  oppClusters_2 =  oppClusters_3 = oppClusters_4 = 0;
         ourPieces.clear();
         opponentPieces.clear();
         pieceArray = new Piece[10][10];//the easy way
