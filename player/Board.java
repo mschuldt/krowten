@@ -208,6 +208,13 @@ public class Board{
         return adjacencyMasksHT[(int)(bitRep % 67)];
     }
 
+    //returns a piece on the board described by BITREP
+    //null if no piece is present
+    private Piece getPiece(long bitRep){
+        assert (bitRep >= 0 && bitRep <= 63) : "Board.getPiece: invalid bitRep";
+        return piecesHT[(int)(bitRep % 67)];
+    }
+
     /** Board.move(Move,int) moves a piece on the board as described
      *  by MOVE. COLOR is the color of the piece to be moved.
      *
