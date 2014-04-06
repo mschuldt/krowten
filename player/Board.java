@@ -1010,77 +1010,7 @@ public class Board{
         return pieceArray[x+1][y+1];
     }
 
-    /** Board.connectedPieces(int, int) returns a list of all the pieces
-     *   'connected' the the piece located at square (X,Y) on this board.
-     *   The exact rules for connectedness are as defined in this projects
-     *   readme file.
-     *
-     *   If there is no piece at (X,Y) return null
-     *   Only pieces of the same color as the one at (X,Y) are returned.
-     *
-     *   Unusual conditions:
-     *    -If (X,Y) does not describe a valid location on the board, the
-     *     behavior of this program is undefined. It may return a list
-     *     of pieces or it may crash the program.
-     *
-     * @param x the x-coordinate of the piece on the board
-     * @param y the y-coordinate of the piece on the board
-     *
-     * @returns an array of pieces that are 'connected' to the one at (X,Y)
-     */
-    public PieceList connectedPieces(int x, int y){
-        //TODO: use the matrix to retrieve the connected pieces
-        int startX = x + 1;
-        int startY = y + 1;
-        Piece current = pieceArray[startX][startY];
-        if (current == null){
-            return null;
-        }
-        int color = current.color;
-        PieceList pieces = new PieceList();
-        int currentX = startX, currentY = startY -1;
-        int xInc, yInc;
-        int[][] increments = {{0,-1}, //above
-                              {0, 1}, //below
-                              {-1,0}, //left
-                              {1, 0}, //right
-                              {1,-1}, //right upper diagonal
-                              {1, 1}, //right lower diagonal
-                              {-1,-1}, //left upper diagonal
-                              {-1,1}}; //left lower diagonal
 
-        for (int[] inc : increments){
-            xInc = inc[0];
-            yInc = inc[1];
-            currentX = startX + xInc;
-            currentY = startY + yInc;
-            current = pieceArray[currentX][currentY];
-            while (current == null){
-                currentX += xInc;
-                currentY += yInc;
-                current = pieceArray[currentX][currentY];
-            }
-            if (current != edge){
-                pieces.addIfColor(current, color);
-            }
-        }
-        return pieces;
-    }
-
-    /** Board.connectedPieces(Piece) returns a list of all the pieces
-     *   'connected' the piece PIECE.
-     *
-     *   Unusual conditions:
-     *    If PIECE is not on this board then the behavior of this method
-     *    is undefined.
-     *
-     * @param piece the piece on whose connected pieces will be returned
-
-     * @returns an array of pieces that are 'connected' to PIECE
-     */
-    public PieceList connectedPieces(Piece piece){
-        return connectedPieces(piece.x, piece.y);
-    }
 
     //returns a pieces from goalA
     private PieceList getStartGoalPieces(int color){
@@ -2315,12 +2245,84 @@ public class Board{
         return pieces;
     }
 
+    /** Board.connectedPiecesSlow(int, int) returns a list of all the pieces
+     *   'connected' the the piece located at square (X,Y) on this board.
+     *   The exact rules for connectedness are as defined in this projects
+     *   readme file.
+     *
+     *   If there is no piece at (X,Y) return null
+     *   Only pieces of the same color as the one at (X,Y) are returned.
+     *
+     *   Unusual conditions:
+     *    -If (X,Y) does not describe a valid location on the board, the
+     *     behavior of this program is undefined. It may return a list
+     *     of pieces or it may crash the program.
+     *
+     * @param x the x-coordinate of the piece on the board
+     * @param y the y-coordinate of the piece on the board
+     *
+     * @returns an array of pieces that are 'connected' to the one at (X,Y)
+     */
+    public PieceList connectedPiecesSlow(int x, int y){
+        //TODO: use the matrix to retrieve the connected pieces
+        int startX = x + 1;
+        int startY = y + 1;
+        Piece current = pieceArray[startX][startY];
+        if (current == null){
+            return null;
+        }
+        int color = current.color;
+        PieceList pieces = new PieceList();
+        int currentX = startX, currentY = startY -1;
+        int xInc, yInc;
+        int[][] increments = {{0,-1}, //above
+                              {0, 1}, //below
+                              {-1,0}, //left
+                              {1, 0}, //right
+                              {1,-1}, //right upper diagonal
+                              {1, 1}, //right lower diagonal
+                              {-1,-1}, //left upper diagonal
+                              {-1,1}}; //left lower diagonal
+
+        for (int[] inc : increments){
+            xInc = inc[0];
+            yInc = inc[1];
+            currentX = startX + xInc;
+            currentY = startY + yInc;
+            current = pieceArray[currentX][currentY];
+            while (current == null){
+                currentX += xInc;
+                currentY += yInc;
+                current = pieceArray[currentX][currentY];
+            }
+            if (current != edge){
+                pieces.addIfColor(current, color);
+            }
+        }
+        return pieces;
+    }
+
+    /** Board.connectedPiecesSlow(Piece) returns a list of all the pieces
+     *   'connected' the piece PIECE.
+     *
+     *   Unusual conditions:
+     *    If PIECE is not on this board then the behavior of this method
+     *    is undefined.
+     *
+     * @param piece the piece on whose connected pieces will be returned
+
+     * @returns an array of pieces that are 'connected' to PIECE
+     */
+    public PieceList connectedPiecesSlow(Piece piece){
+        return connectedPiecesSlow(piece.x, piece.y);
+    }
+
 
     //version of hasNetwork that takes a printBoard so that it can draw the network lines on it
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
                                int m, int b, int depth, PrintBoard pb){
         int newM, newB;
-        PieceList pl = connectedPieces(currentPiece);
+        PieceList pl = connectedPiecesSlow(currentPiece);
         if (pl == null){
             return false;
         }
