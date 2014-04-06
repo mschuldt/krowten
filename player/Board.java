@@ -28,6 +28,7 @@ public class Board{
 
     private PieceList adjacentPieceList;
 
+
     Move m = new Move(0,0);
 
     //fields track how many pieces are adjacent to a given spot
@@ -46,6 +47,7 @@ public class Board{
     long[] adjacencyMasks;
     //hash table of adjacency masks. the hash is the pieces bitMask % 67
     long[] adjacencyMasksHT;
+    Piece[] piecesHT;
 
     /* Python code template used for generating bitmasks
        hex(int("""
@@ -95,6 +97,7 @@ public class Board{
 
         bitReps = genBitReps();
         adjacencyMasksHT = new long[68];//populated by `genAdjacencyMasks'
+        piecesHT = new Piece[68];
         adjacencyMasks = genAdjacencyMasks();
 
 
@@ -227,6 +230,9 @@ public class Board{
             toY = move.y1 + 1;
             bitRep = getBitRep(toX-1, toY-1);
             p = pieces.pop().set(color, bitRep, move.x1, move.y1);
+
+            piecesHT[(int)p.bitRep % 67] = p;
+
             adjMask = getAdjMask(toX-1, toY-1);
             assert pieceArray[toX][toY] == null : "square is already full";
 
@@ -408,6 +414,7 @@ public class Board{
             p.bitRep = getBitRep(toX-1, toY-1);
             p.x = toX-1;
             p.y = toY-1;
+            piecesHT[(int)(p.bitRep % 67)] = p;
             pieceArray[fromX][fromY] = null;
             addToMatrix(p);
             break;
@@ -530,6 +537,7 @@ public class Board{
             }
             pieces.add(p);
             removeFromMatrix(p);
+            piecesHT[(int)(p.bitRep % 67)] = null;
             pieceArray[x][y] = null;
             break;
 
@@ -645,10 +653,12 @@ public class Board{
                 oppField_1 |= adjMask;
 
             }
+            piecesHT[(int)(p.bitRep % 67)] = null;
             removeFromMatrix(p);
             p.bitRep = toBitRep;
             p.x = toX-1;
             p.y = toY-1;
+            piecesHT[(int)(toBitRep % 67)] = p;
             pieceArray[toX][toY] = p;
             addToMatrix(p);
             pieceArray[fromX][fromY] = null;
