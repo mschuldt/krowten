@@ -28,4 +28,9 @@ public class Piece{
         return "<" + (color == 0 ? "Black" : "White")
             +" Piece at (" + x +"," + y + ")>";
     }
+
+    public Piece[] connectedPieces(){
+        return connected;
+    }
 }
+
