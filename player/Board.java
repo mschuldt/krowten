@@ -1600,7 +1600,7 @@ public class Board{
         PieceList adjacent;
         for (Piece p: pieces){
             //sum the total connections
-            //  sum += connectedPieces(p).length();
+            //  sum += connectedPiecesSlow(p).length();
 
             //give points for pieces with no other adjacent pieces
             adjacent = adjacentPieces(p, color);
@@ -1833,7 +1833,7 @@ public class Board{
         long visited;
         //check that all pieces are correctly linked
         for (Piece p : color == ourColor ? ourPieces : opponentPieces){
-            connections = connectedPieces(p);
+            connections = connectedPiecesSlow(p);
             for (Piece connect : p.connected){
                 if (connect != null
                     && connect.color == color
@@ -2510,7 +2510,7 @@ public class Board{
         long[] clusters = {0,0,0,0,0,0,0,0,0};
         int n = 0;
         for (Piece p : getPieces(color)){
-            clusters[connectedPieces(p).length()] |= p.bitRep;
+            clusters[connectedPiecesSlow(p).length()] |= p.bitRep;
         }
         return clusters;
     }
@@ -2876,7 +2876,7 @@ public class Board{
             case "connected": case "connect": case "c":
                 if (arg1isRef){
                     Piece p;
-                    PieceList pieces = connectedPieces(argX1, argY1);
+                    PieceList pieces = connectedPiecesSlow(argX1, argY1);
                     if (pieces == null){
                         messages.add("no piece at ("+argX1+","+argY1+")");
                         break;
