@@ -215,7 +215,7 @@ public class Board{
     //returns a piece on the board described by BITREP
     //null if no piece is present
     private Piece getPiece(long bitRep){
-        assert (bitRep >= 0 && bitRep <= 63) : "Board.getPiece: invalid bitRep";
+        assert (bitRep >= 0) : "Board.getPiece: invalid bitRep: " + bitRep;
         return piecesHT[(int)(bitRep % 67)];
     }
 
