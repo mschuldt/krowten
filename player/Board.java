@@ -1516,21 +1516,9 @@ public class Board{
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
-        //PieceList pl = connectedPieces(currentPiece);
-        Piece[] pl = {currentPiece.up,
-                      currentPiece.down,
-                      currentPiece.left,
-                      currentPiece.right,
-                      currentPiece.leftUp,
-                      currentPiece.rightUp,
-                      currentPiece.leftDown,
-                      currentPiece.rightDown};
 
-        // if (pl == null){
-        //     return length;
-        // }
 
-        for (Piece piece : pl){
+        for (Piece piece : currentPiece.connected){
             if (piece == null || piece.color != currentPiece.color){
                 continue;
             }
