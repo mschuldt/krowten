@@ -164,6 +164,16 @@ public class Board{
 
     }
 
+    private long[] genBitReps(){
+        long [] masks = new long[64];
+        long bitRep = 1;
+        for (int i = 0; i < 64; i++){
+            masks[i] = bitRep;
+            bitRep <<= 1;
+        }
+        return masks;
+    }
+
     private long[] genAdjacencyMasks(){
         long [] masks = new long[64];
         long mask;
