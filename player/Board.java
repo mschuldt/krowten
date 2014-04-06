@@ -1480,77 +1480,6 @@ public class Board{
         return mList;
     }
 
-    /**
-     * returns list of all valid moves available for color, meaning
-     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
-     * 2) the location where the piece will be placed is a valid and legal location on the board
-     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
-     * and is not currently occupied by any piece including itself.
-     * 3) there will not be any clusters >= 3 on the board after making the Move.
-     */
-    public MoveList validMovesSlow(int color){
-        MoveList moves = new MoveList(440);
-        validMovesSlow(color, moves);
-        return moves;
-    }
-
-    /** Board.validMovesSlow(int, MoveList) is just like Board.validMovesSlow(int)
-     *  except that it populates MLIST with the moves instead of
-     *  returning a reference to a new MoveList.
-     *
-     *  Unusual Conditions:
-     *   if the max size of MLIST is less then the number of moves found
-     *   then the behavior of this method is undefined
-     *
-     *  @param color the color of the player whose moves are to be determined
-     *  @param mList a MoveList that will be populated with the moves
-     */
-    public MoveList validMovesSlow(int color, MoveList mList){
-        mList.clear();
-
-        int numPieces = getNumPieces(color);
-        PieceList pieces = getPieces(color);
-
-        //AList<Move> mList = new AList<Move>(440);
-        int x_lower, y_lower, x_upper, y_upper;
-        if (color == black) {
-            x_lower = 1;
-            x_upper = 6;
-            y_lower = 0;
-            y_upper = 7;
-        } else { // white
-            x_lower = 0;
-            x_upper = 7;
-            y_lower = 1;
-            y_upper = 6;
-        }
-        if (numPieces < 10) { //ADD moves
-            for (int x = x_lower; x <= x_upper; x++) {
-                for (int y = y_lower; y <= y_upper; y++) {
-                    if (!pieceAt(x, y)) {
-                        setMove(m, x, y);
-                        if (!formsIllegalCluster(m, color)){
-                            mList.add(x, y);
-                        }
-                    }
-                }
-            }
-        } else {                      // STEP moves
-            for (int x = x_lower; x <= x_upper; x++) {
-                for (int y = y_lower; y <= y_upper; y++) {
-                    if (!pieceAt(x, y)) {
-                        for (Piece p : pieces){
-                            setMove(m, x, y, p.x, p.y);
-                            if (!formsIllegalCluster(m, color)){
-                                mList.add(x, y, p.x, p.y);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
 
     /** Board.getPieces(int) returns the pieces all pieces
      *  that have the same color as COLOR
@@ -1566,26 +1495,7 @@ public class Board{
         return opponentPieces;
     }
 
-    /*
-     *
-     */
-    //don't delete--this is still used for verification purposes
-    public PieceList getPiecesSlow(int color){
-        PieceList pieces = new PieceList(10);
-        Piece p = null;
-        int i = 0;
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++){
-                if (pieceAt(x, y)){
-                    p = getPiece(x, y);
-                    if (p.color == color){
-                        pieces.add(p);
-                    }
-                }
-            }
-        }
-        return pieces;
-    }
+
 
     /**
      * Board.getNumPieces(int) returns the number of pieces
@@ -2237,6 +2147,79 @@ public class Board{
         ok = verifyGoalCount() && ok;
         ok = verifyMatrix() && ok;
         return ok;
+    }
+
+
+    public MoveList validMovesSlow(int color){
+        MoveList moves = new MoveList(440);
+        validMovesSlow(color, moves);
+        return moves;
+    }
+
+
+    public MoveList validMovesSlow(int color, MoveList mList){
+        mList.clear();
+
+        int numPieces = getNumPieces(color);
+        PieceList pieces = getPieces(color);
+
+        //AList<Move> mList = new AList<Move>(440);
+        int x_lower, y_lower, x_upper, y_upper;
+        if (color == black) {
+            x_lower = 1;
+            x_upper = 6;
+            y_lower = 0;
+            y_upper = 7;
+        } else { // white
+            x_lower = 0;
+            x_upper = 7;
+            y_lower = 1;
+            y_upper = 6;
+        }
+        if (numPieces < 10) { //ADD moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        setMove(m, x, y);
+                        if (!formsIllegalCluster(m, color)){
+                            mList.add(x, y);
+                        }
+                    }
+                }
+            }
+        } else {                      // STEP moves
+            for (int x = x_lower; x <= x_upper; x++) {
+                for (int y = y_lower; y <= y_upper; y++) {
+                    if (!pieceAt(x, y)) {
+                        for (Piece p : pieces){
+                            setMove(m, x, y, p.x, p.y);
+                            if (!formsIllegalCluster(m, color)){
+                                mList.add(x, y, p.x, p.y);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    //don't delete--this is still used for verification purposes
+    public PieceList getPiecesSlow(int color){
+        PieceList pieces = new PieceList(10);
+        Piece p = null;
+        int i = 0;
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++){
+                if (pieceAt(x, y)){
+                    p = getPiece(x, y);
+                    if (p.color == color){
+                        pieces.add(p);
+                    }
+                }
+            }
+        }
+        return pieces;
     }
 
 
