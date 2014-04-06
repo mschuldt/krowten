@@ -199,7 +199,7 @@ public class Board{
      */
     public void move(Move move, int color){
         int toX, toY;
-        long bitRep;
+        long bitRep,adjMask;
         Piece p;
         switch (move.moveKind){
         case Move.ADD :
@@ -207,7 +207,7 @@ public class Board{
             toY = move.y1 + 1;
             bitRep = getBitRep(toX-1, toY-1);
             p = pieces.pop().set(color, bitRep, move.x1, move.y1);
-
+            adjMask = getAdjMask(toX-1, toY-1);
             assert pieceArray[toX][toY] == null : "square is already full";
 
             if (color == ourColor){
@@ -220,6 +220,12 @@ public class Board{
                 }
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
 
+                //add adjacent squares to adjacency fields
+                ourField_4 = ((ourField_3 & adjMask) | ourField_4);
+                ourField_3 = ((ourField_2 & adjMask) | ourField_3);
+                ourField_2 = ((ourField_1 & adjMask) | ourField_2);
+                ourField_1 = (ourField_1 | adjMask);
+
                 ourPieces.add(p);
 
             }else{
@@ -231,6 +237,11 @@ public class Board{
                     opponentNumInGoalB++;
                 }
                 assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
+
+                oppField_4 = ((oppField_3 & adjMask) | oppField_4);
+                oppField_3 = ((oppField_2 & adjMask) | oppField_3);
+                oppField_2 = ((oppField_1 & adjMask) | oppField_2);
+                oppField_1 = (oppField_1 | adjMask);
 
                 opponentPieces.add(p);
             }
@@ -247,6 +258,8 @@ public class Board{
 
             toX = move.x1 + 1;
             toY = move.y1 + 1;
+
+            adjMask = getAdjMask(fromX-1, fromY-1);
 
             long toBitRep = getBitRep(toX-1, toY-1);
             long fromBitRep = pieceArray[fromX][fromY].bitRep;
@@ -272,6 +285,21 @@ public class Board{
                 }else if ((fromBitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB--;
                 }
+                //remove source adjacent squares to adjacency fields
+
+                // unset squares that overlap adj if the next level is unset
+                ourField_1 ^= (adjMask & ourField_1 & ~ourField_2);
+                ourField_2 ^= (adjMask & ourField_2 & ~ourField_3);
+                ourField_3 ^= (adjMask & ourField_3 & ~ourField_4);
+                ourField_4 ^= (adjMask & ourField_4);
+
+                adjMask = getAdjMask(toX-1, toY-1);
+                //add destination adjacent squares to adjacency fields
+                ourField_4 |= (ourField_3 & adjMask);
+                ourField_3 |= (ourField_2 & adjMask);
+                ourField_2 |= (ourField_1 & adjMask);
+                ourField_1 |= adjMask;
+
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 opponentBitBoard |= toBitRep;
@@ -286,6 +314,19 @@ public class Board{
                 }else if ((fromBitRep & opponentGoalMaskB) != 0){
                     opponentNumInGoalB--;
                 }
+
+                oppField_1 ^= (adjMask & oppField_1 & ~oppField_2);
+                oppField_2 ^= (adjMask & oppField_2 & ~oppField_3);
+                oppField_3 ^= (adjMask & oppField_3 & ~oppField_4);
+                oppField_4 ^= (adjMask & oppField_4);
+
+                adjMask = getAdjMask(toX-1, toY-1);
+
+                oppField_4 |= (oppField_3 & adjMask);
+                oppField_3 |= (oppField_2 & adjMask);
+                oppField_2 |= (oppField_1 & adjMask);
+                oppField_1 |= adjMask;
+
             }
             p = pieceArray[fromX][fromY];
             removeFromMatrix(p);
