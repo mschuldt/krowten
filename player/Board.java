@@ -321,12 +321,7 @@ public class Board{
         move(move, opponentColor);
     }
 
-    //This assumes that the move we are undoing was our move.
-    //(the bitboards will get messed up if this was not the case)
     /** Board.unMove(Move) reverses the effects of the move MOVE.
-     *  MOVE must have been a move for the pieces of the player
-     *  who owns this board, that is, the player whose color
-     *  was passed to the initializer.
      *
      *  Unusual conditions:
      *  The behaviour of this method is not defined for the case
@@ -341,7 +336,7 @@ public class Board{
         case Move.ADD :
             int x = move.x1 + 1,
                 y = move.y1 + 1;
-            //TODO: asserts to check index validity
+
             p = pieceArray[x][y];
             assert p != null : "square should not be empty";
             assert p != edge : "cannot undo: piece is an edge";
@@ -621,9 +616,9 @@ public class Board{
         return ((ourBitBoard % 1073741789) << 31) | (opponentBitBoard % 1073741789);
     }
 
-    /** Board.adjacentPieces(int,int) returns an array of pieces
-     * that are adjacent to the pieces at coordinates (X,Y) on
-     * the board.
+    /** Board.adjacentPieces(int,int) returns a PieceList of
+     * pieces that are adjacent to the pieces at coordinates
+     * (X,Y) on the board.
      *
      * The x,y coordinates are indexed from the top left with x
      * increasing to the right and y increasing down.
@@ -645,12 +640,13 @@ public class Board{
      *
      *  @param x the x-coordinate location of the square
      *  @param y the y-coordinate location of the square
+     *  @parma color the color of the pieces to be returned
      *
      *  @returns an array of pieces adjacent to location (x,y) on the board
      */
     public PieceList adjacentPieces(int x, int y,int color){
         x++; y++;
-        //TODO: index bounds checking
+
         Piece [] pieces = {pieceArray[x][y-1],    //top
                            pieceArray[x+1][y-1],  //top right
                            pieceArray[x+1][y],    //right
@@ -665,14 +661,28 @@ public class Board{
         return lst;
     }
 
-    //TODO: interface docs
+    /** Board.adjacentPieces(int,int) returns an array of pieces
+     *  that are adjacent to location (X,Y) on the board
+     *
+     *  There must be a piece at (X, Y)
+     *
+     *  only the pieces of the same color as the piece at (X,Y)
+     *  are returned.
+     *
+     *  @param x the x-coordinate location of the square
+     *  @param y the y-coordinate location of the square
+     *
+     *  @returns an array of pieces adjacent to (X,Y) on the board
+     *
+     */
     public PieceList adjacentPieces(int x, int y){
         assert pieceArray[x+1][y+1] != null : "cannot get adjacent pieces to empty square";
         return adjacentPieces(x, y, pieceArray[x+1][y+1].color);
     }
 
     /** Board.adjacentPieces(Piece) returns an array of pieces
-     * that are adjacent to PIECE on the board
+     * that are adjacent to PIECE on the board and have the same color
+     * as PIECE
      *
      * The list returned does not include PIECE, just the ones around it,
      * so the returned list ranges in length from 0 to 8.
@@ -689,7 +699,7 @@ public class Board{
         return adjacentPieces(piece.x, piece.y, piece.color);
     }
 
-    //TODO: interface docs
+
     public PieceList adjacentPieces(Piece piece, int color){
         return adjacentPieces(piece.x, piece.y, color);
 
@@ -739,6 +749,7 @@ public class Board{
         }
         return pieceArray[x+1][y+1];
     }
+
     /** Board.connectedPieces(int, int) returns a list of all the pieces
      *   'connected' the the piece located at square (X,Y) on this board.
      *   The exact rules for connectedness are as defined in this projects
@@ -758,6 +769,7 @@ public class Board{
      * @returns an array of pieces that are 'connected' to the one at (X,Y)
      */
     public PieceList connectedPieces(int x, int y){
+        //TODO: use the matrix to retrieve the connected pieces
         int startX = x + 1;
         int startY = y + 1;
         Piece current = pieceArray[startX][startY];
@@ -835,6 +847,7 @@ public class Board{
         return rows[7];
     }
 
+    //this does the work for Board.hasNetwork(int)
     private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
                                int m, int b, int depth){
         int newM, newB;
@@ -881,6 +894,19 @@ public class Board{
         return false;
     }
 
+    /** Board.hasNetwork(int) return true if a valid network is formed by pieces
+     *  of whose color is COLOR on "this" board.
+     *
+     *  Color must be equal to Board.white or Board.black
+     *
+     *  Unusual conditions:
+     *  If the board contain illegal squares, the behavior of this
+     *        method is undefined.
+     *
+     *  @param color the color of pieces to check for a network
+     *
+     *  @returns true if a network is formed by COLOR pieces, otherwise false.
+     */
     public boolean hasNetwork(int color){
         if ((color == ourColor ? ourPieceCount : opponentPieceCount) < 6){
             return false;
@@ -1023,6 +1049,14 @@ public class Board{
         return false;
     }
 
+    /** Board.isValidMove returns a boolean value indicating if a given
+     * move is valid
+     *
+     * @param m move to check for validity
+     * @param color color of the player for which the move is intended
+     *
+     * @returns true if the move is valid, else false
+     */
     public boolean isValidMove(Move m, int color){
         int toX,toY,fromX,fromY;
         int pieceCount;
@@ -1120,7 +1154,7 @@ public class Board{
         m.moveKind = Move.STEP;
     }
 
-    /*
+    /**
      * returns list of all valid moves available for color, meaning
      * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
      * 2) the location where the piece will be placed is a valid and legal location on the board
@@ -1134,7 +1168,17 @@ public class Board{
         return moves;
     }
 
-    //like validMoves but does not allocate any memory
+    /** Board.validMoves(int, MoveList) is just like Board.validMoves(int)
+     *  except that it populates MLIST with the moves instead of
+     *  returning a reference to a new MoveList.
+     *
+     *  Unusual Conditions:
+     *   if the max size of MLIST is less then the number of moves found
+     *   then the behavior of this method is undefined
+     *
+     *  @param color the color of the player whose moves are to be determined
+     *  @param mList a MoveList that will be populated with the moves
+     */
     public MoveList validMoves(int color, MoveList mList){
         mList.clear();
 
@@ -1182,6 +1226,13 @@ public class Board{
         return null;
     }
 
+    /** Board.getPieces(int) returns the pieces all pieces
+     *  that have the same color as COLOR
+     *
+     *  @param color the color of pieces to return
+     *
+     *  @returns a PieceList with all pieces with the same color as COLOR
+     */
     public PieceList getPieces(int color){
         if (color == ourColor){
             return ourPieces;
@@ -1213,6 +1264,10 @@ public class Board{
     /**
      * Board.getNumPieces(int) returns the number of pieces
      * of COLOR on the board
+     *
+     * @param color the color of the pieces to count
+     *
+     * @returns the number of pieces that have the same color as COLOR
      */
     public int getNumPieces(int color){
         if (color == ourColor){
@@ -1221,7 +1276,7 @@ public class Board{
         return opponentPieceCount;
     }
 
-    //TODO: docs
+    //this is a helper for Board.runLength(Piece, long[])
     private int runLength(Piece currentPiece, long[] memberPieces,
                           int m, int b, int length){
         int newM, newB;
@@ -1254,7 +1309,10 @@ public class Board{
     }
 
     //returns the length of the partial network starting with STARTPIECE
-    public int runLength(Piece startPiece,long[] memberPieces){
+    //this is used internally by the evaluation function
+    //memberPieces is an array only so that its first element can
+    //be passed by reference
+    private int runLength(Piece startPiece,long[] memberPieces){
 
         long bitBoard, goalA, goalB;
 
@@ -1269,7 +1327,9 @@ public class Board{
         return runLength(startPiece, memberPieces ,11, 60, 1);
     }
 
-    int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
+    //this is used by the evaluation function to determine the
+    //values of piece positions
+    private int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
                                  {-3,-3, 2,-1,  2, 1, 0,-4},
                                  {-4,-3,-1,-3, -1,-1, 0,-3},
                                  {-2,-3, 4,-3,  4, 1, 0,-3},
@@ -1279,6 +1339,7 @@ public class Board{
                                  {0 , 0, 0, 0,  0, 0, 0, 0}};
 
     //return the sum of the square values of each piece
+    //used by the evaluation function
     private int squareScoreSum(int color){
         int sum= 0;
         if (color == white){
@@ -1293,13 +1354,10 @@ public class Board{
         return sum;
     }
 
-    //TODO
-    //? interface change:
-    //    MachinePlayer.scoreBoard(Board B, Player P)
-    //    -> Baord.score(int color);
-    //
-
-    public int score(int color){
+    /** Board.score(int) returns a value for this board from the
+     * perspective of the player whose color is COLOR.
+     */
+    private int score(int color){
         assert ! hasNetwork(color): "Board.score: board has a network";
 
         int sum=squareScoreSum(color);
@@ -1339,9 +1397,14 @@ public class Board{
         return sum;
     }
 
+    /** Board.score() returns value that represents how favorable 'this'
+     * board is to the player who owns it -- that is, the player
+     * whoses color was passed to the constructor of 'this' board.
+     *
+     * @returns a value representing the score of this board
+     */
     public int score(){
         return score(ourColor) - score(opponentColor);
-
     }
 
     //==========================================================================
