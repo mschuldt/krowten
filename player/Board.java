@@ -2078,7 +2078,136 @@ public class Board{
         return ok;
     }
 
+    private boolean verifyMoveFinding(int color){
 
+        long bb1, bb2,field_1, field_2, field_3, clusters, goalMask, clusters1, clusters2;
+        int npieces;
+        MoveList vmoves = validMovesSlow(color);
+        int notFound = 0;
+        boolean ok = true;
+        if (color == ourColor){
+            npieces = ourPieceCount;
+            bb1 = opponentBitBoard;
+            bb2 = ourBitBoard;
+            field_1 = ourField_1;
+            field_2 = ourField_2;
+            field_3 = ourField_3;
+            clusters1 = ourClusters_1;
+            clusters2 = ourClusters_2;
+            goalMask = opponentGoalMask;
+        }else{
+            npieces = opponentPieceCount;
+            bb1 = ourBitBoard;
+            bb2 = opponentBitBoard;
+            field_1 = oppField_1;
+            field_2 = oppField_2;
+            field_3 = oppField_3;
+            clusters1 = oppClusters_1;
+            clusters2 = oppClusters_2;
+            goalMask = ourGoalMask;
+        }
+        long invalidSquares = (bb1
+                               | bb2
+                               | field_2
+                               | clusters1
+                               | goalMask
+                               | cornersMask);
+        long bitrep;
+        int mcount=0;
+
+        if (npieces < 10){ //add moves
+            for (long br : bitReps){
+                if ((br & invalidSquares) == 0){
+                    //FIX: the piece hashtable should always contain null
+                    //pb.mark(getPiece(br));
+                    mcount++;
+                }
+            }
+        }else{ //step moves
+            for (int x = 0; x < 8; x++){
+                for (int y = 0; y < 8; y++){
+                    if (! isValidIndex(x,y)){
+                        continue;
+                    }
+
+                    long from = getBitRep(x,y);
+                    if ((bb2 & from) == 0){
+                        continue;
+                    }
+                    // for (long from : bitReps){
+                    //     if (getPiece(from) == null){
+                    //         continue;// keep list of valid pieces
+                    //     }
+
+
+                    //remove 'from' from the bit representations,
+                    //find all squares that it can move to excluding itself.
+
+                    //remove squares from cluster board
+                    long adjMask = getAdjMask(from);
+                    clusters = clusters1;
+                    long cluster=0;
+                    if ((field_1 & from) != 0){
+                        //removing a piece that this adjacent to another
+                        cluster = getAdjMask(bb2 & adjMask) | adjMask;
+                        clusters = (clusters1 ^ (cluster & clusters1
+                                                 & ~clusters2));
+                    }
+
+                    //remove source adjacent squares to adjacency fields
+                    long level_2 = (field_2 ^ (adjMask & field_2 & ~field_3));
+
+                    invalidSquares = (ourBitBoard
+                                      | opponentBitBoard
+                                      | level_2
+                                      | clusters
+                                      | goalMask
+                                      | cornersMask
+                                      | from);
+
+                    // for (long to : bitReps){
+                    //     if ((to & invalidSquares) == 0){
+                    //         mcount++;
+                    //     }
+                    // }
+                    boolean found=false;
+                    for (int x2 = 0; x2 < 8; x2++){
+                        for (int y2 = 0; y2 < 8; y2++){
+                            if (x == x2 && y == y2){
+                                continue;
+                            }
+                            if ((getBitRep(x2,y2) & invalidSquares) == 0){
+                                mcount++;
+                                found = false;
+                                for (Move mov : vmoves){
+                                    if (mov.x1 == x2
+                                        && mov.y1 == y2
+                                        && mov.x2 == x
+                                        && mov.y2 == y){
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found){
+                                    System.out.println("could not find move from " + locStr(x,y) + " to " + locStr(x2,y2));
+                                    notFound++;
+                                    ok = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (notFound > 0){
+            System.out.println("failed top find " + notFound + " moves");
+        }
+        return ok;
+    }
+
+    private boolean verifyMoveFinding(){
+        return verifyMoveFinding(white) && verifyMoveFinding(black);
+    }
 
     //verify that all internal state is valid
     public boolean verify(){
