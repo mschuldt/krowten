@@ -91,7 +91,7 @@ public class MachinePlayer extends Player {
         }
 
         MoveList allValidMoves = movesLists[depth];
-        board.validMoves(side, allValidMoves);
+        board.validMovesSlow(side, allValidMoves);
 
         myBest.move = allValidMoves.get(0);
 

@@ -1345,13 +1345,13 @@ public class Board{
      * and is not currently occupied by any piece including itself.
      * 3) there will not be any clusters >= 3 on the board after making the Move.
      */
-    public MoveList validMoves(int color){
+    public MoveList validMovesSlow(int color){
         MoveList moves = new MoveList(440);
-        validMoves(color, moves);
+        validMovesSlow(color, moves);
         return moves;
     }
 
-    /** Board.validMoves(int, MoveList) is just like Board.validMoves(int)
+    /** Board.validMovesSlow(int, MoveList) is just like Board.validMovesSlow(int)
      *  except that it populates MLIST with the moves instead of
      *  returning a reference to a new MoveList.
      *
@@ -1362,7 +1362,7 @@ public class Board{
      *  @param color the color of the player whose moves are to be determined
      *  @param mList a MoveList that will be populated with the moves
      */
-    public MoveList validMoves(int color, MoveList mList){
+    public MoveList validMovesSlow(int color, MoveList mList){
         mList.clear();
 
         int numPieces = getNumPieces(color);
@@ -2120,7 +2120,7 @@ public class Board{
 
     public long legalMovesBB(int color){
         long movesBoard = 0;
-        for (Move m: validMoves(color)){
+        for (Move m: validMovesSlow(color)){
             movesBoard |= getBitRep(m.x1, m.y1);
         }
         return movesBoard;
@@ -2528,10 +2528,10 @@ public class Board{
 
             case "validmoves":
                 System.out.println("Valid moves:");
-                AList<Move> validMoves = new AList<Move>(1);
-                validMoves = validMoves(color);
+                AList<Move> validMovesSlow = new AList<Move>(1);
+                validMovesSlow = validMovesSlow(color);
                 AListIterator<Move> iter;// = new AListIterator(new Integer[] {1,2,3,4,5}, 0);
-                iter = validMoves.iterator();
+                iter = validMovesSlow.iterator();
                 while (iter.hasNext())
                     System.out.print(iter.next() + ", ");
                 break;
@@ -2568,7 +2568,7 @@ public class Board{
                 messages.add(hasNetwork(color) ? "YES": "NO");
                 break;
             case "moves": //ok
-                AList<Move> moves = validMoves(color);
+                AList<Move> moves = validMovesSlow(color);
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
                 int nBad = 0;
