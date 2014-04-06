@@ -38,7 +38,7 @@ public class Board{
     long oppClusters_1, oppClusters_2, oppClusters_3, oppClusters_4;
 
 
-    private static final boolean verifyAll = true; //when true, run this.verify() after every move
+    private static final boolean verifyAll = false; //when true, run this.verify() after every move
 
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
@@ -699,7 +699,6 @@ public class Board{
 
     // }
 
-    //add a piece to the linked matrix
     private void addToMatrix(Piece p){
         Piece curr = null;
         int x = p.x;
@@ -2178,7 +2177,7 @@ public class Board{
         }
 
         //check that all the new moves are found in the list of old ones
-         for (Move m2 : newWhite){
+        for (Move m2 : newWhite){
             found= false;
             for (Move m1: oldWhite){
                 if ((m1.moveKind == Move.ADD
@@ -4138,13 +4137,13 @@ public class Board{
 
     public static void main(String[] args){
         Board b = new Board(black,
-                            "        " +
-                            "  o     " +
+                            "  x     " +
+                            "  o xx  " +
                             "        " +
                             "o ox  x " +
                             "  ox    " +
                             "o    x  " +
-                            "    ox  " +
+                            " xx ox  " +
                             "        "
                             );
 
