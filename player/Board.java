@@ -42,6 +42,7 @@ public class Board{
     // equivalent of an unsigned long int
     long[] bitReps;
     long[] adjacencyMasks;
+
     /* Python code template used for generating bitmasks
        hex(int("""
        00000000
@@ -2773,6 +2774,30 @@ public class Board{
 
             case "printmatrix":
                 System.out.println("todo");
+                break;
+
+            case "adjmasks": case "am": //adjacency masks
+                long one,two,three,four;
+
+                if (color == ourColor){
+                    one = ourField_1;
+                    two = ourField_2;
+                    three = ourField_3;
+                    four = ourField_4;
+                }else{
+                    one = oppField_1;
+                    two = oppField_2;
+                    three = oppField_3;
+                    four = oppField_4;
+                }
+                messages.add("leval 1:");
+                messages.add(bitBoardToString(one));
+                messages.add("leval 2:");
+                messages.add(bitBoardToString(two));
+                messages.add("leval 3:");
+                messages.add(bitBoardToString(three));
+                messages.add("leval 4:");
+                messages.add(bitBoardToString(four));
                 break;
 
             case "testshuffle":
