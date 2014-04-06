@@ -42,6 +42,8 @@ public class Board{
     // equivalent of an unsigned long int
     long[] bitReps;
     long[] adjacencyMasks;
+    //hash table of adjacency masks. the hash is the pieces bitMask % 67
+    long[] adjacencyMasksHT;
 
     /* Python code template used for generating bitmasks
        hex(int("""
@@ -90,7 +92,9 @@ public class Board{
         opponentNumInGoalA = opponentNumInGoalB = 0;
 
         bitReps = genBitReps();
+        adjacencyMasksHT = new long[68];//populated by `genAdjacencyMasks'
         adjacencyMasks = genAdjacencyMasks();
+
 
         ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
         oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
@@ -158,6 +162,8 @@ public class Board{
         return masks;
     }
 
+    //generate adjacency bit mask, returning a list of them
+    //and inserting them into `adjacencyMasksHT'
     private long[] genAdjacencyMasks(){
         long [] masks = new long[64];
         long mask;
@@ -171,6 +177,7 @@ public class Board{
                 mask |= ((b << 7) | b >> 9 | b >> 1);
             }
             masks[i] = mask;
+            adjacencyMasksHT[(int)(b % 67)] = mask;
             i++;
         }
         return masks;
