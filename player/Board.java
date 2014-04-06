@@ -1341,12 +1341,31 @@ public class Board{
         m.moveKind = Move.STEP;
     }
 
+    /**
+     * returns list of all valid moves available for color, meaning
+     * 1) move placing a new piece if he has < 10 pieces on the board and moving a piece otherwise
+     * 2) the location where the piece will be placed is a valid and legal location on the board
+     * (i.e., it is actually on the board, is not one of the four corners, and is not the other player's goals)
+     * and is not currently occupied by any piece including itself.
+     * 3) there will not be any clusters >= 3 on the board after making the Move.
+     */
     public MoveList validMoves(int color){
         MoveList moves = new MoveList(440);
         validMoves(color, moves);
         return moves;
     }
 
+    /** Board.validMoves(int, MoveList) is just like Board.validMoves(int)
+     *  except that it populates MLIST with the moves instead of
+     *  returning a reference to a new MoveList.
+     *
+     *  Unusual Conditions:
+     *   if the max size of MLIST is less then the number of moves found
+     *   then the behavior of this method is undefined
+     *
+     *  @param color the color of the player whose moves are to be determined
+     *  @param mList a MoveList that will be populated with the moves
+     */
     public MoveList validMoves(int color, MoveList mList){
         mList.clear();
 
