@@ -78,6 +78,16 @@ public class Board{
     //four invalid corner squares
     public static final Piece edge = new Piece(0,0,0,0);
 
+    //indexes for Piece.connected
+    public static final up = 0;
+    public static final down = 1;
+    public static final left = 2;
+    public static final right = 3;
+    public static final rightUp = 4;
+    public static final rightDown = 5;
+    public static final leftUp = 6;
+    public static final leftDown = 7;
+
     /** Board.Board(int) constructs a new board for player with color COLOR
      *  The board is initially empty
      *
