@@ -2256,6 +2256,11 @@ public class Board{
         ok = verifyPieceCount() && ok;
         ok = verifyGoalCount() && ok;
         ok = verifyMatrix() && ok;
+        ok = verifyAdjacencyBoards() && ok;
+        ok = verifyAdjacencyMasksHT() && ok;
+        ok = verifyPiecesHT() && ok;
+        ok = verifyMoveFinding() && ok;
+        //ok = verifyMoveFinding2() && ok;
         return ok;
     }
 
