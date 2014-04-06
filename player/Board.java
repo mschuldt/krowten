@@ -162,14 +162,14 @@ public class Board{
         long mask;
         int i=0;
         for (long b : bitReps){
-            masks[i] = ((  b << 1)
-                        | (b >> 1)
-                        | (b << 7)
-                        | (b << 8)
-                        | (b << 9)
-                        | (b >> 7)
-                        | (b >> 8)
-                        | (b >> 9));
+            mask = ((b << 8) | (b >> 8));
+            if ((b & leftGoalMask) == 0){
+                mask |= ((b >> 7) | b << 9 | b << 1);
+            }
+            if ((b & rightGoalMask) == 0){
+                mask |= ((b << 7) | b >> 9 | b >> 1);
+            }
+            masks[i] = mask;
             i++;
         }
         return masks;
