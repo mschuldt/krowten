@@ -2010,25 +2010,38 @@ public class Board{
 
 
     private boolean verifyAdjacencyBoards(){
-        MoveList ourMoves = validMoves(ourColor);
-        MoveList oppMoves = validMoves(opponentColor);
+        MoveList ourMoves = validMovesSlow(ourColor);
+        MoveList oppMoves = validMovesSlow(opponentColor);
         boolean ok = true;
-        long invalidSquares = (ourBitBoard | opponentBitBoard | ourField_2 | opponentGoalMask);
+        long invalidSquares = (ourBitBoard
+                               | opponentBitBoard
+                               | ourField_2
+                               | ourClusters_1
+                               | opponentGoalMask);
 
-        //check that moves are considered valid on the adjacency boards
-        for (Move move : ourMoves){
-            if ((getBitRep(move.x1,move.y1) & invalidSquares) != 0){
-                System.out.println("adjacency boards incorrectly claim a move(ours) is inavlid");
-                ok = false;
+        if (ourPieceCount < 10){
+
+            //check that moves are considered valid on the adjacency boards
+            for (Move move : ourMoves){
+                if ((getBitRep(move.x1,move.y1) & invalidSquares) != 0){
+                    System.out.println("adjacency boards incorrectly claim a move(ours) is invalid");
+                    ok = false;
+                }
             }
         }
-
-        invalidSquares = (ourBitBoard | opponentBitBoard | oppField_2 | ourGoalMask);
-        for (Move move : oppMoves){
-            if ((getBitRep(move.x1,move.y1) & invalidSquares) != 0){
-                System.out.println("adjacency boards incorrectly claim a move(opponents) is inavlid");
-                ok = false;
+        if (opponentPieceCount < 10){
+            invalidSquares = (ourBitBoard
+                              | opponentBitBoard
+                              | oppField_2
+                              | oppClusters_1
+                              | ourGoalMask);
+            for (Move move : oppMoves){
+                if ((getBitRep(move.x1,move.y1) & invalidSquares) != 0){
+                    System.out.println("adjacency boards incorrectly claim a move(opponents) is inavlid");
+                    ok = false;
+                }
             }
+
         }
 
         //TODO: check that all moves generated with the adjacency boards
