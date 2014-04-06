@@ -40,25 +40,7 @@ public class Board{
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
     // equivalent of an unsigned long int
-    final long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
-                            0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
-                            0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
-                            0x100000L, 0x200000L, 0x400000L, 0x800000L,
-                            0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
-                            0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L,
-                            0x100000000L, 0x200000000L, 0x400000000L,
-                            0x800000000L, 0x1000000000L, 0x2000000000L,
-                            0x4000000000L, 0x8000000000L, 0x10000000000L,
-                            0x20000000000L, 0x40000000000L, 0x80000000000L,
-                            0x100000000000L, 0x200000000000L, 0x400000000000L,
-                            0x800000000000L, 0x1000000000000L, 0x2000000000000L,
-                            0x4000000000000L, 0x8000000000000L, 0x10000000000000L,
-                            0x20000000000000L, 0x40000000000000L,
-                            0x80000000000000L, 0x100000000000000L,
-                            0x200000000000000L, 0x400000000000000L,
-                            0x800000000000000L, 0x1000000000000000L,
-                            0x2000000000000000L, 0x4000000000000000L,
-                            0x8000000000000000L};
+    long[] bitReps;
     long[] adjacencyMasks;
     /* Python code template used for generating bitmasks
        hex(int("""
@@ -106,6 +88,7 @@ public class Board{
         ourNumInGoalA = ourNumInGoalB = 0;
         opponentNumInGoalA = opponentNumInGoalB = 0;
 
+        bitReps = genBitReps();
         adjacencyMasks = genAdjacencyMasks();
 
         ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
