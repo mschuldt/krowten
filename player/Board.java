@@ -163,7 +163,11 @@ public class Board{
         long [] masks = new long[64];
         long bitRep = 1;
         for (int i = 0; i < 64; i++){
+            if (bitRep <0){
+                bitRep = 1;//do this to prevent needing to take negatve indexing
+            }
             masks[i] = bitRep;
+
             bitRep <<= 1;
         }
         return masks;
