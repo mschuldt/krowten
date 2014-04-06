@@ -59,7 +59,7 @@ public class Board{
                             0x800000000000000L, 0x1000000000000000L,
                             0x2000000000000000L, 0x4000000000000000L,
                             0x8000000000000000L};
-
+    long[] adjacencyMasks;
     /* Python code template used for generating bitmasks
        hex(int("""
        00000000
