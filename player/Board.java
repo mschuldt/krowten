@@ -2061,6 +2061,25 @@ public class Board{
         return ok;
     }
 
+    private boolean verifyPiecesHT(){
+        boolean ok = true;
+        for (Piece p: ourPieces){
+            if (piecesHT[(int)(p.bitRep % 67)] != p){
+                System.out.println("piece at " + locStr(p.x,p.y)+ "is not in the hash table");
+                ok =false;
+            }
+        }
+        for (Piece p: opponentPieces){
+            if (piecesHT[(int)(p.bitRep % 67)] != p){
+                System.out.println("piece at " + locStr(p.x,p.y)+ "is not in the hash table");
+                ok =false;
+            }
+        }
+        return ok;
+    }
+
+
+
     //verify that all internal state is valid
     public boolean verify(){
         boolean ok = true;
