@@ -79,14 +79,14 @@ public class Board{
     public static final Piece edge = new Piece(0,0,0,0);
 
     //indexes for Piece.connected
-    public static final UP = 0;
-    public static final DOWN = 1;
-    public static final LEFT = 2;
-    public static final RIGHT = 3;
-    public static final RIGHTUP = 4;
-    public static final RIGHTDOWN = 5;
-    public static final LEFTUP = 6;
-    public static final LEFTDOWN = 7;
+    public static final int UP = 0;
+    public static final int DOWN = 1;
+    public static final int LEFT = 2;
+    public static final int RIGHT = 3;
+    public static final int RIGHTUP = 4;
+    public static final int RIGHTDOWN = 5;
+    public static final int LEFTUP = 6;
+    public static final int LEFTDOWN = 7;
 
     /** Board.Board(int) constructs a new board for player with color COLOR
      *  The board is initially empty
