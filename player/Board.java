@@ -36,12 +36,10 @@ public class Board{
 
 
     private static final boolean verifyAll = false; //when true, run this.verify() after every move
+
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
-    // equivalent of an unsigned long integer
-    //
-    // The `bitReps' array was generated with this python code:
-    // "{0, " + ", ".join([str(hex(int("1" + "0"*x, 2))) + "L" for x in range(64)]) + "}"
+    // equivalent of an unsigned long int
     final long[] bitReps = {0x1L, 0x2L, 0x4L, 0x8L, 0x10L, 0x20L, 0x40L, 0x80L, 0x100L,
                             0x200L, 0x400L, 0x800L, 0x1000L, 0x2000L, 0x4000L,
                             0x8000L, 0x10000L, 0x20000L, 0x40000L, 0x80000L,
@@ -282,8 +280,7 @@ public class Board{
             addToMatrix(p);
             break;
         case Move.QUIT :
-            //TODO
-            break;
+            return;
         }
         if (verifyAll){
             verify();
@@ -329,7 +326,7 @@ public class Board{
      *
      *  @param move the move to reverse.
      */
-    void unMove(Move move){
+    public void unMove(Move move){
         Piece p = null;
         Piece pp = null;
         switch (move.moveKind){
@@ -425,8 +422,7 @@ public class Board{
             break;
 
         case Move.QUIT :
-            //TODO
-            break;
+            return;
         }
         if (verifyAll){
             verify();
@@ -589,7 +585,7 @@ public class Board{
     private boolean verifyNotInMatrix(Piece piece, int color){
         Piece p = null;
         for (int i=0; i< 20; i++){
-            p = pieces.get(i);//TODO: should have a legitimate way of doing this
+            p = pieces.get(i);
             if (p == piece.left
                 || p == piece.right
                 || p == piece.up
@@ -1219,11 +1215,24 @@ public class Board{
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
-        PieceList pl = connectedPieces(currentPiece);
-        if (pl == null){
-            return length;
-        }
+        //PieceList pl = connectedPieces(currentPiece);
+        Piece[] pl = {currentPiece.up,
+                      currentPiece.down,
+                      currentPiece.left,
+                      currentPiece.right,
+                      currentPiece.leftUp,
+                      currentPiece.rightUp,
+                      currentPiece.leftDown,
+                      currentPiece.rightDown};
+
+        // if (pl == null){
+        //     return length;
+        // }
+
         for (Piece piece : pl){
+            if (piece == null || piece.color != currentPiece.color){
+                continue;
+            }
             if (piece.x == currentPiece.x){
                 newM = 10;
                 newB = piece.x;
@@ -1482,7 +1491,6 @@ public class Board{
                 ok = false;
             }
         }
-        //TODO: check that all correct pieces are also in the piece lists
 
         return true;
     }
@@ -2025,9 +2033,6 @@ public class Board{
         }catch (UnsupportedEncodingException err){
             messages.add("Error saving to file: unsupported encoding");
         }
-
-        //TODO: ::Q split up a string
-        //      ::Q string to number
 
         System.out.println(pb.toString());
         System.out.print("you are color " + colorStr(color).toUpperCase());
@@ -2601,7 +2606,9 @@ public class Board{
                 messages.add("cleared the board");
                 break;
 
-            case "rungame": case "rg": //TODO: FIX: this is crashing
+            case "rungame": case "rg": //TODO: FIX: this is crashing sometimes
+                                       //=> games can also be run from the
+                                       //MachinePlayer class
                 clearBoard();
                 MachinePlayer player1 = new MachinePlayer(white);
                 MachinePlayer player2 = new MachinePlayer(black);
