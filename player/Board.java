@@ -30,6 +30,11 @@ public class Board{
 
     Move m = new Move(0,0);
 
+    //fields track how many pieces are adjacent to a given spot
+    long ourField_1, ourField_2, ourField_3, ourField_4;
+    long oppField_1, oppField_2, oppField_3, oppField_4;
+
+
     private static final boolean verifyAll = false; //when true, run this.verify() after every move
     // because the corners of the gameboard cannot be used, the last bit is
     // not needed (actually the last two). This is lucky because java has no
@@ -102,6 +107,9 @@ public class Board{
         ourPieceCount =  opponentPieceCount = 0;
         ourNumInGoalA = ourNumInGoalB = 0;
         opponentNumInGoalA = opponentNumInGoalB = 0;
+
+        ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
+        oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
 
         ourColor = color; //0 for black, 1 for white
         opponentColor = 1-color;
@@ -1869,6 +1877,8 @@ public class Board{
         ourPieceCount =  opponentPieceCount = 0;
         ourNumInGoalA = ourNumInGoalB = 0;
         opponentNumInGoalA = opponentNumInGoalB = 0;
+        ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
+        oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
         ourPieces.clear();
         opponentPieces.clear();
         pieceArray = new Piece[10][10];//the easy way
