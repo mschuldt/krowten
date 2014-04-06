@@ -62,7 +62,7 @@ public class Board{
     */
     //TODO: why are these masks effectively reflected?
     //      NOTE: they have been reversed in hasNetwork to account for this
-    final long cornersMask = 0x4081000000000081L,
+    final long cornersMask = 0x8100000000000081L,
         upperGoalMask = 0x7e00000000000000L,
         lowerGoalMask = 0x7e,
         rightGoalMask = 0x1010101010100L,
