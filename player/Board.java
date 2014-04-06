@@ -106,6 +106,8 @@ public class Board{
         ourNumInGoalA = ourNumInGoalB = 0;
         opponentNumInGoalA = opponentNumInGoalB = 0;
 
+        adjacencyMasks = genAdjacencyMasks();
+
         ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
         oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
 
@@ -160,6 +162,24 @@ public class Board{
         ourGoalMask = (ourGoalMaskA | ourGoalMaskB);
         opponentGoalMask = (opponentGoalMaskA | opponentGoalMaskB);
 
+    }
+
+    private long[] genAdjacencyMasks(){
+        long [] masks = new long[64];
+        long mask;
+        int i=0;
+        for (long b : bitReps){
+            masks[i] = ((  b << 1)
+                        | (b >> 1)
+                        | (b << 7)
+                        | (b << 8)
+                        | (b << 9)
+                        | (b >> 7)
+                        | (b >> 8)
+                        | (b >> 9));
+            i++;
+        }
+        return masks;
     }
 
     //returns the binary representation of the piece at (X, Y)
