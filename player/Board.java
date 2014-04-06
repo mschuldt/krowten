@@ -461,6 +461,7 @@ public class Board{
     public void unMove(Move move){
         Piece p = null;
         Piece pp = null;
+        long cluster, adjMask;
         switch (move.moveKind){
         case Move.ADD :
             int x = move.x1 + 1,
@@ -471,6 +472,7 @@ public class Board{
             assert p != edge : "cannot undo: piece is an edge";
 
             long bitRep = p.bitRep;
+            adjMask = getAdjMask(x-1, y-1);
 
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
@@ -481,6 +483,21 @@ public class Board{
                 }else if ((bitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB--;
                 }
+
+                //remove source squares from cluster board
+                if ((ourField_1 & bitRep) != 0){
+                    cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
+                    ourClusters_1 ^= (cluster & ourClusters_1 & ~ourClusters_2);
+                    ourClusters_2 ^= (cluster & ourClusters_2 & ~ourClusters_3);
+                    ourClusters_3 ^= (cluster & ourClusters_3 & ~ourClusters_4);
+                    ourClusters_4 ^= (cluster & ourClusters_4);
+                }
+
+                ourField_1 ^= (adjMask & ourField_1 & ~ourField_2);
+                ourField_2 ^= (adjMask & ourField_2 & ~ourField_3);
+                ourField_3 ^= (adjMask & ourField_3 & ~ourField_4);
+                ourField_4 ^= (adjMask & ourField_4);
+
 
                 pp = ourPieces.pop();
                 assert pp == p : "pop removed wrong piece from `ourPieces'";
@@ -494,6 +511,20 @@ public class Board{
                 }else if ((bitRep & opponentGoalMaskB) != 0){
                     opponentNumInGoalB--;
                 }
+
+                if ((oppField_1 & bitRep) != 0){
+                    cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
+                    oppClusters_1 ^= (cluster & oppClusters_1 & ~oppClusters_2);
+                    oppClusters_2 ^= (cluster & oppClusters_2 & ~oppClusters_3);
+                    oppClusters_3 ^= (cluster & oppClusters_3 & ~oppClusters_4);
+                    oppClusters_4 ^= (cluster & oppClusters_4);
+                }
+
+                oppField_1 ^= (adjMask & oppField_1 & ~oppField_2);
+                oppField_2 ^= (adjMask & oppField_2 & ~oppField_3);
+                oppField_3 ^= (adjMask & oppField_3 & ~oppField_4);
+                oppField_4 ^= (adjMask & oppField_4);
+
                 pp = opponentPieces.pop();
                 assert pp == p : "pop removed wrong piece from `opponentPieces'";
             }
@@ -515,6 +546,8 @@ public class Board{
 
             long fromBitRep = p.bitRep;
 
+            adjMask = getAdjMask(fromX-1, fromY-1);
+
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
                 ourBitBoard |= toBitRep;
@@ -529,6 +562,44 @@ public class Board{
                 }else if ((toBitRep & ourGoalMaskB) != 0){
                     ourNumInGoalB++;
                 }
+
+                //remove source squares from cluster board
+                if ((ourField_1 & fromBitRep) != 0){
+                    //removing a piece that this adjacent to another
+                    cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
+                    ourClusters_1 ^= (cluster & ourClusters_1 & ~ourClusters_2);
+                    ourClusters_2 ^= (cluster & ourClusters_2 & ~ourClusters_3);
+                    ourClusters_3 ^= (cluster & ourClusters_3 & ~ourClusters_4);
+                    ourClusters_4 ^= (cluster & ourClusters_4);
+                }
+
+
+                //remove source adjacent squares to adjacency fields
+
+                // unset squares that overlap adj if the next level is unset
+                ourField_1 ^= (adjMask & ourField_1 & ~ourField_2);
+                ourField_2 ^= (adjMask & ourField_2 & ~ourField_3);
+                ourField_3 ^= (adjMask & ourField_3 & ~ourField_4);
+                ourField_4 ^= (adjMask & ourField_4);
+
+                adjMask = getAdjMask(toX-1, toY-1);
+
+                // //add destination to cluster board
+                if ((ourField_1 & toBitRep) != 0){//just created a size 2 cluster
+                    cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
+                    ourClusters_4 |= (ourClusters_3 & cluster);
+                    ourClusters_3 |= (ourClusters_2 & cluster);
+                    ourClusters_2 |= (ourClusters_1 & cluster);
+                    ourClusters_1 |= cluster;
+                }
+
+                //add destination adjacent squares to adjacency fields
+                ourField_4 |= (ourField_3 & adjMask);
+                ourField_3 |= (ourField_2 & adjMask);
+                ourField_2 |= (ourField_1 & adjMask);
+                ourField_1 |= adjMask;
+
+
             }else{
                 opponentBitBoard ^= p.bitRep;
                 opponentBitBoard |= toBitRep;
@@ -543,6 +614,36 @@ public class Board{
                 }else if ((toBitRep & opponentGoalMaskB) != 0){
                     opponentNumInGoalB++;
                 }
+
+
+                if ((oppField_1 & fromBitRep) != 0){
+                    cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
+                    oppClusters_1 ^= (cluster & oppClusters_1 & ~oppClusters_2);
+                    oppClusters_2 ^= (cluster & oppClusters_2 & ~oppClusters_3);
+                    oppClusters_3 ^= (cluster & oppClusters_3 & ~oppClusters_4);
+                    oppClusters_4 ^= (cluster & oppClusters_4);
+                }
+
+                oppField_1 ^= (adjMask & oppField_1 & ~oppField_2);
+                oppField_2 ^= (adjMask & oppField_2 & ~oppField_3);
+                oppField_3 ^= (adjMask & oppField_3 & ~oppField_4);
+                oppField_4 ^= (adjMask & oppField_4);
+
+                adjMask = getAdjMask(toX-1, toY-1);
+
+                if ((oppField_1 & toBitRep) != 0){
+                    cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
+                    oppClusters_4 |= (oppClusters_3 & cluster);
+                    oppClusters_3 |= (oppClusters_2 & cluster);
+                    oppClusters_2 |= (oppClusters_1 & cluster);
+                    oppClusters_1 |= cluster;
+                }
+
+                oppField_4 |= (oppField_3 & adjMask);
+                oppField_3 |= (oppField_2 & adjMask);
+                oppField_2 |= (oppField_1 & adjMask);
+                oppField_1 |= adjMask;
+
             }
             removeFromMatrix(p);
             p.bitRep = toBitRep;
