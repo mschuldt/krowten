@@ -1707,6 +1707,18 @@ public class Board{
         return ok;
     }
 
+
+    private boolean verifyAdjacencyMasksHT(){
+        boolean ok = true;
+        for (int i=0;i < 63;i++){
+            if (adjacencyMasks[i] != adjacencyMasksHT[(int)(bitReps[i] % 67)]){
+                System.out.println("adjacency mask in array does not match the value in the hash table");
+                ok = false;
+            }
+        }
+        return ok;
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         boolean ok = true;
