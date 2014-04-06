@@ -7,7 +7,7 @@ public class Piece{
     //these are fields used by the matrix representation
     public Piece up,down,left,right,rightUp,rightDown, leftUp,leftDown;
 
-    public Piece connected;
+    public Piece[] connected;
 
     public Piece(){}
 
