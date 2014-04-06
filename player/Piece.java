@@ -7,6 +7,8 @@ public class Piece{
     //these are fields used by the matrix representation
     public Piece up,down,left,right,rightUp,rightDown, leftUp,leftDown;
 
+    public Piece connected;
+
     public Piece(){}
 
     public Piece (int _color, long _bitRep, int _x, int _y){
@@ -14,6 +16,7 @@ public class Piece{
     }
 
     public Piece set(int _color, long _bitRep, int _x, int _y){
+        connected = new Piece[8];
         color = _color;
         bitRep = _bitRep;
         x = _x;
