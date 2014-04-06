@@ -846,18 +846,19 @@ public class Board{
     private boolean verifyNotInMatrix(Piece p){
         return verifyNotInMatrix(p, black) && verifyNotInMatrix(p, white);
     }
+
     private boolean verifyNotInMatrix(Piece piece, int color){
         Piece p = null;
         for (int i=0; i< 20; i++){
             p = pieces.get(i);
-            if (p == piece.left
-                || p == piece.right
-                || p == piece.up
-                || p == piece.down
-                || p == piece.rightUp
-                || p == piece.leftUp
-                || p == piece.rightDown
-                || p == piece.leftDown){
+            if (p == piece.connected[LEFT]
+                || p == piece.connected[RIGHT]
+                || p == piece.connected[UP]
+                || p == piece.connected[DOWN]
+                || p == piece.connected[RIGHTUP]
+                || p == piece.connected[LEFTUP]
+                || p == piece.connected[RIGHTDOWN]
+                || p == piece.connected[LEFTDOWN]){
                 return false;
             }
         }
@@ -871,7 +872,7 @@ public class Board{
      *   so that they can both fit in a 'long' without overlapping.
      *   They are combined by shifting one of the boards left and ORing
      *   them together.
-    */
+     */
     public long hash(){
         return ((ourBitBoard % 1073741789) << 31) | (opponentBitBoard % 1073741789);
     }
@@ -1475,7 +1476,7 @@ public class Board{
                 }
             }
         }
-        return mList;
+        return null;
     }
 
 
@@ -1834,15 +1835,7 @@ public class Board{
         //check that all pieces are correctly linked
         for (Piece p : color == ourColor ? ourPieces : opponentPieces){
             connections = connectedPieces(p);
-            Piece[] matrixConnections = {p.up,
-                                         p.down,
-                                         p.left,
-                                         p.right,
-                                         p.rightUp,
-                                         p.rightDown,
-                                         p.leftUp,
-                                         p.leftDown};
-            for (Piece connect : matrixConnections){
+            for (Piece connect : p.connected){
                 if (connect != null
                     && connect.color == color
                     && !connections.containsPiece(connect)){
@@ -1866,7 +1859,7 @@ public class Board{
                     System.out.println(p +" should not be in the matrix(row)");
                 }
                 visited |= p.bitRep;
-                p = p.right;
+                p = p.connected[RIGHT];
             }
         }
         visited = 0;
@@ -1883,7 +1876,7 @@ public class Board{
                     System.out.println(p +" should not be in the matrix(column)");
                 }
                 visited |= p.bitRep;
-                p = p.down;
+                p = p.connected[DOWN];
             }
         }
         visited = 0;
@@ -1900,7 +1893,7 @@ public class Board{
                     System.out.println(p +" should not be in the matrix(fDiagonal)");
                 }
                 visited |= p.bitRep;
-                p = p.leftDown;
+                p = p.connected[LEFTDOWN];
             }
         }
         visited = 0;
@@ -1917,7 +1910,7 @@ public class Board{
                     System.out.println(p +" should not be in the matrix(bDiagonal");
                 }
                 visited |= p.bitRep;
-                p = p.rightDown;
+                p = p.connected[RIGHTDOWN];
             }
         }
         return ok;
@@ -2992,29 +2985,29 @@ public class Board{
                         messages.add("  Color = " + colorStr(p.color));
                         messages.add("  bitRep = " + p.bitRep);
                         messages.add("  x,y = " + p.x + "," + p.y);
-                        if (p.up != null){
-                            messages.add("  up = " +p.up);
+                        if (p.connected[UP] != null){
+                            messages.add("  up = " +p.connected[UP]);
                         }
-                        if (p.down != null){
-                            messages.add("  down = " +p.down);
+                        if (p.connected[DOWN] != null){
+                            messages.add("  down = " +p.connected[DOWN]);
                         }
-                        if (p.left != null){
-                            messages.add("  left = " +p.left);
+                        if (p.connected[LEFT] != null){
+                            messages.add("  left = " +p.connected[LEFT]);
                         }
-                        if (p.right != null){
-                            messages.add("  right = " +p.right);
+                        if (p.connected[RIGHT] != null){
+                            messages.add("  right = " +p.connected[RIGHT]);
                         }
-                        if (p.rightUp != null){
-                            messages.add("  rightUp = " +p.rightUp);
+                        if (p.connected[RIGHTUP] != null){
+                            messages.add("  rightUp = " +p.connected[RIGHTUP]);
                         }
-                        if (p.rightDown != null){
-                            messages.add("  rightDown = " +p.rightDown);
+                        if (p.connected[RIGHTDOWN] != null){
+                            messages.add("  rightDown = " +p.connected[RIGHTDOWN]);
                         }
-                        if (p.leftUp != null){
-                            messages.add("  leftUp = " +p.leftUp);
+                        if (p.connected[LEFTUP] != null){
+                            messages.add("  leftUp = " +p.connected[LEFTUP]);
                         }
-                        if (p.leftDown != null){
-                            messages.add("  leftDown = " +p.leftDown);
+                        if (p.connected[LEFTDOWN] != null){
+                            messages.add("  leftDown = " +p.connected[LEFTDOWN]);
                         }
                     }
                 }else{
