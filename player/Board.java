@@ -238,8 +238,6 @@ public class Board{
             bitRep = getBitRep(toX-1, toY-1);
             p = pieces.pop().set(color, bitRep, move.x1, move.y1);
 
-            piecesHT[(int)p.bitRep % 67] = p;
-
             adjMask = getAdjMask(toX-1, toY-1);
             assert pieceArray[toX][toY] == null : "square is already full";
 
@@ -298,6 +296,7 @@ public class Board{
             //pieceArray[toX][toY] = new Piece(color, bitRep, move.x1, move.y1); //FIX
 
             pieceArray[toX][toY] = p;
+            piecesHT[(int)(p.bitRep % 67)] = p;
             addToMatrix(p);
             break;
 
@@ -416,6 +415,7 @@ public class Board{
 
             }
             p = pieceArray[fromX][fromY];
+            piecesHT[(int)(p.bitRep % 67)] = null;
             removeFromMatrix(p);
             pieceArray[toX][toY] = p;
             p.bitRep = getBitRep(toX-1, toY-1);
