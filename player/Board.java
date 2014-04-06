@@ -177,8 +177,11 @@ public class Board{
                 mask |= ((b << 7) | b >> 9 | b >> 1);
             }
             masks[i] = mask;
-            adjacencyMasksHT[(int)(b % 67)] = mask;
             i++;
+            if ((b % 67) < 0){
+                continue;//the last value is < 0 so is an invalid index
+            }
+            adjacencyMasksHT[(int)(b % 67)] = mask;
         }
         return masks;
     }
