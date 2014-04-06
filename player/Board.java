@@ -182,6 +182,10 @@ public class Board{
         return bitReps[y*8 + x];
     }
 
+    private long getAdjMask(int x, int y){
+        return adjacencyMasks[y*8 + x];
+    }
+
     /** Board.move(Move,int) moves a piece on the board as described
      *  by MOVE. COLOR is the color of the piece to be moved.
      *
