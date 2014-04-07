@@ -14,8 +14,6 @@ public class Board{
 
     private int ourColor, opponentColor;
     private int ourPieceCount, opponentPieceCount;
-    private int ourNumInGoalA,ourNumInGoalB,
-        opponentNumInGoalA,opponentNumInGoalB;
 
     public static final int white = 1;
     public static final int black = 0;
@@ -102,8 +100,6 @@ public class Board{
             System.out.println("Board.Board(int) -- Error: invalid color");
         }
         ourPieceCount =  opponentPieceCount = 0;
-        ourNumInGoalA = ourNumInGoalB = 0;
-        opponentNumInGoalA = opponentNumInGoalB = 0;
 
         bitReps = genBitReps();
         adjacencyMasksHT = new long[68];//populated by `genAdjacencyMasks'
@@ -258,11 +254,7 @@ public class Board{
             if (color == ourColor){
                 ourBitBoard |= bitRep;
                 ourPieceCount++;
-                if ((bitRep & ourGoalMaskA) != 0){
-                    ourNumInGoalA++;
-                }else if ((bitRep & ourGoalMaskB) != 0){
-                    ourNumInGoalB++;
-                }
+
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
 
                 if ((ourField_1 & bitRep) != 0){//just created a size 2 cluster
@@ -284,11 +276,7 @@ public class Board{
             }else{
                 opponentBitBoard |= bitRep;
                 opponentPieceCount++;
-                if ((bitRep & opponentGoalMaskA) != 0){
-                    opponentNumInGoalA++;
-                }else if ((bitRep & opponentGoalMaskB) != 0){
-                    opponentNumInGoalB++;
-                }
+
                 assert opponentPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
 
                 if ((oppField_1 & bitRep) != 0){
@@ -336,17 +324,7 @@ public class Board{
                 //add new location
                 ourBitBoard |= toBitRep;
                 //increment counter if moveing to a goal
-                if ((toBitRep & ourGoalMaskA) != 0){
-                    ourNumInGoalA++;
-                }else if ((toBitRep & ourGoalMaskB) != 0){
-                    ourNumInGoalB++;
-                }
-                //decrease counter is removing from a goal
-                if ((fromBitRep & ourGoalMaskA) != 0){
-                    ourNumInGoalA--;
-                }else if ((fromBitRep & ourGoalMaskB) != 0){
-                    ourNumInGoalB--;
-                }
+
 
                 //remove source squares from cluster board
                 if ((ourField_1 & fromBitRep) != 0){
@@ -387,17 +365,6 @@ public class Board{
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
                 opponentBitBoard |= toBitRep;
-
-                if ((toBitRep & opponentGoalMaskA) != 0){
-                    opponentNumInGoalA++;
-                }else if ((toBitRep & opponentGoalMaskB) != 0){
-                    opponentNumInGoalB++;
-                }
-                if ((fromBitRep & opponentGoalMaskA) != 0){
-                    opponentNumInGoalA--;
-                }else if ((fromBitRep & opponentGoalMaskB) != 0){
-                    opponentNumInGoalB--;
-                }
 
                 if ((oppField_1 & fromBitRep) != 0){
                     cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
@@ -506,12 +473,6 @@ public class Board{
                 ourBitBoard ^= p.bitRep;
                 ourPieceCount--;
 
-                if ((bitRep & ourGoalMaskA) != 0){
-                    ourNumInGoalA--;
-                }else if ((bitRep & ourGoalMaskB) != 0){
-                    ourNumInGoalB--;
-                }
-
                 //remove source squares from cluster board
                 if ((ourField_1 & bitRep) != 0){
                     cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
@@ -533,12 +494,6 @@ public class Board{
             }else{
                 opponentBitBoard ^= p.bitRep;
                 opponentPieceCount--;
-
-                if ((bitRep & opponentGoalMaskA) != 0){
-                    opponentNumInGoalA--;
-                }else if ((bitRep & opponentGoalMaskB) != 0){
-                    opponentNumInGoalB--;
-                }
 
                 if ((oppField_1 & bitRep) != 0){
                     cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
@@ -581,17 +536,6 @@ public class Board{
                 ourBitBoard ^= p.bitRep;
                 ourBitBoard |= toBitRep;
 
-                if ((fromBitRep & ourGoalMaskA) != 0){
-                    ourNumInGoalA--;
-                }else if ((fromBitRep & ourGoalMaskB) != 0){
-                    ourNumInGoalB--;
-                }
-                if ((toBitRep & ourGoalMaskA) != 0){
-                    ourNumInGoalA++;
-                }else if ((toBitRep & ourGoalMaskB) != 0){
-                    ourNumInGoalB++;
-                }
-
                 //remove source squares from cluster board
                 if ((ourField_1 & fromBitRep) != 0){
                     //removing a piece that this adjacent to another
@@ -632,17 +576,6 @@ public class Board{
             }else{
                 opponentBitBoard ^= p.bitRep;
                 opponentBitBoard |= toBitRep;
-
-                if ((fromBitRep & opponentGoalMaskA) != 0){
-                    opponentNumInGoalA--;
-                }else if ((fromBitRep & opponentGoalMaskB) != 0){
-                    opponentNumInGoalB--;
-                }
-                if ((toBitRep & opponentGoalMaskA) != 0){
-                    opponentNumInGoalA++;
-                }else if ((toBitRep & opponentGoalMaskB) != 0){
-                    opponentNumInGoalB++;
-                }
 
 
                 if ((oppField_1 & fromBitRep) != 0){
@@ -1734,22 +1667,22 @@ public class Board{
                 }
             }
         }
-        if (ourA != ourNumInGoalA){
-            System.out.println("incorrect value for `ourNumInGoalA' expect: "+ ourA + " got: "+ ourNumInGoalA);
-            ok = false;
-        }
-        if (ourB != ourNumInGoalB){
-            System.out.println("incorrect value for `ourNumInGoalB' expect: "+ ourB + " got: "+ ourNumInGoalB);
-            ok = false;
-        }
-        if (oppA != opponentNumInGoalA){
-            System.out.println("incorrect value for `opponentNumInGoalA' expect: "+ oppA + " got: "+ opponentNumInGoalA);
-            ok = false;
-        }
-        if (oppB != opponentNumInGoalB){
-            System.out.println("incorrect value for `opponentNumInGoalB' expect: "+ oppB + " got: "+ opponentNumInGoalB);
-            ok = false;
-        }
+        // if (ourA != ourNumInGoalA){
+        //     System.out.println("incorrect value for `ourNumInGoalA' expect: "+ ourA + " got: "+ ourNumInGoalA);
+        //     ok = false;
+        // }
+        // if (ourB != ourNumInGoalB){
+        //     System.out.println("incorrect value for `ourNumInGoalB' expect: "+ ourB + " got: "+ ourNumInGoalB);
+        //     ok = false;
+        // }
+        // if (oppA != opponentNumInGoalA){
+        //     System.out.println("incorrect value for `opponentNumInGoalA' expect: "+ oppA + " got: "+ opponentNumInGoalA);
+        //     ok = false;
+        // }
+        // if (oppB != opponentNumInGoalB){
+        //     System.out.println("incorrect value for `opponentNumInGoalB' expect: "+ oppB + " got: "+ opponentNumInGoalB);
+        //     ok = false;
+        // }
         return ok;
     }
 
@@ -2619,8 +2552,6 @@ public class Board{
     private void clearBoard(){
         ourBitBoard = opponentBitBoard = 0;
         ourPieceCount =  opponentPieceCount = 0;
-        ourNumInGoalA = ourNumInGoalB = 0;
-        opponentNumInGoalA = opponentNumInGoalB = 0;
         ourField_1 = ourField_2 = ourField_3 = ourField_4 = 0;
         oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
         ourClusters_1 =  ourClusters_2 =  ourClusters_3 = ourClusters_4 = 0;
