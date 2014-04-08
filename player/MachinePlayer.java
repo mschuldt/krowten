@@ -22,7 +22,8 @@ public class MachinePlayer extends Player {
     private static final int OUT_OF_TIME = 99999999;//should be > then any score
     MoveList[] movesLists;
 
-
+    //this is set to true while iteratively deepening
+    boolean iterativeDeepining = false;
     double startTime; //time the minimax search started
 
     // Creates a machine player with the given color.  Color is either 0 (black)
@@ -63,17 +64,44 @@ public class MachinePlayer extends Player {
         }
         return ret;
     }
+
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
-        double chooseMoveStart = System.currentTimeMillis();
         int depth = searchDepth;
         if (depth == VAR_DEPTH){
-            if (board.getNumPieces(ourColor) < 10-STEP_DEPTH){
-                depth = ADD_DEPTH;
-            }else{
-                depth = STEP_DEPTH;
+            return chooseMoveIterativelyDeepening();
+        }
+        iterativeDeepining = false;
+        Best bestMove = minimax(ourColor, -100000, 100000, depth);
+
+        if (bestMove.move == null){ //this happens sometimes...why?
+            MoveList validmoves = new MoveList();
+            board.validMoves(ourColor, validmoves);
+            if (validmoves.length() == 0){
+                //System.out.println("no more moves");
+                Move ret = new Move(0,0);
+                ret.moveKind = Move.QUIT;
+                //System.out.println("move time: " + timeSince(chooseMoveStart));
+                return ret;
             }
+            bestMove.move = validmoves.get(0);
+            System.out.println("fixed null move");
+        }
+
+        //make the move here instead of calling this.forceMove if we know that the move is valid
+        board.move(bestMove.move, ourColor);
+        return bestMove.move;
+    }
+
+    public Move chooseMoveIterativelyDeepening(){
+        iterativeDeepining = true;
+        double chooseMoveStart = System.currentTimeMillis();
+        int depth = searchDepth;
+        if (board.getNumPieces(ourColor) < 10-STEP_DEPTH){
+            depth = ADD_DEPTH;
+        }else{
+            depth = STEP_DEPTH;
         }
         double endTime = 0.0;
         Best bestMove = null;
@@ -130,7 +158,8 @@ public class MachinePlayer extends Player {
         Best myBest = new Best();
         Best reply;
 
-        if ((System.currentTimeMillis() - startTime)/1000.0 > 4.9){
+        if (iterativeDeepining
+            && (System.currentTimeMillis() - startTime)/1000.0 > 4.9){
             myBest.score = OUT_OF_TIME;
             return myBest;
         }
@@ -159,7 +188,6 @@ public class MachinePlayer extends Player {
             System.out.println("error: exceeded max depth  in minimax (" +depth+")");
         }
         MoveList allValidMoves = movesLists[depth];
-        //MoveList allValidMoves = new MoveList();
         board.validMoves(side, allValidMoves);
         myBest.move = copyMove(allValidMoves.get(0));
 
