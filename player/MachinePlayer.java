@@ -52,7 +52,17 @@ public class MachinePlayer extends Player {
         return "" + ((System.currentTimeMillis() - time)/1000.0);
     }
 
-
+    private Move copyMove(Move move){
+        Move ret = new Move();
+        ret.moveKind = move.moveKind;
+        ret.x1 = move.x1;
+        ret.y1 = move.y1;
+        if (move.moveKind == Move.STEP){
+            ret.x2 = move.x2;
+            ret.y2 = move.y2;
+        }
+        return ret;
+    }
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
