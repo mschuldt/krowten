@@ -226,6 +226,53 @@ public class MachinePlayer extends Player {
         board.interactiveDebug(this);
     }
 
+    public static void benchMark(){
+        int emptyDepth = 6;
+        int fullDepth = 4;
+        double start=0,end=0;
+        for (int depth = 2; depth < 7; depth++){
+            MachinePlayer p = new MachinePlayer(white, depth);
+
+            p.forceBoard("        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        "
+                         );
+
+            start = System.currentTimeMillis();
+            p.chooseMove();
+            end = System.currentTimeMillis();
+
+            System.out.println("from empty [depth: " + depth + "]: "+ (end - start)/1000.0 + "s ");
+        }
+
+        for (int depth = 2; depth < 7; depth++){
+
+            MachinePlayer p2 = new MachinePlayer(white, depth);
+            p2.forceBoard("     x  " +
+                          " oxxo   " +
+                          "    o o " +
+                          "  ox  x " +
+                          "  oxoo  " +
+                          "     x  " +
+                          " x  oxo " +
+                          " x      "
+                          );
+
+            start = System.currentTimeMillis();
+            p2.chooseMove();
+            end = System.currentTimeMillis();
+
+
+            System.out.println("from full [depth: " + depth + "]: "+ (end - start)/1000.0 + "s ");
+        }
+
+    }
+
     public static void main(String[] args){
 
         MachinePlayer p = new MachinePlayer(white);
@@ -238,7 +285,8 @@ public class MachinePlayer extends Player {
                      "    ox  " +
                      "        "
                      );
-        runGame();
+        //runGame();
         //p.interactiveDebug();
+        benchMark();
     }
 }
