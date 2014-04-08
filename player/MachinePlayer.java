@@ -55,7 +55,15 @@ public class MachinePlayer extends Player {
             }
         }
 
-        Best bestMove = minimax(ourColor, -100000, 100000, depth); //TODO: alpha, beta values ok?
+        Best bestMove = minimax(ourColor, -100000, 100000, depth);
+
+        if (bestMove.move == null){ //this happens sometimes...why?
+            MoveList validmoves = new MoveList();
+            board.validMoves(ourColor, validmoves);
+            bestMove.move = validmoves.get(0);
+            System.out.println("fixed null move");
+        }
+
         //make the move here instead of calling this.forceMove if we know that the move is valid
         board.move(bestMove.move, ourColor);
         return bestMove.move;
@@ -69,13 +77,6 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
-
-        //TODO: avoid calculating all the moves before checking for networks
-        //      (need this now so that we have we will always have a valid move)
-        MoveList allValidMoves = movesLists[depth];
-        board.validMoves(side, allValidMoves);
-
-        myBest.move = allValidMoves.get(0);
 
         if (board.hasNetwork(opponentColor)){
             myBest.score = -10000 - 100*depth;
@@ -91,12 +92,16 @@ public class MachinePlayer extends Player {
             myBest.score = board.score();
             return myBest;
         }
+
         if (side == ourColor){
             myBest.score = alpha;
         }else{
             myBest.score = beta;
         }
 
+        MoveList allValidMoves = movesLists[depth];
+        board.validMoves(side, allValidMoves);
+        myBest.move = allValidMoves.get(0);
 
         int score=0;
         for (Move m : allValidMoves){
