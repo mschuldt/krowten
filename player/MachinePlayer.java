@@ -66,6 +66,7 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
+        double chooseMoveStart = System.currentTimeMillis();
         int depth = searchDepth;
         if (depth == VAR_DEPTH){
             if (board.getNumPieces(ourColor) < 10-STEP_DEPTH){
@@ -77,33 +78,37 @@ public class MachinePlayer extends Player {
         double endTime = 0.0;
         Best bestMove = null;
         Best tmpBest = null;
+        startTime = System.currentTimeMillis();
         while (true){
-            startTime = System.currentTimeMillis();
             tmpBest = minimax(ourColor, -100000, 100000, depth);
-            endTime = System.currentTimeMillis();
+            tmpBest.move = copyMove(tmpBest.move);
             if ((tmpBest.score == OUT_OF_TIME) && (bestMove == null)){
                 System.out.println("ran out of time. never found a move");
             }
             if (tmpBest.score != OUT_OF_TIME){
                 bestMove = tmpBest;
             }else{
+                // System.out.println("ran out of time");
                 break;
             }
-            if ((endTime - startTime)/1000.0 > 4.9){
+            if ((System.currentTimeMillis() - startTime)/1000.0 > 4.9){
                 break;
             }
             depth++;
+            if (depth >= MAX_DEPTH){
+                System.out.println("error: exceeded max depth in choose move(" +depth+")");
+            }
         }
-
         System.out.println("searched to depth " + depth);
 
         if (bestMove.move == null){ //this happens sometimes...why?
             MoveList validmoves = new MoveList();
             board.validMoves(ourColor, validmoves);
             if (validmoves.length() == 0){
-                System.out.println("no more moves");
+                //System.out.println("no more moves");
                 Move ret = new Move(0,0);
                 ret.moveKind = Move.QUIT;
+                //System.out.println("move time: " + timeSince(chooseMoveStart));
                 return ret;
             }
             bestMove.move = validmoves.get(0);
@@ -112,6 +117,7 @@ public class MachinePlayer extends Player {
 
         //make the move here instead of calling this.forceMove if we know that the move is valid
         board.move(bestMove.move, ourColor);
+        System.out.println("move time: " + timeSince(chooseMoveStart));
         return bestMove.move;
     }
 
@@ -150,8 +156,9 @@ public class MachinePlayer extends Player {
         }
 
         MoveList allValidMoves = movesLists[depth];
+        //MoveList allValidMoves = new MoveList();
         board.validMoves(side, allValidMoves);
-        myBest.move = allValidMoves.get(0);
+        myBest.move = copyMove(allValidMoves.get(0));
 
         int score=0;
         for (Move m : allValidMoves){
@@ -159,12 +166,16 @@ public class MachinePlayer extends Player {
             reply = minimax(1 - side, alpha, beta, depth - 1);
             score = reply.score;
             board.unMove(m);
+            if (score == OUT_OF_TIME){
+                myBest.score = OUT_OF_TIME;
+                return myBest;
+            }
             if ((side == ourColor) && (score > myBest.score)){
-                myBest.move = m;
+                myBest.move = copyMove(m);
                 myBest.score = score;
                 alpha = score;
             } else if ((side == opponentColor) && (score < myBest.score)){
-                myBest.move = m;
+                myBest.move = copyMove(m);
                 myBest.score = score;
                 beta = score;
             }
