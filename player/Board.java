@@ -241,6 +241,9 @@ public class Board{
         long bitRep,adjMask;
         long cluster;
         Piece p;
+
+        assert move != null : "move is null";
+
         switch (move.moveKind){
         case Move.ADD :
             toX = move.x1 + 1;
