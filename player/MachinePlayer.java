@@ -155,6 +155,9 @@ public class MachinePlayer extends Player {
             myBest.score = beta;
         }
 
+        if (depth >= MAX_DEPTH){ //TEMPORARY
+            System.out.println("error: exceeded max depth  in minimax (" +depth+")");
+        }
         MoveList allValidMoves = movesLists[depth];
         //MoveList allValidMoves = new MoveList();
         board.validMoves(side, allValidMoves);
