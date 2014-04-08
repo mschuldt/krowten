@@ -60,6 +60,12 @@ public class MachinePlayer extends Player {
         if (bestMove.move == null){ //this happens sometimes...why?
             MoveList validmoves = new MoveList();
             board.validMoves(ourColor, validmoves);
+            if (validmoves.length() == 0){
+                System.out.println("no more moves");
+                Move ret = new Move(0,0);
+                ret.moveKind = Move.QUIT;
+                return ret;
+            }
             bestMove.move = validmoves.get(0);
             System.out.println("fixed null move");
         }
