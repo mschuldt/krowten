@@ -70,6 +70,13 @@ public class MachinePlayer extends Player {
         Best myBest = new Best();
         Best reply;
 
+        //TODO: avoid calculating all the moves before checking for networks
+        //      (need this now so that we have we will always have a valid move)
+        MoveList allValidMoves = movesLists[depth];
+        board.validMoves(side, allValidMoves);
+
+        myBest.move = allValidMoves.get(0);
+
         if (board.hasNetwork(opponentColor)){
             myBest.score = -10000 - 100*depth;
             return myBest;
@@ -90,10 +97,6 @@ public class MachinePlayer extends Player {
             myBest.score = beta;
         }
 
-        MoveList allValidMoves = movesLists[depth];
-        board.validMoves(side, allValidMoves);
-
-        myBest.move = allValidMoves.get(0);
 
         int score=0;
         for (Move m : allValidMoves){
