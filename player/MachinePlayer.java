@@ -14,10 +14,15 @@ public class MachinePlayer extends Player {
     public static final int white = 1;
     public static final int black = 0;
     private static final int VAR_DEPTH = -1;
+    //minimum depths to search to
     private static final int ADD_DEPTH = 5;
     private static final int STEP_DEPTH = 4;
 
+    private static final int OUT_OF_TIME = 99999999;//should be > then any score
     MoveList[] movesLists;
+
+
+    double startTime; //time the minimax search started
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
@@ -54,8 +59,28 @@ public class MachinePlayer extends Player {
                 depth = STEP_DEPTH;
             }
         }
+        double endTime = 0.0;
+        Best bestMove = null;
+        Best tmpBest = null;
+        while (true){
+            startTime = System.currentTimeMillis();
+            tmpBest = minimax(ourColor, -100000, 100000, depth);
+            endTime = System.currentTimeMillis();
+            if ((tmpBest.score == OUT_OF_TIME) && (bestMove == null)){
+                System.out.println("ran out of time. never found a move");
+            }
+            if (tmpBest.score != OUT_OF_TIME){
+                bestMove = tmpBest;
+            }else{
+                break;
+            }
+            if ((endTime - startTime)/1000.0 > 4.9){
+                break;
+            }
+            depth++;
+        }
 
-        Best bestMove = minimax(ourColor, -100000, 100000, depth);
+        System.out.println("searched to depth " + depth);
 
         if (bestMove.move == null){ //this happens sometimes...why?
             MoveList validmoves = new MoveList();
@@ -84,6 +109,10 @@ public class MachinePlayer extends Player {
         Best myBest = new Best();
         Best reply;
 
+        if ((System.currentTimeMillis() - startTime)/1000.0 > 4.9){
+            myBest.score = OUT_OF_TIME;
+            return myBest;
+        }
         if (board.hasNetwork(opponentColor)){
             myBest.score = -10000 - 100*depth;
             return myBest;
