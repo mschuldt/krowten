@@ -48,6 +48,11 @@ public class MachinePlayer extends Player {
         }
     }
 
+    public static String timeSince(double time){
+        return "" + ((System.currentTimeMillis() - time)/1000.0);
+    }
+
+
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
