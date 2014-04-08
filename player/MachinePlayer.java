@@ -17,6 +17,7 @@ public class MachinePlayer extends Player {
     //minimum depths to search to
     private static final int ADD_DEPTH = 5;
     private static final int STEP_DEPTH = 4;
+    private static final int MAX_DEPTH = 10; //should be impossibly large
 
     private static final int OUT_OF_TIME = 99999999;//should be > then any score
     MoveList[] movesLists;
@@ -41,9 +42,8 @@ public class MachinePlayer extends Player {
         board = new Board(color);
         this.searchDepth = searchDepth;
 
-        int depth = (searchDepth == VAR_DEPTH ? ADD_DEPTH : searchDepth);
-        movesLists = new MoveList[depth+1];
-        for (int i = 0; i <= depth; i++){
+        movesLists = new MoveList[MAX_DEPTH];
+        for (int i = 0; i < MAX_DEPTH; i++){
             movesLists[i] = new MoveList();
         }
     }
