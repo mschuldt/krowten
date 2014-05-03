@@ -2182,7 +2182,9 @@ public class Board{
         ok = verifyPiecesHT() && ok;
         //ok = verifyMoveFinding() && ok;
         ok = verifyMoveFinding2() && ok;
-        ok = verifyClusterBoards() && ok;
+        //this cannot be used when `verifyAll' is true because
+        //it is mutually recursive with Board.move
+        //ok = verifyClusterBoards() && ok;
 
         if (!ok){
             System.out.println("board is corrupted.");
