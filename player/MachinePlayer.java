@@ -375,15 +375,23 @@ public class MachinePlayer extends Player {
     public static void main(String[] args){
 
         MachinePlayer p = new MachinePlayer(white);
-        p.forceBoard("        " +
-                     "        " +
-                     "        " +
-                     "o ox  x " +
-                     "  ox    " +
-                     "o    x  " +
-                     "    ox  " +
-                     "        "
-                     );
+        // p.forceBoard("        " +
+        //              "        " +
+        //              "        " +
+        //              "o ox  x " +
+        //              "  ox    " +
+        //              "o    x  " +
+        //              "    ox  " +
+        //              "        "
+        //              );
+        p.forceBoard("     x  " +
+                     " oxxo   " +
+                     "    o o " +
+                     "  ox  x " +
+                     "   xoo  " +
+                     "  o  x  " +
+                     " x  oxo " +
+                     " x      ");
         //runGame();
         //p.interactiveDebug();
         benchMark();

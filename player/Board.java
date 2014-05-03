@@ -4172,14 +4172,14 @@ public class Board{
 
     public static void main(String[] args){
         Board b = new Board(black,
-                            "  x     " +
-                            "  o xx  " +
-                            "        " +
-                            "o ox  x " +
-                            "  ox    " +
-                            "o    x  " +
-                            " xx ox  " +
-                            "        "
+                            "     x  " +
+                            "o xxo   " +
+                            "    o o " +
+                            "  ox  x " +
+                            "  oxoo  " +
+                            "     x  " +
+                            " x  oxo " +
+                            " x      "
                             );
 
         PrintBoard pb = b.toPrintBoard();
