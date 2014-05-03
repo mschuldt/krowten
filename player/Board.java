@@ -1913,8 +1913,8 @@ public class Board{
                     mcount++;
                 }
             }
-            if (mcount != moves.length()){
-                System.out.println("found "+mcount+" ADD moves. Expected "+ moves.length() + " moves");
+            if (mcount != vmoves.length()){
+                System.out.println("found "+mcount+" ADD moves. Expected "+ vmoves.length() + " moves");
                 ok = false;
             }
         }else{ //step moves
