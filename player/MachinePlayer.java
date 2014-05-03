@@ -344,10 +344,8 @@ public class MachinePlayer extends Player {
             p.chooseMove();
             end = System.currentTimeMillis();
 
-            if (!p.board.verify()){
-                System.out.println("board is corrupted board");
-                System.out.println(p.board.toBoardString());
-            }
+            p.board.verify()
+
             System.out.println("from empty [depth: " + depth + "]: "+ (end - start)/1000.0 + "s ");
         }
 
