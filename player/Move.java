@@ -61,6 +61,28 @@ public class Move {
         }
     }
 
+    public boolean equals(Object obj){
+        if ((obj == null) || !(obj instanceof Move)){
+            return false;
+        }
+        Move o = (Move) obj;
 
+        switch (moveKind) {
+        case QUIT:
+            return o.moveKind == QUIT;
+        case ADD:
+            return ((o.moveKind == ADD)
+                    && (x1 == o.x1)
+                    && (y1 == o.y1));
+        case STEP:
+        return ((o.moveKind == STEP)
+                && (x1 == o.x1)
+                && (y1 == o.y1)
+                && (x2 == o.x2)
+                && (y2 == o.y2));
+        default:
+            return false;
+        }
+    }
 
 }
