@@ -327,8 +327,7 @@ public class Board{
             if (color == ourColor){
                 //remove old location
                 ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-                //add new location
-                ourBitBoard |= toBitRep;
+
                 //increment counter if moveing to a goal
 
 
@@ -368,9 +367,13 @@ public class Board{
                 ourField_2 |= (ourField_1 & adjMask);
                 ourField_1 |= adjMask;
 
+                //add new location
+                ourBitBoard |= toBitRep;
+
+
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
-                opponentBitBoard |= toBitRep;
+
 
                 if ((oppField_1 & fromBitRep) != 0){
                     cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
@@ -400,6 +403,8 @@ public class Board{
                 oppField_2 |= (oppField_1 & adjMask);
                 oppField_1 |= adjMask;
 
+                opponentBitBoard |= toBitRep;
+
             }
             p = pieceArray[fromX][fromY];
             piecesHT[(int)(p.bitRep % 67)] = null;
@@ -418,6 +423,7 @@ public class Board{
         if (verifyAll){
             verify();
         }
+
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -540,7 +546,7 @@ public class Board{
 
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
-                ourBitBoard |= toBitRep;
+
 
                 //remove source squares from cluster board
                 if ((ourField_1 & fromBitRep) != 0){
@@ -578,10 +584,10 @@ public class Board{
                 ourField_2 |= (ourField_1 & adjMask);
                 ourField_1 |= adjMask;
 
+                ourBitBoard |= toBitRep;
 
             }else{
                 opponentBitBoard ^= p.bitRep;
-                opponentBitBoard |= toBitRep;
 
 
                 if ((oppField_1 & fromBitRep) != 0){
@@ -612,6 +618,7 @@ public class Board{
                 oppField_2 |= (oppField_1 & adjMask);
                 oppField_1 |= adjMask;
 
+                opponentBitBoard |= toBitRep;
             }
             piecesHT[(int)(p.bitRep % 67)] = null;
             removeFromMatrix(p);
