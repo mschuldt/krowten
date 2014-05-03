@@ -2078,6 +2078,90 @@ public class Board{
         return verifyMoveFinding(white) && verifyMoveFinding(black);
     }
 
+    //checks cluster and adjacency boards by creating
+    //adding all pieces to a seporate board and comparing the
+    //resulting bitboards.
+    private boolean verifyClusterBoards(){
+        Board test = new Board(ourColor);
+        Move m;
+        boolean ok = true;
+
+        for (Piece p : ourPieces){
+            test.move(new Move(p.x, p.y), ourColor);
+        }
+
+        for (Piece p : opponentPieces){
+            test.move(new Move(p.x, p.y), opponentColor);
+        }
+
+        if (ourField_1 != test.ourField_1){
+            System.out.println("Error: ourField_1 is corrupted");
+            ok = false;
+        }
+        if (ourField_2 != test.ourField_2){
+            System.out.println("Error: ourField_2 is corrupted");
+            ok = false;
+        }
+        if (ourField_3 != test.ourField_3){
+            System.out.println("Error: ourField_3 is corrupted");
+            ok = false;
+        }
+        if (ourField_4 != test.ourField_4){
+            System.out.println("Error: ourField_4 is corrupted");
+            ok = false;
+        }
+        if (oppField_1 != test.oppField_1){
+            System.out.println("Error: oppField_1 is corrupted");
+            ok = false;
+        }
+        if (oppField_2 != test.oppField_2){
+            System.out.println("Error: oppField_2 is corrupted");
+            ok = false;
+        }
+        if (oppField_3 != test.oppField_3){
+            System.out.println("Error: oppField_3 is corrupted");
+            ok = false;
+        }
+        if (oppField_4 != test.oppField_4){
+            System.out.println("Error: oppField_4 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_1 != test.ourClusters_1){
+            System.out.println("Error: ourClusters_1 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_2 != test.ourClusters_2){
+            System.out.println("Error: ourClusters_2 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_3 != test.ourClusters_3){
+            System.out.println("Error: ourClusters_3 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_4 != test.ourClusters_4){
+            System.out.println("Error: ourClusters_4 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_1 != test.oppClusters_1){
+            System.out.println("Error: oppClusters_1 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_2 != test.oppClusters_2){
+            System.out.println("Error: oppClusters_2 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_3 != test.oppClusters_3){
+            System.out.println("Error: oppClusters_3 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_4 != test.oppClusters_4){
+            System.out.println("Error: oppClusters_4 is corrupted");
+            ok = false;
+        }
+
+        return ok;
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         boolean ok = true;
@@ -2089,8 +2173,9 @@ public class Board{
         ok = verifyAdjacencyBoards() && ok;
         ok = verifyAdjacencyMasksHT() && ok;
         ok = verifyPiecesHT() && ok;
-        ok = verifyMoveFinding() && ok;
-        //ok = verifyMoveFinding2() && ok;
+        //ok = verifyMoveFinding() && ok;
+        ok = verifyMoveFinding2() && ok;
+        ok = verifyClusterBoards() && ok;
 
         if (!ok){
             System.out.println("board is corrupted.");
