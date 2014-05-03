@@ -246,7 +246,7 @@ public class MachinePlayer extends Player {
     public static void runGame(){
 
         MachinePlayer p1 = new MachinePlayer(white);
-        MachinePlayer p2 = new MachinePlayer(black);
+        MachinePlayer p2 = new MachinePlayer(black, 4);
         Move m1, m2;
         int winner=0;
         while (true){
