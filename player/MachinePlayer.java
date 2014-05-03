@@ -345,10 +345,8 @@ public class MachinePlayer extends Player {
             p.chooseMove();
             end = System.currentTimeMillis();
 
-            if (!p.board.verify()){
-                System.out.println("board is corrupted board");
-                System.out.println(p.board.toBoardString());
-            }
+            p.board.verify();
+
             System.out.println("from empty [depth: " + depth + "]: "+ (end - start)/1000.0 + "s ");
         }
 
@@ -369,10 +367,7 @@ public class MachinePlayer extends Player {
             p2.chooseMove();
             end = System.currentTimeMillis();
 
-            if (!p2.board.verify()){
-                System.out.println("board is corrupted board");
-                System.out.println(p2.board.toBoardString());
-            }
+            p2.board.verify();
             System.out.println("from full [depth: " + depth + "]: "+ (end - start)/1000.0 + "s ");
         }
 
@@ -381,15 +376,23 @@ public class MachinePlayer extends Player {
     public static void main(String[] args){
 
         MachinePlayer p = new MachinePlayer(white);
-        p.forceBoard("        " +
-                     "        " +
-                     "        " +
-                     "o ox  x " +
-                     "  ox    " +
-                     "o    x  " +
-                     "    ox  " +
-                     "        "
-                     );
+        // p.forceBoard("        " +
+        //              "        " +
+        //              "        " +
+        //              "o ox  x " +
+        //              "  ox    " +
+        //              "o    x  " +
+        //              "    ox  " +
+        //              "        "
+        //              );
+        p.forceBoard("     x  " +
+                     " oxxo   " +
+                     "    o o " +
+                     "  ox  x " +
+                     "   xoo  " +
+                     "  o  x  " +
+                     " x  oxo " +
+                     " x      ");
         //runGame();
         //p.interactiveDebug();
         benchMark();

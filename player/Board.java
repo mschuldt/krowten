@@ -261,6 +261,9 @@ public class Board{
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
 
                 if ((ourField_1 & bitRep) != 0){//just created a size 2 cluster
+                    // "ourBitBoard & adjMask" always returns a valid
+                    //position if bitRep is a valid position because there
+                    //will be at most 1 adjacent piece
                     cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
                     ourClusters_4 |= (ourClusters_3 & cluster);
                     ourClusters_3 |= (ourClusters_2 & cluster);
@@ -269,10 +272,10 @@ public class Board{
                 }
 
                 //add adjacent squares to adjacency fields
-                ourField_4 = ((ourField_3 & adjMask) | ourField_4);
-                ourField_3 = ((ourField_2 & adjMask) | ourField_3);
-                ourField_2 = ((ourField_1 & adjMask) | ourField_2);
-                ourField_1 = (ourField_1 | adjMask);
+                ourField_4 |= (ourField_3 & adjMask);
+                ourField_3 |= (ourField_2 & adjMask);
+                ourField_2 |= (ourField_1 & adjMask);
+                ourField_1 |= adjMask;
 
                 ourPieces.add(p);
 
@@ -290,10 +293,10 @@ public class Board{
                     oppClusters_1 |= cluster;
                 }
 
-                oppField_4 = ((oppField_3 & adjMask) | oppField_4);
-                oppField_3 = ((oppField_2 & adjMask) | oppField_3);
-                oppField_2 = ((oppField_1 & adjMask) | oppField_2);
-                oppField_1 = (oppField_1 | adjMask);
+                oppField_4 |= (oppField_3 & adjMask);
+                oppField_3 |= (oppField_2 & adjMask);
+                oppField_2 |= (oppField_1 & adjMask);
+                oppField_1 |= adjMask;
 
                 opponentPieces.add(p);
             }
@@ -324,8 +327,7 @@ public class Board{
             if (color == ourColor){
                 //remove old location
                 ourBitBoard ^= pieceArray[fromX][fromY].bitRep;
-                //add new location
-                ourBitBoard |= toBitRep;
+
                 //increment counter if moveing to a goal
 
 
@@ -365,9 +367,13 @@ public class Board{
                 ourField_2 |= (ourField_1 & adjMask);
                 ourField_1 |= adjMask;
 
+                //add new location
+                ourBitBoard |= toBitRep;
+
+
             }else{
                 opponentBitBoard ^= pieceArray[fromX][fromY].bitRep;
-                opponentBitBoard |= toBitRep;
+
 
                 if ((oppField_1 & fromBitRep) != 0){
                     cluster = getAdjMask(opponentBitBoard & adjMask) | adjMask;
@@ -397,6 +403,8 @@ public class Board{
                 oppField_2 |= (oppField_1 & adjMask);
                 oppField_1 |= adjMask;
 
+                opponentBitBoard |= toBitRep;
+
             }
             p = pieceArray[fromX][fromY];
             piecesHT[(int)(p.bitRep % 67)] = null;
@@ -415,6 +423,7 @@ public class Board{
         if (verifyAll){
             verify();
         }
+
     }
     //seporate methods for moveing our pieces and moving their pieces
     //so that we don't have to pass the color of the piece we intend
@@ -537,7 +546,7 @@ public class Board{
 
             if (p.color == ourColor){
                 ourBitBoard ^= p.bitRep;
-                ourBitBoard |= toBitRep;
+
 
                 //remove source squares from cluster board
                 if ((ourField_1 & fromBitRep) != 0){
@@ -575,10 +584,10 @@ public class Board{
                 ourField_2 |= (ourField_1 & adjMask);
                 ourField_1 |= adjMask;
 
+                ourBitBoard |= toBitRep;
 
             }else{
                 opponentBitBoard ^= p.bitRep;
-                opponentBitBoard |= toBitRep;
 
 
                 if ((oppField_1 & fromBitRep) != 0){
@@ -609,6 +618,7 @@ public class Board{
                 oppField_2 |= (oppField_1 & adjMask);
                 oppField_1 |= adjMask;
 
+                opponentBitBoard |= toBitRep;
             }
             piecesHT[(int)(p.bitRep % 67)] = null;
             removeFromMatrix(p);
@@ -1431,13 +1441,21 @@ public class Board{
     //this is used by the evaluation function to determine the
     //values of piece positions
     private int[][] whiteSquareValues = {{ 0, 0, 0, 0,  0, 0, 0, 0},
-                                         {-3,-3, 2,-1,  2, 1, 0,-4},
-                                         {-4,-3,-1,-3, -1,-1, 0,-3},
-                                         {-2,-3, 4,-3,  4, 1, 0,-3},
-                                         {-4,-3,-3,-3, -3,-1, 0,-4},
-                                         {-2,-2, 3,-3,  3, 1, 0,-3},
-                                         {-4,-2, 0,-3,  0,-1, 0,-3},
+                                         {-3,-3, 2,-1,  2, 1, 1,-4},
+                                         {-4,-3,-1,-3, -1,-2, 1,-3},
+                                         {-2,-3, 4,-3,  4, 1, 1,-3},
+                                         {-4,-3,-3,-3, -3,-2, 1,-4},
+                                         {-2,-2, 3,-3,  3, 1, 1,-3},
+                                         {-4,-2, 0,-3,  0,-3, 1,-3},
                                          {0 , 0, 0, 0,  0, 0, 0, 0}};
+    // private int[][] whiteSquareValues = {{0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0},
+    //                                      {0,0,0,0, 0,0,0,0}};
 
     //return the sum of the square values of each piece
     //used by the evaluation function
@@ -1888,6 +1906,13 @@ public class Board{
         long bitrep;
         int mcount=0;
 
+        //check move counts
+        MoveList moves = validMoves(color);
+        if (moves.length() != vmoves.length()){
+            System.out.println("found " + moves.length() +" moves, (should be " + vmoves.length() + ")");
+            ok = false;
+        }
+
         if (npieces < 10){ //add moves
             for (long br : bitReps){
                 if ((br & invalidSquares) == 0){
@@ -1895,6 +1920,10 @@ public class Board{
                     //pb.mark(getPiece(br));
                     mcount++;
                 }
+            }
+            if (mcount != vmoves.length()){
+                System.out.println("found "+mcount+" ADD moves. Expected "+ vmoves.length() + " moves");
+                ok = false;
             }
         }else{ //step moves
             for (int x = 0; x < 8; x++){
@@ -1962,7 +1991,7 @@ public class Board{
                                     }
                                 }
                                 if (!found){
-                                    System.out.println("could not find move from " + locStr(x,y) + " to " + locStr(x2,y2));
+                                    System.out.println("found illegal move: " + locStr(x,y) + " to " + locStr(x2,y2));
                                     notFound++;
                                     ok = false;
                                 }
@@ -1992,53 +2021,39 @@ public class Board{
         int nbl = newBlack.length();
         if (owl != nwl){
             ok = false;
-            System.out.println("wrong number of white moves. old moves" + owl + " new moves: " + nwl);
+            System.out.println("wrong number of white moves. old moves: " + owl + " new moves: " + nwl);
         }
         if (obl != nbl){
             ok = false;
-            System.out.println("wrong number of black moves. old moves" + obl + " new moves: " + nbl);
+            System.out.println("wrong number of black moves. old moves: " + obl + " new moves: " + nbl);
         }
 
         //check that all the old moves are found in the list of new ones
         for (Move m1: oldWhite){
             found= false;
             for (Move m2 : newWhite){
-                if ((m1.moveKind == Move.ADD
-                     && m1.x1 == m2.x1
-                     && m1.y1 == m2.y1)
-                    || (m1.moveKind == Move.STEP
-                        && m1.x1 == m2.x1
-                        && m1.y1 == m2.y1
-                        && m1.x2 == m2.x2
-                        && m1.y2 == m2.y2)){
+                if(m1.equals(m2)){
                     found = true;
                     break;
                 }
-                if (! found){
-                    System.out.println("white move " + m1 + " is not in generated by new method");
-                    ok = false;
-                }
+            }
+            if (! found){
+                System.out.println("Error: white move " + m1 + " not found");
+                ok = false;
             }
         }
 
         for (Move m1: oldBlack){
             found= false;
             for (Move m2 : newBlack){
-                if ((m1.moveKind == Move.ADD
-                     && m1.x1 == m2.x1
-                     && m1.y1 == m2.y1)
-                    || (m1.moveKind == Move.STEP
-                        && m1.x1 == m2.x1
-                        && m1.y1 == m2.y1
-                        && m1.x2 == m2.x2
-                        && m1.y2 == m2.y2)){
+                if (m1.equals(m2)){
                     found = true;
                     break;
                 }
-                if (! found){
-                    System.out.println("black move " + m1 + " is not in generated by new method");
-                    ok = false;
-                }
+            }
+            if (! found){
+                System.out.println("Error: black move " + m1 + " not found");
+                ok = false;
             }
         }
 
@@ -2046,42 +2061,28 @@ public class Board{
         for (Move m2 : newWhite){
             found= false;
             for (Move m1: oldWhite){
-                if ((m1.moveKind == Move.ADD
-                     && m1.x1 == m2.x1
-                     && m1.y1 == m2.y1)
-                    || (m1.moveKind == Move.STEP
-                        && m1.x1 == m2.x1
-                        && m1.y1 == m2.y1
-                        && m1.x2 == m2.x2
-                        && m1.y2 == m2.y2)){
+                if (m2.equals(m1)){
                     found = true;
                     break;
                 }
-                if (! found){
-                    System.out.println("white move " + m2 + " is not in old list of moves");
-                    ok = false;
-                }
+            }
+            if (! found){
+                System.out.println("Error: white move " + m2 + " is invalid");
+                ok = false;
             }
         }
 
         for (Move m2 : newBlack){
             found= false;
             for (Move m1: oldBlack){
-                if ((m1.moveKind == Move.ADD
-                     && m1.x1 == m2.x1
-                     && m1.y1 == m2.y1)
-                    || (m1.moveKind == Move.STEP
-                        && m1.x1 == m2.x1
-                        && m1.y1 == m2.y1
-                        && m1.x2 == m2.x2
-                        && m1.y2 == m2.y2)){
+                if (m1.equals(m2)){
                     found = true;
                     break;
                 }
-                if (! found){
-                    System.out.println("black move " + m2 + " is not in old list of moves");
-                    ok = false;
-                }
+            }
+            if (! found){
+                System.out.println("Error: black move " + m2 + " is invalid");
+                ok = false;
             }
         }
 
@@ -2090,6 +2091,90 @@ public class Board{
 
     private boolean verifyMoveFinding(){
         return verifyMoveFinding(white) && verifyMoveFinding(black);
+    }
+
+    //checks cluster and adjacency boards by creating
+    //adding all pieces to a seporate board and comparing the
+    //resulting bitboards.
+    public boolean verifyClusterBoards(){
+        Board test = new Board(ourColor);
+        Move m;
+        boolean ok = true;
+
+        for (Piece p : ourPieces){
+            test.move(new Move(p.x, p.y), ourColor);
+        }
+
+        for (Piece p : opponentPieces){
+            test.move(new Move(p.x, p.y), opponentColor);
+        }
+
+        if (ourField_1 != test.ourField_1){
+            System.out.println("Error: ourField_1 is corrupted");
+            ok = false;
+        }
+        if (ourField_2 != test.ourField_2){
+            System.out.println("Error: ourField_2 is corrupted");
+            ok = false;
+        }
+        if (ourField_3 != test.ourField_3){
+            System.out.println("Error: ourField_3 is corrupted");
+            ok = false;
+        }
+        if (ourField_4 != test.ourField_4){
+            System.out.println("Error: ourField_4 is corrupted");
+            ok = false;
+        }
+        if (oppField_1 != test.oppField_1){
+            System.out.println("Error: oppField_1 is corrupted");
+            ok = false;
+        }
+        if (oppField_2 != test.oppField_2){
+            System.out.println("Error: oppField_2 is corrupted");
+            ok = false;
+        }
+        if (oppField_3 != test.oppField_3){
+            System.out.println("Error: oppField_3 is corrupted");
+            ok = false;
+        }
+        if (oppField_4 != test.oppField_4){
+            System.out.println("Error: oppField_4 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_1 != test.ourClusters_1){
+            System.out.println("Error: ourClusters_1 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_2 != test.ourClusters_2){
+            System.out.println("Error: ourClusters_2 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_3 != test.ourClusters_3){
+            System.out.println("Error: ourClusters_3 is corrupted");
+            ok = false;
+        }
+        if (ourClusters_4 != test.ourClusters_4){
+            System.out.println("Error: ourClusters_4 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_1 != test.oppClusters_1){
+            System.out.println("Error: oppClusters_1 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_2 != test.oppClusters_2){
+            System.out.println("Error: oppClusters_2 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_3 != test.oppClusters_3){
+            System.out.println("Error: oppClusters_3 is corrupted");
+            ok = false;
+        }
+        if (oppClusters_4 != test.oppClusters_4){
+            System.out.println("Error: oppClusters_4 is corrupted");
+            ok = false;
+        }
+
+        return ok;
     }
 
     //verify that all internal state is valid
@@ -2103,8 +2188,16 @@ public class Board{
         ok = verifyAdjacencyBoards() && ok;
         ok = verifyAdjacencyMasksHT() && ok;
         ok = verifyPiecesHT() && ok;
-        ok = verifyMoveFinding() && ok;
-        //ok = verifyMoveFinding2() && ok;
+        //ok = verifyMoveFinding() && ok;
+        ok = verifyMoveFinding2() && ok;
+        //this cannot be used when `verifyAll' is true because
+        //it is mutually recursive with Board.move
+        //ok = verifyClusterBoards() && ok;
+
+        if (!ok){
+            System.out.println("board is corrupted.");
+            System.out.println(toBoardString());
+        }
         return ok;
     }
 
@@ -2438,7 +2531,8 @@ public class Board{
 
     public long legalMovesBB(int color){
         long movesBoard = 0;
-        for (Move m: validMovesSlow(color)){
+        //for (Move m: validMovesSlow(color)){
+        for (Move m: validMoves(color)){
             movesBoard |= getBitRep(m.x1, m.y1);
         }
         return movesBoard;
@@ -2625,6 +2719,7 @@ public class Board{
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
         boolean showBitBoards = true;
+        boolean useSlow = false;;
         String lastCommand = "print";
         Move m = null;
 
@@ -2883,8 +2978,20 @@ public class Board{
             case "network?": case "net?": case "n?":
                 messages.add(hasNetwork(color) ? "YES": "NO");
                 break;
-            case "moves": //ok
-                AList<Move> moves = validMovesSlow(color);
+
+            case "smoves":
+                useSlow = true; //deliberate fall-through
+            case "moves":
+                AList<Move> moves;
+                if (useSlow){
+                    moves = validMovesSlow(color);
+                    messages.add("found moves with slow method");
+                }else{
+                    moves = validMoves(color);
+                    messages.add("found moves with fast method");
+                }
+                useSlow = false;
+
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
                 int nBad = 0;
@@ -4073,14 +4180,14 @@ public class Board{
 
     public static void main(String[] args){
         Board b = new Board(black,
-                            "  x     " +
-                            "  o xx  " +
-                            "        " +
-                            "o ox  x " +
-                            "  ox    " +
-                            "o    x  " +
-                            " xx ox  " +
-                            "        "
+                            "     x  " +
+                            "o xxo   " +
+                            "    o o " +
+                            "  ox  x " +
+                            "  oxoo  " +
+                            "     x  " +
+                            " x  oxo " +
+                            " x      "
                             );
 
         PrintBoard pb = b.toPrintBoard();
