@@ -2,26 +2,14 @@
 
 package dict;
 
-/**
- *  HashTable implements a Dictionary as a hash table with chaining.
- *  All objects used as keys must have a valid hashCode() method, which is
- *  used to determine which bucket of the hash table an entry is stored in.
- *  Each object's hashCode() is presumed to return an int between
- *  Integer.MIN_VALUE and Integer.MAX_VALUE.  The HashTable class
- *  implements only the compression function, which maps the hash code to
- *  a bucket in the table's range.
- **/
-
 public class HashTable {
     private Entry [] array;
     private int numBuckets;
     private int numItems;
-    private int collisions = 0;
 
     /**
      *  Construct a new empty hash table intended to hold roughly sizeEstimate
-     *  entries.  (The precise number of buckets is up to you, but we recommend
-     *  you use a prime number, and shoot for a load factor between 0.5 and 1.)
+     *  entries.
      **/
     public HashTable(int sizeEstimate) {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
@@ -30,14 +18,6 @@ public class HashTable {
             array[i] = new Entry();
         }
         numItems = 0;
-    }
-
-    /**
-     *  Construct a new empty hash table with a default size.  Say, a prime in
-     *  the neighborhood of 100.
-     **/
-    public HashTable() {
-        this(101);
     }
 
     /** returns the smallest prime >= n
@@ -61,9 +41,6 @@ public class HashTable {
     /**
      *  Converts a hash code in the range Integer.MIN_VALUE...Integer.MAX_VALUE
      *  to a value in the range 0...(size of hash table) - 1.
-     *
-     *  This function should have package protection (so we can test it), and
-     *  should be used by insert, find, and remove.
      **/
     int compFunction(long hashCode) {
         int c = ((int)hashCode) % numBuckets;
@@ -71,13 +48,9 @@ public class HashTable {
     }
 
     /**
-     *  Returns the number of entries stored in the dictionary.  Entries with
-     *  the same key (or even the same key and value) each still count as
-     *  a separate entry.
-     *  @return number of entries in the dictionary.
+     *  Returns the number of entries stored in the hash table.
      **/
     public int size() {
-        //TODO: rename these size fields to something less retarded
         return numItems;
     }
 
@@ -89,25 +62,15 @@ public class HashTable {
     }
 
     /**
-     *  Tests if the dictionary is empty.
-     *
-     *  @return true if the dictionary has no entries; false otherwise.
+     *  return true if the dictionary is empty.
      **/
     public boolean isEmpty() {
         return numItems == 0;
     }
 
     /**
-     *  Create a new Entry object referencing the input key and associated value,
-     *  and insert the entry into the dictionary.  Return a reference to the new
-     *  entry.  Multiple entries with the same key (or even the same key and
-     *  value) can coexist in the dictionary.
-     *
-     *  This method should run in O(1) time if the number of collisions is small.
-     *
-     *  @param key the key by which the entry can be retrieved.
-     *  @param value an arbitrary object.
-     *  @return an entry containing the key and value.
+     *  Modify the HASHCODE entry to contain SCORE, OURBOARD and OPPBOARD.
+     *  update it's generation to GEN. Returns a reference to the entry.
      **/
     public Entry insert(long hashCode, int score, long ourBoard, long oppBoard, int gen) {
 
@@ -131,14 +94,7 @@ public class HashTable {
 
     /**
      *  Search for an entry with the specified key.  If such an entry is found,
-     *  return it; otherwise return null.  If several entries have the specified
-     *  key, choose one arbitrarily and return it.
-     *
-     *  This method should run in O(1) time if the number of collisions is small.
-     *
-     *  @param key the search key.
-     *  @return an entry containing the key and an associated value, or null if
-     *          no entry contains the specified key.
+     *  return it; otherwise return null.
      **/
     public Entry find(long hashCode, long ourBoard, long oppBoard, int gen){
         Entry entry = array[compFunction(hashCode)];
@@ -161,14 +117,9 @@ public class HashTable {
         return str;
     }
 
-    public int collisions (){
-        return collisions;
-    }
-
     public static void main(String[] args){
         int n= 2;
-        HashTable ht = new HashTable();
-        HList list = new HList();
+        HashTable ht = new HashTable(20);
         for (int i = 2; i < 100; i++){
             n = ht.getNextPrime(n+1);
             System.out.println(i + ":  " + n);
