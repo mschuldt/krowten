@@ -1,21 +1,21 @@
-/* HashTableChained.java */
+/* HashTable.java */
 
 package dict;
 import list.*;
 
 /**
- *  HashTableChained implements a Dictionary as a hash table with chaining.
+ *  HashTable implements a Dictionary as a hash table with chaining.
  *  All objects used as keys must have a valid hashCode() method, which is
  *  used to determine which bucket of the hash table an entry is stored in.
  *  Each object's hashCode() is presumed to return an int between
- *  Integer.MIN_VALUE and Integer.MAX_VALUE.  The HashTableChained class
+ *  Integer.MIN_VALUE and Integer.MAX_VALUE.  The HashTable class
  *  implements only the compression function, which maps the hash code to
  *  a bucket in the table's range.
  *
  *  DO NOT CHANGE ANY PROTOTYPES IN THIS FILE.
  **/
 
-public class HashTableChained {
+public class HashTable {
     /**
      *  Place any data fields here.
      **/
@@ -29,7 +29,7 @@ public class HashTableChained {
      *  entries.  (The precise number of buckets is up to you, but we recommend
      *  you use a prime number, and shoot for a load factor between 0.5 and 1.)
      **/
-    public HashTableChained(int sizeEstimate) {
+    public HashTable(int sizeEstimate) {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
         array = new HList[numBuckets];
         for (int i =0;i < numBuckets; i++){
@@ -42,7 +42,7 @@ public class HashTableChained {
      *  Construct a new empty hash table with a default size.  Say, a prime in
      *  the neighborhood of 100.
      **/
-    public HashTableChained() {
+    public HashTable() {
         this(101);
     }
 
@@ -217,7 +217,7 @@ public class HashTableChained {
 
     public static void main(String[] args){
         int n= 2;
-        HashTableChained ht = new HashTableChained();
+        HashTable ht = new HashTable();
         HList list = new HList();
         for (int i = 2; i < 100; i++){
             n = ht.getNextPrime(n+1);
