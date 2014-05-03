@@ -2105,6 +2105,11 @@ public class Board{
         ok = verifyPiecesHT() && ok;
         ok = verifyMoveFinding() && ok;
         //ok = verifyMoveFinding2() && ok;
+
+        if (!ok){
+            System.out.println("board is corrupted.");
+            System.out.println(toBoardString());
+        }
         return ok;
     }
 
