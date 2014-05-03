@@ -153,24 +153,14 @@ public class HashTable {
         int len = 0;
         int collisionCnt[] = new int[100];
         int max = 0;
-        for (HList dl : array){
-            len = dl.length();
-            if (len > max){
-                max = len;
-            }
-            if (len < 100){
-                collisionCnt[len]++;
-            }else{
-                System.out.println("You're hash sucks!");
-            }
-        }
+
         int c = 0;
         for (int i = 0; i <max; i++){
-            c = collisionCnt[i];
-            str += i + ": " + c + "\n";
+            str += i + ": " + array[i].collisions + "\n";
         }
         return str;
     }
+
     public int collisions (){
         return collisions;
     }
