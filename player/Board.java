@@ -2630,6 +2630,7 @@ public class Board{
         boolean inhibitBoardPrint = false;
         boolean fakeInput = false;
         boolean showBitBoards = true;
+        boolean useSlow = false;;
         String lastCommand = "print";
         Move m = null;
 
@@ -2888,8 +2889,20 @@ public class Board{
             case "network?": case "net?": case "n?":
                 messages.add(hasNetwork(color) ? "YES": "NO");
                 break;
-            case "moves": //ok
-                AList<Move> moves = validMovesSlow(color);
+
+            case "smoves":
+                useSlow = true; //deliberate fall-through
+            case "moves":
+                AList<Move> moves;
+                if (useSlow){
+                    moves = validMovesSlow(color);
+                    messages.add("found moves with slow method");
+                }else{
+                    moves = validMoves(color);
+                    messages.add("found moves with fast method");
+                }
+                useSlow = false;
+
                 messages.add("found " + moves.length() +" moves");
                 System.out.print("moves: ");
                 int nBad = 0;
