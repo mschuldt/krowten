@@ -261,6 +261,9 @@ public class Board{
                 assert ourPieceCount <= 10 : colorStr(color) + " has more then 10 pieces";
 
                 if ((ourField_1 & bitRep) != 0){//just created a size 2 cluster
+                    // "ourBitBoard & adjMask" always returns a valid
+                    //position if bitRep is a valid position because there
+                    //will be at most 1 adjacent piece
                     cluster = getAdjMask(ourBitBoard & adjMask) | adjMask;
                     ourClusters_4 |= (ourClusters_3 & cluster);
                     ourClusters_3 |= (ourClusters_2 & cluster);
