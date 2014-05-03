@@ -6,6 +6,7 @@ public class Entry {
 
     public long ourBitBoard, opponentBitBoard;
     public int score;
+    public int generation;
 
     public Entry(){
     }
