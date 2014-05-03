@@ -114,7 +114,9 @@ public class HashTable {
         Entry entry = array[compFunction(hashCode)];
 
         if (entry.generation == gen){
-            collisions++;
+            entry.collisions++;
+        }else{
+            entry.collisions = 0;
         }
 
         entry.generation = gen;
