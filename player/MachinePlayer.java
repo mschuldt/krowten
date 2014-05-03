@@ -188,7 +188,8 @@ public class MachinePlayer extends Player {
             System.out.println("error: exceeded max depth  in minimax (" +depth+")");
         }
         MoveList allValidMoves = movesLists[depth];
-        board.validMoves(side, allValidMoves);
+        //board.validMoves(side, allValidMoves);
+        board.validMovesSlow(side, allValidMoves);
         myBest.move = copyMove(allValidMoves.get(0));
 
         int score=0;
@@ -246,7 +247,7 @@ public class MachinePlayer extends Player {
     public static void runGame(){
 
         MachinePlayer p1 = new MachinePlayer(white);
-        MachinePlayer p2 = new MachinePlayer(black);
+        MachinePlayer p2 = new MachinePlayer(black, 4);
         Move m1, m2;
         int winner=0;
         while (true){
