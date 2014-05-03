@@ -1,7 +1,6 @@
 /* HashTable.java */
 
 package dict;
-import list.*;
 
 /**
  *  HashTable implements a Dictionary as a hash table with chaining.
@@ -19,7 +18,7 @@ public class HashTable {
     /**
      *  Place any data fields here.
      **/
-    private HList [] array;
+    private Entry [] array;
     private int numBuckets;
     private int numItems;
     private int collisions = 0;
@@ -31,9 +30,9 @@ public class HashTable {
      **/
     public HashTable(int sizeEstimate) {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
-        array = new HList[numBuckets];
+        array = new Entry[numBuckets];
         for (int i =0;i < numBuckets; i++){
-            array[i] = new HList();
+            array[i] = new Entry();
         }
         numItems = 0;
     }
@@ -135,13 +134,20 @@ public class HashTable {
      *  @return an entry containing the key and value.
      **/
     public Entry insert(long hashCode, int score, long ourBoard, long oppBoard, int gen) {
-        Entry entry = new Entry(score, ourBoard, oppBoard);
-        int index = compFunction(hashCode);
-        array[index].add(entry, gen);
-        if (array[index].length() > 1){
+
+        Entry entry = array[compFunction(hashCode)];
+
+        if (entry.generation == gen){
             collisions++;
         }
+
+        entry.generation = gen;
+        entry.score = score;
+        entry.ourBitBoard = ourBoard;
+        entry.opponentBitBoard = oppBoard;
+
         numItems++;
+
         return entry;
     }
 
@@ -156,9 +162,12 @@ public class HashTable {
      *  @return an entry containing the key and an associated value, or null if
      *          no entry contains the specified key.
      **/
-    public Entry find(long hashCode, long ourBoard, long oppBoard, int gen){ //test
-        HListNode node = array[compFunction(hashCode)].find(ourBoard, oppBoard, gen);
-        return node == null ? null : node.entry;
+    public Entry find(long hashCode, long ourBoard, long oppBoard, int gen){
+        Entry entry = array[compFunction(hashCode)];
+        if (entry.generation == gen){
+            return entry;
+        }
+        return null;
     }
 
      /**
