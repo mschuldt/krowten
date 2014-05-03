@@ -2088,7 +2088,7 @@ public class Board{
     //checks cluster and adjacency boards by creating
     //adding all pieces to a seporate board and comparing the
     //resulting bitboards.
-    private boolean verifyClusterBoards(){
+    public boolean verifyClusterBoards(){
         Board test = new Board(ourColor);
         Move m;
         boolean ok = true;
