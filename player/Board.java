@@ -1888,6 +1888,13 @@ public class Board{
         long bitrep;
         int mcount=0;
 
+        //check move counts
+        MoveList moves = validMoves(color);
+        if (moves.length() != vmoves.length()){
+            System.out.println("found " + moves.length() +" moves, (should be " + vmoves.length() + ")");
+            ok = false;
+        }
+
         if (npieces < 10){ //add moves
             for (long br : bitReps){
                 if ((br & invalidSquares) == 0){
