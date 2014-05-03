@@ -1903,6 +1903,10 @@ public class Board{
                     mcount++;
                 }
             }
+            if (mcount != moves.length()){
+                System.out.println("found "+mcount+" ADD moves. Expected "+ moves.length() + " moves");
+                ok = false;
+            }
         }else{ //step moves
             for (int x = 0; x < 8; x++){
                 for (int y = 0; y < 8; y++){
