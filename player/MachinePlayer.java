@@ -11,6 +11,7 @@ public class MachinePlayer extends Player {
     Board board;
     int searchDepth;
     int ourColor, opponentColor;
+    int generation;
     public static final int white = 1;
     public static final int black = 0;
     private static final int VAR_DEPTH = -1;
@@ -47,6 +48,7 @@ public class MachinePlayer extends Player {
         for (int i = 0; i < MAX_DEPTH; i++){
             movesLists[i] = new MoveList();
         }
+        generation = 0;
     }
 
     public static String timeSince(double time){
@@ -68,6 +70,7 @@ public class MachinePlayer extends Player {
     // Returns a new move by "this" player.  Internally records the move (updates
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
+        generation++;
         int depth = searchDepth;
         if (depth == VAR_DEPTH){
             return chooseMoveIterativelyDeepening();
