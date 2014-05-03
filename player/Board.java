@@ -2454,7 +2454,8 @@ public class Board{
 
     public long legalMovesBB(int color){
         long movesBoard = 0;
-        for (Move m: validMovesSlow(color)){
+        //for (Move m: validMovesSlow(color)){
+        for (Move m: validMoves(color)){
             movesBoard |= getBitRep(m.x1, m.y1);
         }
         return movesBoard;
