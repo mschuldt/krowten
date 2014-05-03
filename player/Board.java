@@ -272,10 +272,10 @@ public class Board{
                 }
 
                 //add adjacent squares to adjacency fields
-                ourField_4 = ((ourField_3 & adjMask) | ourField_4);
-                ourField_3 = ((ourField_2 & adjMask) | ourField_3);
-                ourField_2 = ((ourField_1 & adjMask) | ourField_2);
-                ourField_1 = (ourField_1 | adjMask);
+                ourField_4 |= (ourField_3 & adjMask);
+                ourField_3 |= (ourField_2 & adjMask);
+                ourField_2 |= (ourField_1 & adjMask);
+                ourField_1 |= adjMask;
 
                 ourPieces.add(p);
 
@@ -293,10 +293,10 @@ public class Board{
                     oppClusters_1 |= cluster;
                 }
 
-                oppField_4 = ((oppField_3 & adjMask) | oppField_4);
-                oppField_3 = ((oppField_2 & adjMask) | oppField_3);
-                oppField_2 = ((oppField_1 & adjMask) | oppField_2);
-                oppField_1 = (oppField_1 | adjMask);
+                oppField_4 |= (oppField_3 & adjMask);
+                oppField_3 |= (oppField_2 & adjMask);
+                oppField_2 |= (oppField_1 & adjMask);
+                oppField_1 |= adjMask;
 
                 opponentPieces.add(p);
             }
