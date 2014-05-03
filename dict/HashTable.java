@@ -10,14 +10,9 @@ package dict;
  *  Integer.MIN_VALUE and Integer.MAX_VALUE.  The HashTable class
  *  implements only the compression function, which maps the hash code to
  *  a bucket in the table's range.
- *
- *  DO NOT CHANGE ANY PROTOTYPES IN THIS FILE.
  **/
 
 public class HashTable {
-    /**
-     *  Place any data fields here.
-     **/
     private Entry [] array;
     private int numBuckets;
     private int numItems;
@@ -62,25 +57,6 @@ public class HashTable {
         }
     }
 
-    /** returns the largest prime prime <= n
-     */
-    private int getPrevPrime(int n){
-        int sq;
-        if (n <= 1){
-            return 1; //::Q is 1 a prime?
-        }
-        start:
-        while (true){
-            sq = (int)Math.sqrt(n)+1;
-            for (int i=2;i<=sq;i++){
-                if (n % i == 0){
-                    n--;
-                    continue start;
-                }
-            }
-            return n;
-        }
-    }
 
     /**
      *  Converts a hash code in the range Integer.MIN_VALUE...Integer.MAX_VALUE
@@ -170,33 +146,6 @@ public class HashTable {
         return null;
     }
 
-     /**
-      *  Remove an entry with the specified key.  If such an entry is found,
-      *  remove it from the table and return it; otherwise return null.
-      *  If several entries have the specified key, choose one arbitrarily, then
-      *  remove and return it.
-      *
-      *  This method should run in O(1) time if the number of collisions is small.
-      *
-      *  @param key the search key.
-      *  @return an entry containing the key and an associated value, or null if
-      *          no entry contains the specified key.
-      */
-    // public Entry remove(long hashCode) {
-    //     numItems--;
-    //     return array[compFunction(hashCode)].removeEntry(key);
-    // }
-
-    /**
-     *  Remove all entries from the dictionary.
-     */
-    public void makeEmpty(){
-        for (int i = 0; i < numBuckets; i++){
-            array[i].clear();
-        }
-        collisions = numItems = 0;
-    }
-
     public String toString(){
         String str = "";
         int len = 0;
@@ -232,8 +181,6 @@ public class HashTable {
             n = ht.getNextPrime(n+1);
             System.out.println(i + ":  " + n);
         }
-        System.out.println("getPrevPrime(Integer.MAX_VALUE) = " +ht.getPrevPrime(Integer.MAX_VALUE));
         System.out.println("getnextPrime(2147483644) = " +ht.getNextPrime(2147483644));
-        System.out.println("getprevPrime(1) = " +ht.getPrevPrime(1));
     }
 }
