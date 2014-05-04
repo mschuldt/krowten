@@ -12,6 +12,9 @@ public class HashTable {
     private static final int ENTRY_OUR_BITBOARD = 1;
     private static final int ENTRY_OPP_BITBOARD = 2;
     private static final int ENTRY_GENERATION = 3;
+    private static final int ENTRY_EVALED_BOARDS = 4;
+
+    int max = 0;
 
     /**
      *  Construct a new empty hash table intended to hold roughly sizeEstimate
@@ -21,7 +24,7 @@ public class HashTable {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
         array = new long[numBuckets][];
         for (int i =0;i < numBuckets; i++){
-            array[i] = new long[4];
+            array[i] = new long[5];
         }
         numItems = collisions = 0;
     }
@@ -78,7 +81,7 @@ public class HashTable {
      *  Modify the HASHCODE entry to contain SCORE, OURBOARD and OPPBOARD.
      *  update it's generation to GEN. Returns a reference to the entry.
      **/
-    public long[] insert(long hashCode, int score, long ourBoard, long oppBoard, int gen) {
+    public long[] insert(long hashCode, int score, long ourBoard, long oppBoard, long evaledBoards, int gen) {
 
         long[] entry = array[compFunction(hashCode)];
 
@@ -93,11 +96,27 @@ public class HashTable {
         //     return entry;
         // }
 
+        //only keep the current value if it more boards where
+        //evaled to find it, but only if that number is above
+        //some constant (found via experimentation)
+        if (entry[ENTRY_EVALED_BOARDS] > evaledBoards){
+            if (entry[ENTRY_EVALED_BOARDS] > 10000){
+                //System.out.print(".");
+                return entry;
+            }
+        }
+
+        // if (evaledBoards > max){
+        //     max = (int)evaledBoards;
+        //     System.out.println("evaledBoards = " +evaledBoards);
+        // }
+
+
         entry[ENTRY_GENERATION] = gen;
         entry[ENTRY_SCORE] = score;
         entry[ENTRY_OUR_BITBOARD] = ourBoard;
         entry[ENTRY_OPP_BITBOARD] = oppBoard;
-
+        entry[ENTRY_EVALED_BOARDS] = evaledBoards;
 
         return entry;
     }
@@ -124,9 +143,9 @@ public class HashTable {
         int max = 0;
 
         int c = 0;
-        for (int i = 0; i <max; i++){
-            str += i + ": " + array[i].collisions + "\n";
-        }
+        // for (int i = 0; i <max; i++){
+        //     str += i + ": " + array[i]collisions + "\n";
+        // }
         return str;
     }
 

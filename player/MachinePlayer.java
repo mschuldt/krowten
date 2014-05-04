@@ -37,6 +37,7 @@ public class MachinePlayer extends Player {
     private static final int ENTRY_OURBITBOARD = 1;
     private static final int ENTRY_OPPBITBOARD = 2;
     private static final int ENTRY_GENERATION = 3;
+    private static final int ENTRY_EVALED_BOARDS = 4;
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
@@ -82,6 +83,9 @@ public class MachinePlayer extends Player {
     // the internal game board) as a move by "this" player.
     public Move chooseMove() {
         generation++;
+
+        ht.collisions =  0;
+
         int depth = searchDepth;
         if (depth == VAR_DEPTH){
             return chooseMoveIterativelyDeepening();
@@ -172,6 +176,7 @@ public class MachinePlayer extends Player {
     public Best minimax(int side, int alpha, int beta, int depth){
         Best myBest = new Best();
         Best reply;
+        int evaledBoards = 0;
 
         if (iterativeDeepining
             && (System.currentTimeMillis() - startTime)/1000.0 > 4.9){
@@ -217,19 +222,24 @@ public class MachinePlayer extends Player {
             entry = ht.find(hashCode, ourBoard, oppBoard, generation);
             if (entry != null){
                 score = (int)entry[ENTRY_SCORE];
+                evaledBoards += (int) entry[ENTRY_EVALED_BOARDS]; //?
             }else{
                 reply = minimax(1 - side, alpha, beta, depth - 1);
                 score = reply.score;
-                ht.insert(hashCode, score, ourBoard, oppBoard, generation);
+                evaledBoards += reply.evaledBoards;
+                ht.insert(hashCode, score, ourBoard, oppBoard,
+                          reply.evaledBoards, generation);
             }
 
             //*** normal code
             // reply = minimax(1 - side, alpha, beta, depth - 1);
             // score = reply.score;
+            // evaledBoards += reply.evaledBoards;
 
             board.unMove(m);
             if (score == OUT_OF_TIME){
                 myBest.score = OUT_OF_TIME;
+                myBest.evaledBoards = evaledBoards;
                 return myBest;
             }
             if ((side == ourColor) && (score > myBest.score)){
@@ -242,9 +252,11 @@ public class MachinePlayer extends Player {
                 beta = score;
             }
             if (alpha >= beta){
+                myBest.evaledBoards = evaledBoards;
                 return myBest;
             }
         }
+        myBest.evaledBoards = evaledBoards;
         return myBest;
     }
 
