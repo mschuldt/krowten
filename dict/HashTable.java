@@ -97,21 +97,6 @@ public class HashTable {
             return entry;
         }
 
-        //only keep the current value if it more boards where
-        //evaled to find it, but only if that number is above
-        //some constant (found via experimentation)
-        // if (entry[ENTRY_EVALED_BOARDS] > evaledBoards
-        //     && entry[ENTRY_EVALED_BOARDS] > 10000){
-        //         return entry;
-        //     }
-        // }
-
-        // if (evaledBoards > max){
-        //     max = (int)evaledBoards;
-        //     System.out.println("evaledBoards = " +evaledBoards);
-        // }
-
-
         entry[ENTRY_GENERATION] = gen;
         entry[ENTRY_SCORE] = score;
         entry[ENTRY_OUR_BITBOARD] = ourBoard;
