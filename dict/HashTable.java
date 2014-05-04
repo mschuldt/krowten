@@ -98,7 +98,10 @@ public class HashTable {
      **/
     public Entry find(long hashCode, long ourBoard, long oppBoard, int gen){
         Entry entry = array[compFunction(hashCode)];
-        if (entry.generation == gen){
+        if (entry.generation == gen
+            && entry.ourBitBoard == ourBoard
+            && entry.opponentBitBoard == oppBoard
+            ){
             return entry;
         }
         return null;
