@@ -2,6 +2,8 @@
 // javac -g -cp ../ ../player/*.java ../list/*.java
 
 package player;
+import dict.HashTable;
+import dict.Entry;
 
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
@@ -141,6 +143,7 @@ public class MachinePlayer extends Player {
         }
         System.out.println("searched to depth " + depth);
 
+
         if (bestMove.move == null){ //this happens sometimes...why?
             MoveList validmoves = new MoveList();
             board.validMoves(ourColor, validmoves);
@@ -206,8 +209,24 @@ public class MachinePlayer extends Player {
         int score=0;
         for (Move m : allValidMoves){
             board.move(m, side);
-            reply = minimax(1 - side, alpha, beta, depth - 1);
-            score = reply.score;
+
+            ///***  memoization code
+            hashCode = board.hash();
+            ourBoard = board.getOurBitBoard();
+            oppBoard = board.getOpponentBitBoard();
+            entry = ht.find(hashCode, ourBoard, oppBoard, generation);
+            if (entry != null){
+                score = (int)entry[ENTRY_SCORE];
+            }else{
+                reply = minimax(1 - side, alpha, beta, depth - 1);
+                score = reply.score;
+                ht.insert(hashCode, score, ourBoard, oppBoard, generation);
+            }
+
+            //*** normal code
+            // reply = minimax(1 - side, alpha, beta, depth - 1);
+            // score = reply.score;
+
             board.unMove(m);
             if (score == OUT_OF_TIME){
                 myBest.score = OUT_OF_TIME;
