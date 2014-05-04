@@ -373,9 +373,22 @@ public class MachinePlayer extends Player {
         int emptyDepth = 6;
         int fullDepth = 4;
         double start=0,end=0;
-        for (int depth = 2; depth < 7; depth++){
-            MachinePlayer p = new MachinePlayer(white, depth);
 
+        MachinePlayer p = new MachinePlayer(white, 0);
+        p.forceBoard("        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        " +
+                         "        "
+                     );
+        System.out.println("choosing move via iterate deepening(empty)");
+        p.chooseMoveIterativelyDeepening();
+
+        for (int depth = 2; depth < 7; depth++){
+            p = new MachinePlayer(white, depth);
             p.forceBoard("        " +
                          "        " +
                          "        " +
@@ -395,9 +408,21 @@ public class MachinePlayer extends Player {
             System.out.println("from empty [depth: " + depth + "]: "+ (end - start)/1000.0 + "s ");
         }
 
-        for (int depth = 2; depth < 7; depth++){
 
-            MachinePlayer p2 = new MachinePlayer(white, depth);
+        MachinePlayer p2 = new MachinePlayer(white, 19);
+        p2.forceBoard("     x  " +
+                      " oxxo   " +
+                      "    o o " +
+                      "  ox  x " +
+                      "  oxoo  " +
+                      "     x  " +
+                      " x  oxo " +
+                      " x      "
+                      );
+        System.out.println("choosing move via iterate deepening(full)");
+        p2.chooseMoveIterativelyDeepening();
+        for (int depth = 2; depth < 7; depth++){
+            p2 = new MachinePlayer(white, depth);
             p2.forceBoard("     x  " +
                           " oxxo   " +
                           "    o o " +
@@ -438,8 +463,8 @@ public class MachinePlayer extends Player {
                      "  o  x  " +
                      " x  oxo " +
                      " x      ");
-        //runGame();
+        runGame();
         //p.interactiveDebug();
-        benchMark();
+        //benchMark();
     }
 }
