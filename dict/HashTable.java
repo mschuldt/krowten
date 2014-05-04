@@ -92,20 +92,19 @@ public class HashTable {
             numItems++;
         }
 
-        // this is slower
-        // if (entry[ENTRY_GENERATION] < gen){
-        //     return entry;
-        // }
+        if (entry[ENTRY_DEPTH] > depth
+            && entry[ENTRY_GENERATION] == gen){
+            return entry;
+        }
 
         //only keep the current value if it more boards where
         //evaled to find it, but only if that number is above
         //some constant (found via experimentation)
-        if (entry[ENTRY_EVALED_BOARDS] > evaledBoards){
-            if (entry[ENTRY_EVALED_BOARDS] > 10000){
-                //System.out.print(".");
-                return entry;
-            }
-        }
+        // if (entry[ENTRY_EVALED_BOARDS] > evaledBoards
+        //     && entry[ENTRY_EVALED_BOARDS] > 10000){
+        //         return entry;
+        //     }
+        // }
 
         // if (evaledBoards > max){
         //     max = (int)evaledBoards;
