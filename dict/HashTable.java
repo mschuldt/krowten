@@ -88,6 +88,11 @@ public class HashTable {
             numItems++;
         }
 
+        // this is slower
+        // if (entry[ENTRY_GENERATION] < gen){
+        //     return entry;
+        // }
+
         entry[ENTRY_GENERATION] = gen;
         entry[ENTRY_SCORE] = score;
         entry[ENTRY_OUR_BITBOARD] = ourBoard;
