@@ -38,6 +38,7 @@ public class MachinePlayer extends Player {
     private static final int ENTRY_OPPBITBOARD = 2;
     private static final int ENTRY_GENERATION = 3;
     private static final int ENTRY_EVALED_BOARDS = 4;
+    private static final int ENTRY_DEPTH = 5;
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
@@ -220,7 +221,8 @@ public class MachinePlayer extends Player {
             ourBoard = board.getOurBitBoard();
             oppBoard = board.getOpponentBitBoard();
             entry = ht.find(hashCode, ourBoard, oppBoard, generation);
-            if (entry != null){
+            if (entry != null
+                && entry[ENTRY_DEPTH] >= depth){
                 score = (int)entry[ENTRY_SCORE];
                 evaledBoards += (int) entry[ENTRY_EVALED_BOARDS]; //?
             }else{
@@ -228,7 +230,7 @@ public class MachinePlayer extends Player {
                 score = reply.score;
                 evaledBoards += reply.evaledBoards;
                 ht.insert(hashCode, score, ourBoard, oppBoard,
-                          reply.evaledBoards, generation);
+                          reply.evaledBoards, depth-1, generation);
             }
 
             //*** normal code

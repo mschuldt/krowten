@@ -13,6 +13,7 @@ public class HashTable {
     private static final int ENTRY_OPP_BITBOARD = 2;
     private static final int ENTRY_GENERATION = 3;
     private static final int ENTRY_EVALED_BOARDS = 4;
+    private static final int ENTRY_DEPTH = 5;
 
     int max = 0;
 
@@ -24,7 +25,7 @@ public class HashTable {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
         array = new long[numBuckets][];
         for (int i =0;i < numBuckets; i++){
-            array[i] = new long[5];
+            array[i] = new long[6];
         }
         numItems = collisions = 0;
     }
@@ -81,7 +82,7 @@ public class HashTable {
      *  Modify the HASHCODE entry to contain SCORE, OURBOARD and OPPBOARD.
      *  update it's generation to GEN. Returns a reference to the entry.
      **/
-    public long[] insert(long hashCode, int score, long ourBoard, long oppBoard, long evaledBoards, int gen) {
+    public long[] insert(long hashCode, int score, long ourBoard, long oppBoard, long evaledBoards, int depth, int gen) {
 
         long[] entry = array[compFunction(hashCode)];
 
@@ -117,6 +118,7 @@ public class HashTable {
         entry[ENTRY_OUR_BITBOARD] = ourBoard;
         entry[ENTRY_OPP_BITBOARD] = oppBoard;
         entry[ENTRY_EVALED_BOARDS] = evaledBoards;
+        entry[ENTRY_DEPTH] = depth;
 
         return entry;
     }
