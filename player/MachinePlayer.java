@@ -136,6 +136,7 @@ public class MachinePlayer extends Player {
                 bestMove = tmpBest;
             }else{
                 // System.out.println("ran out of time");
+                depth--;
                 break;
             }
             if ((System.currentTimeMillis() - startTime)/1000.0 > 4.9){
