@@ -1,11 +1,17 @@
 /* HashTable.java */
-
+//383
 package dict;
 
 public class HashTable {
-    private Entry [] array;
+    private long [][] array;
     private int numBuckets;
     private int numItems;
+    public int collisions;
+
+    private static final int ENTRY_SCORE = 0;
+    private static final int ENTRY_OUR_BITBOARD = 1;
+    private static final int ENTRY_OPP_BITBOARD = 2;
+    private static final int ENTRY_GENERATION = 3;
 
     /**
      *  Construct a new empty hash table intended to hold roughly sizeEstimate
@@ -13,11 +19,11 @@ public class HashTable {
      **/
     public HashTable(int sizeEstimate) {
         numBuckets = getNextPrime((int) (sizeEstimate*1.5));
-        array = new Entry[numBuckets];
+        array = new long[numBuckets][];
         for (int i =0;i < numBuckets; i++){
-            array[i] = new Entry();
+            array[i] = new long[4];
         }
-        numItems = 0;
+        numItems = collisions = 0;
     }
 
     /** returns the smallest prime >= n
@@ -72,22 +78,21 @@ public class HashTable {
      *  Modify the HASHCODE entry to contain SCORE, OURBOARD and OPPBOARD.
      *  update it's generation to GEN. Returns a reference to the entry.
      **/
-    public Entry insert(long hashCode, int score, long ourBoard, long oppBoard, int gen) {
+    public long[] insert(long hashCode, int score, long ourBoard, long oppBoard, int gen) {
 
-        Entry entry = array[compFunction(hashCode)];
+        long[] entry = array[compFunction(hashCode)];
 
-        if (entry.generation == gen){
-            entry.collisions++;
+        if (entry[ENTRY_GENERATION] == gen){
+            collisions++;
         }else{
-            entry.collisions = 0;
+            numItems++;
         }
 
-        entry.generation = gen;
-        entry.score = score;
-        entry.ourBitBoard = ourBoard;
-        entry.opponentBitBoard = oppBoard;
+        entry[ENTRY_GENERATION] = gen;
+        entry[ENTRY_SCORE] = score;
+        entry[ENTRY_OUR_BITBOARD] = ourBoard;
+        entry[ENTRY_OPP_BITBOARD] = oppBoard;
 
-        numItems++;
 
         return entry;
     }
@@ -96,11 +101,11 @@ public class HashTable {
      *  Search for an entry with the specified key.  If such an entry is found,
      *  return it; otherwise return null.
      **/
-    public Entry find(long hashCode, long ourBoard, long oppBoard, int gen){
-        Entry entry = array[compFunction(hashCode)];
-        if (entry.generation == gen
-            && entry.ourBitBoard == ourBoard
-            && entry.opponentBitBoard == oppBoard
+    public long[] find(long hashCode, long ourBoard, long oppBoard, int gen){
+        long[] entry = array[compFunction(hashCode)];
+        if (entry[ENTRY_GENERATION] == gen
+            && entry[ENTRY_OUR_BITBOARD] == ourBoard
+            && entry[ENTRY_OPP_BITBOARD] == oppBoard
             ){
             return entry;
         }

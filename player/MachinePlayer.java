@@ -27,6 +27,15 @@ public class MachinePlayer extends Player {
     boolean iterativeDeepining = false;
     double startTime; //time the minimax search started
 
+    HashTable ht = new HashTable(1000000);
+    long ourBoard, oppBoard, hashCode;
+    long[] entry;
+    //indexes for entry objects
+    private static final int ENTRY_SCORE = 0;
+    private static final int ENTRY_OURBITBOARD = 1;
+    private static final int ENTRY_OPPBITBOARD = 2;
+    private static final int ENTRY_GENERATION = 3;
+
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
     public MachinePlayer(int color) {
