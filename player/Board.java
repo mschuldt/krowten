@@ -981,8 +981,14 @@ public class Board{
         return rows[7];
     }
 
-    //this does the work for Board.hasNetwork(int)
-    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
+    private Piece getEndGoalList(int color){
+        if (color == white){
+            return columns[7];
+        }
+        return rows[0];
+    }
+
+        private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
                                int m, int b, int depth){
         int newM, newB;
 
