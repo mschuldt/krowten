@@ -956,8 +956,6 @@ public class Board{
         return pieceArray[x+1][y+1];
     }
 
-
-
     //returns a pieces from goalA
     private PieceList getStartGoalPieces(int color){
         Piece p = null;
@@ -1388,11 +1386,10 @@ public class Board{
 
     //this is a helper for Board.runLength(Piece, long[])
     private int runLength(Piece currentPiece, long[] memberPieces,
-                          int m, int b, int length){
+                          long endGoal, int m, int b, int length){
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
-
 
         for (Piece piece : currentPiece.connected){
             if (piece == null || piece.color != currentPiece.color){
@@ -1413,8 +1410,15 @@ public class Board{
                 continue; // we have already visited this piece
             }
 
-            memberPieces[0] = (members | currentPiece.bitRep);
-            len += runLength(piece, memberPieces, newM, newB, 1);
+            //if we use a piece in the goal, don't use anyothers in the goal
+            if ((piece.bitRep & endGoal) != 0){
+                memberPieces[0] = (members | currentPiece.bitRep | endGoal);
+                len += 2; //bonus for using a the goal
+            }else{
+                memberPieces[0] = (members | currentPiece.bitRep);
+            }
+
+            len += runLength(piece, memberPieces, endGoal, newM, newB, 1);
         }
         return length + len;
     }
@@ -1434,8 +1438,9 @@ public class Board{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
         }
-        memberPieces[0] = (memberPieces[0] | goalA | goalB);
-        return runLength(startPiece, memberPieces ,11, 60, 1);
+        //memberPieces[0] = (memberPieces[0] | goalA | goalB);
+        memberPieces[0] = (memberPieces[0] | goalA);
+        return runLength(startPiece, memberPieces, goalB ,11, 60, 1);
     }
 
     //this is used by the evaluation function to determine the
