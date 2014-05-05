@@ -3556,7 +3556,8 @@ public class Board{
             "'showNums'  display the square numbers",
             "'around' <num>    mark pieces that surround <num>",
             "'connect' <num>   draw lines to pieces connected to <num>",
-            "'validmoves'    displays valid moves"};
+            "'validmoves'    displays valid moves",
+            "...Too many...just read the source"};
 
         for (String line: lines){
             messages.add(line);
