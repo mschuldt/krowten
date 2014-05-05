@@ -1,6 +1,6 @@
 package player;
 import java.util.Iterator;
-
+import java.util.Random;
 // Array List
 
 public class AList<T> implements Iterable<T>{
@@ -122,5 +122,21 @@ public class AList<T> implements Iterable<T>{
         }
     }
 
+    public static void main(String[] args){
+        //test code
+        int len = 20;
+        Random rand = new Random(3);
+        long[] values = new long[len];
+        int val = 0;
+        AList<Integer> lst = new AList<Integer>(len);
+        for (int i = 0; i < len; i++){
+            val = rand.nextInt(2*len);
+            lst.add(val);
+            values[i] = val;
+        }
+        System.out.println("before: " + lst);
+        lst.sorted(values);
+        System.out.println("after: " + lst);
 
+    }
 }
