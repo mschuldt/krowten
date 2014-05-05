@@ -24,9 +24,6 @@ public class Board{
     private PieceList ourPieces;
     private PieceList opponentPieces;
 
-    private PieceList adjacentPieceList;
-
-
     Move m = new Move(0,0);
 
     //fields track how many pieces are adjacent to a given spot
@@ -140,7 +137,6 @@ public class Board{
             pieces.add(new Piece());
         }
 
-        adjacentPieceList = new PieceList(8);
         rows = new Piece[8];
         columns = new Piece[8];
         fDiagonals = new Piece[14];
@@ -909,16 +905,6 @@ public class Board{
     public PieceList adjacentPieces(Piece piece, int color){
         return adjacentPieces(piece.x, piece.y, color);
 
-    }
-
-    public void updateAdjacentPiecesList(int x, int y, int color){
-        x++; y++;
-        adjacentPieceList.clear();
-        for (int xAdj = -1; xAdj <= 1; xAdj++){
-            for (int yAdj = -1; yAdj <= 1; yAdj++){
-                adjacentPieceList.addIfColor(pieceArray[x+xAdj][y+yAdj], color);
-            }
-        }
     }
 
     /** Board.pieceAt(int,int) returns true if a piece is located
