@@ -1386,7 +1386,7 @@ public class Board{
 
     //this is a helper for Board.runLength(Piece, long[])
     private int runLength(Piece currentPiece, long[] memberPieces,
-                          long endGoal, int m, int b, int length){
+                          int m, int b, int length){
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
@@ -1410,15 +1410,8 @@ public class Board{
                 continue; // we have already visited this piece
             }
 
-            //if we use a piece in the goal, don't use anyothers in the goal
-            if ((piece.bitRep & endGoal) != 0){
-                memberPieces[0] = (members | currentPiece.bitRep | endGoal);
-                len += 2; //bonus for using a the goal
-            }else{
-                memberPieces[0] = (members | currentPiece.bitRep);
-            }
-
-            len += runLength(piece, memberPieces, endGoal, newM, newB, 1);
+            memberPieces[0] = (members | currentPiece.bitRep);
+            len += runLength(piece, memberPieces, newM, newB, 1);
         }
         return length + len;
     }
@@ -1428,19 +1421,7 @@ public class Board{
     //memberPieces is an array only so that its first element can
     //be passed by reference
     private int runLength(Piece startPiece,long[] memberPieces){
-
-        long bitBoard, goalA, goalB;
-
-        if (startPiece.color == ourColor){
-            goalA = ourGoalMaskA;
-            goalB = ourGoalMaskB;
-        }else{
-            goalA = opponentGoalMaskA;
-            goalB = opponentGoalMaskB;
-        }
-        //memberPieces[0] = (memberPieces[0] | goalA | goalB);
-        memberPieces[0] = (memberPieces[0] | goalA);
-        return runLength(startPiece, memberPieces, goalB ,11, 60, 1);
+        return runLength(startPiece, memberPieces ,11, 60, 1);
     }
 
     //this is used by the evaluation function to determine the
@@ -1499,18 +1480,26 @@ public class Board{
         }
 
         //give points for partial networks
-        long[] memberPieces = {0};
-        long br = 0;
 
+        long goalA, goalB;
+        if (color == ourColor){
+            goalA = ourGoalMaskA;
+            goalB = ourGoalMaskB;
+        }else{
+            goalA = opponentGoalMaskA;
+            goalB = opponentGoalMaskB;
+        }
+        long br = 0;
+        long[] memberPieces = {goalA};
         PieceList goalPieces = getStartGoalPieces(color);
+        //sum the run lengths from the goals
         if (goalPieces.length() > 0){
             for (Piece p: goalPieces){
-                br = p.bitRep;
-                memberPieces[0]= (memberPieces[0] | br);
-                sum+=3*runLength(goalPieces.pop(), memberPieces);
+                sum+=5*runLength(p, memberPieces);
             }
         }
 
+        //sum the the other partial networks
         for (Piece p : getPieces(color)){
             br = p.bitRep;
             if ((memberPieces[0] & br) == 0){
@@ -1518,6 +1507,7 @@ public class Board{
                 sum+= 3*runLength(p, memberPieces);
             }
         }
+
         return sum;
     }
 
