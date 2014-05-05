@@ -15,8 +15,8 @@ public class Board{
     private int ourColor, opponentColor;
     private int ourPieceCount, opponentPieceCount;
 
-    public static final int white = 1;
-    public static final int black = 0;
+    public static final int WHITE = 1;
+    public static final int BLACK = 0;
     private long ourBitBoard = 0;
     private long opponentBitBoard = 0;
 
@@ -71,7 +71,7 @@ public class Board{
 
     //this piece is used to mark the edge of the board and the
     //four invalid corner squares
-    public static final Piece edge = new Piece(0,0,0,0);
+    public static final Piece EDGE = new Piece(0,0,0,0);
 
     //indexes for Piece.connected
     public static final int UP = 0;
@@ -115,19 +115,19 @@ public class Board{
         pieceArray = new Piece[10][10];
 
         for (int x = 0; x < 10; x++){
-            pieceArray[x][0] = edge;
-            pieceArray[x][9] = edge;
+            pieceArray[x][0] = EDGE;
+            pieceArray[x][9] = EDGE;
         }
 
         for (int y = 0; y < 10; y++){
-            pieceArray[0][y] = edge;
-            pieceArray[9][y] = edge;
+            pieceArray[0][y] = EDGE;
+            pieceArray[9][y] = EDGE;
         }
 
-        pieceArray[1][1] = edge;
-        pieceArray[8][1] = edge;
-        pieceArray[1][8] = edge;
-        pieceArray[8][8] = edge;
+        pieceArray[1][1] = EDGE;
+        pieceArray[8][1] = EDGE;
+        pieceArray[1][8] = EDGE;
+        pieceArray[8][8] = EDGE;
 
         ourPieces = new PieceList(10);
         opponentPieces = new PieceList(10);
@@ -144,7 +144,7 @@ public class Board{
 
         //NOTE: if this goal mask assignment is changed, then
         //      code in getStartGoalPieces must be updated.
-        if (ourColor == white){ //white's goals are on the left and right
+        if (ourColor == WHITE){ //white's goals are on the left and right
             ourGoalMaskA = leftGoalMask;
             ourGoalMaskB = rightGoalMask;
             opponentGoalMaskA = lowerGoalMask;
@@ -472,7 +472,7 @@ public class Board{
 
             p = pieceArray[x][y];
             assert p != null : "square should not be empty";
-            assert p != edge : "cannot undo: piece is an edge";
+            assert p != EDGE : "cannot undo: piece is an edge";
 
             long bitRep = p.bitRep;
             adjMask = getAdjMask(x-1, y-1);
@@ -785,7 +785,7 @@ public class Board{
     }
 
     private boolean verifyNotInMatrix(Piece p){
-        return verifyNotInMatrix(p, black) && verifyNotInMatrix(p, white);
+        return verifyNotInMatrix(p, BLACK) && verifyNotInMatrix(p, WHITE);
     }
 
     private boolean verifyNotInMatrix(Piece piece, int color){
@@ -922,7 +922,7 @@ public class Board{
             return false;
         }
         Piece p = pieceArray[x+1][y+1];
-        return (p != null && p != edge);
+        return (p != null && p != EDGE);
     }
 
     /** Board.getPiece(int,int) returns the piece located at (X,Y)
@@ -946,7 +946,7 @@ public class Board{
     private PieceList getStartGoalPieces(int color){
         Piece p = null;
         PieceList lst = new PieceList();
-        if (color == white){ //start at the left
+        if (color == WHITE){ //start at the left
             for (int y=1; y<7; y++){
                 lst.addIfColor(getPiece(0, y), color);
             }
@@ -961,14 +961,14 @@ public class Board{
     //this should be used over getStartGoalPieces because
     //it avoids allocating memory
     private Piece getStartGoalList(int color){
-        if (color == white){
+        if (color == WHITE){
             return columns[0];
         }
         return rows[7];
     }
 
     private Piece getEndGoalList(int color){
-        if (color == white){
+        if (color == WHITE){
             return columns[7];
         }
         return rows[0];
@@ -1037,7 +1037,7 @@ public class Board{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
         }
-        if (color == white){
+        if (color == WHITE){
             direction = DOWN;
         }else{
             direction = RIGHT;
@@ -1442,12 +1442,12 @@ public class Board{
     //used by the evaluation function
     private int squareScoreSum(int color){
         int sum= 0;
-        if (color == white){
-            for (Piece p : getPieces(white)){
+        if (color == WHITE){
+            for (Piece p : getPieces(WHITE)){
                 sum += whiteSquareValues[p.y][p.x];
             }
         }else{
-            for (Piece p : getPieces(black)){
+            for (Piece p : getPieces(BLACK)){
                 sum += whiteSquareValues[p.x][p.y];
             }
         }
@@ -1485,7 +1485,7 @@ public class Board{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
         }
-        if (color == white){
+        if (color == WHITE){
             direction = DOWN;
         }else{
             direction = RIGHT;
@@ -1553,7 +1553,7 @@ public class Board{
         for (int x = 0; x < 8; x++){
             for (int y = 0; y < 8; y++){
                 p = getPiece(x,y);
-                if (p == edge){
+                if (p == EDGE){
                     continue;
                 }
 
@@ -1635,13 +1635,13 @@ public class Board{
         }
 
         //check piece count methods
-        PieceList wp = getPieces(white);
-        PieceList bp = getPieces(black);
-        if (getNumPieces(white) != wp.length()){
+        PieceList wp = getPieces(WHITE);
+        PieceList bp = getPieces(BLACK);
+        if (getNumPieces(WHITE) != wp.length()){
             System.out.println("getPieces(white).length() != getNumPieces(white)");
             ok = false;
         }
-        if (getNumPieces(black) != bp.length()){
+        if (getNumPieces(BLACK) != bp.length()){
             System.out.println("getPieces(black).length() != getNumPieces(black)");
             ok = false;
         }
@@ -1680,7 +1680,7 @@ public class Board{
         for (int x = 0; x<8; x++){
             for (int y = 0; y<8; y++){
                 p = getPiece(x, y);
-                if (p != null && p != edge){
+                if (p != null && p != EDGE){
                     if ((p.bitRep & ourGoalMaskA) != 0){
                         ourA++;
                     }else if ((p.bitRep & ourGoalMaskB) != 0){
@@ -1713,7 +1713,7 @@ public class Board{
     }
 
     public boolean verifyMatrix(){
-        return verifyMatrix(white) && verifyMatrix(black);
+        return verifyMatrix(WHITE) && verifyMatrix(BLACK);
     }
 
     public boolean verifyMatrix(int color){
@@ -2013,10 +2013,10 @@ public class Board{
     }
 
     private boolean verifyMoveFinding2(){
-        MoveList oldWhite = validMovesSlow(white);
-        MoveList oldBlack = validMovesSlow(black);
-        MoveList newWhite = validMoves(white);
-        MoveList newBlack = validMoves(black);
+        MoveList oldWhite = validMovesSlow(WHITE);
+        MoveList oldBlack = validMovesSlow(BLACK);
+        MoveList newWhite = validMoves(WHITE);
+        MoveList newBlack = validMoves(BLACK);
         boolean ok = true;
         boolean found= false;
 
@@ -2095,7 +2095,7 @@ public class Board{
     }
 
     private boolean verifyMoveFinding(){
-        return verifyMoveFinding(white) && verifyMoveFinding(black);
+        return verifyMoveFinding(WHITE) && verifyMoveFinding(BLACK);
     }
 
     //checks cluster and adjacency boards by creating
@@ -2222,7 +2222,7 @@ public class Board{
 
         //AList<Move> mList = new AList<Move>(440);
         int x_lower, y_lower, x_upper, y_upper;
-        if (color == black) {
+        if (color == BLACK) {
             x_lower = 1;
             x_upper = 6;
             y_lower = 0;
@@ -2329,7 +2329,7 @@ public class Board{
                 currentY += yInc;
                 current = pieceArray[currentX][currentY];
             }
-            if (current != edge){
+            if (current != EDGE){
                 pieces.addIfColor(current, color);
             }
         }
@@ -2451,7 +2451,7 @@ public class Board{
                     continue;
                 case 'x' :
                     m = new Move(x, y);
-                    if (ourColor == black){
+                    if (ourColor == BLACK){
                         move(m);
                     }else{
                         opponentMove(m);
@@ -2460,7 +2460,7 @@ public class Board{
                     continue;
                 case 'o' :
                     m = new Move(x,y);
-                    if (ourColor == white){
+                    if (ourColor == WHITE){
                         move(m);
                     }else{
                         opponentMove(m);
@@ -2486,8 +2486,8 @@ public class Board{
         String lines = "";
         String line = "";
         long bitRep = 0;
-        long whiteBB = (ourColor == white ? ourBitBoard : opponentBitBoard);
-        long blackBB = (ourColor == black ? ourBitBoard : opponentBitBoard);
+        long whiteBB = (ourColor == WHITE ? ourBitBoard : opponentBitBoard);
+        long blackBB = (ourColor == BLACK ? ourBitBoard : opponentBitBoard);
 
         for (int y = 0; y < 8; y++){
             line = trueString? "" : "\"";
@@ -2564,9 +2564,9 @@ public class Board{
                 cells[x][y] = cell;
                 if (piece == null){
                     cell.defaultChar = " ";
-                }else if (piece == edge){
+                }else if (piece == EDGE){
                     cell.isEdge = true;
-                }else if (piece.color == black){
+                }else if (piece.color == BLACK){
                     cell.defaultChar = "X";
                 }else {
                     cell.defaultChar = "~";
@@ -2670,19 +2670,19 @@ public class Board{
         }
 
         for (int x = 0; x < 10; x++){
-            pieceArray[x][0] = edge;
-            pieceArray[x][9] = edge;
+            pieceArray[x][0] = EDGE;
+            pieceArray[x][9] = EDGE;
         }
 
         for (int y = 0; y < 10; y++){
-            pieceArray[0][y] = edge;
-            pieceArray[9][y] = edge;
+            pieceArray[0][y] = EDGE;
+            pieceArray[9][y] = EDGE;
         }
 
-        pieceArray[1][1] = edge;
-        pieceArray[8][1] = edge;
-        pieceArray[1][8] = edge;
-        pieceArray[8][8] = edge;
+        pieceArray[1][1] = EDGE;
+        pieceArray[8][1] = EDGE;
+        pieceArray[1][8] = EDGE;
+        pieceArray[8][8] = EDGE;
     }
     private String colorStr(int color){
         switch (color){
@@ -2799,10 +2799,10 @@ public class Board{
                 break;
 
             case "white": case "w":
-                color = white;
+                color = WHITE;
                 break;
             case "black": case "b":
-                color = black;
+                color = BLACK;
                 break;
             case "mark":
                 if (arg1isRef){
@@ -3024,7 +3024,7 @@ public class Board{
                     String loc = locStr(argX1, argY1);
                     if (p == null){
                         messages.add("No piece at "+ loc);
-                    }else if (p == edge){
+                    }else if (p == EDGE){
                         messages.add(loc + " is an edge piece");
                     }else{
                         messages.add("Piece at " + loc);
@@ -3078,12 +3078,12 @@ public class Board{
 
             case "markall": //ok
                 int num= 0;
-                PieceList pLst = getPieces(black);
+                PieceList pLst = getPieces(BLACK);
                 num+=pLst.length();
                 for (Piece p: pLst){
                     pb.mark(p);
                 }
-                pLst = pLst = getPieces(white);
+                pLst = pLst = getPieces(WHITE);
                 num+=pLst.length();
                 for (Piece p: pLst){
                     pb.mark(p);
@@ -3105,7 +3105,7 @@ public class Board{
                 for (int x = 0; x<8; x++){
                     for (int y = 0; y<8; y++){
                         p = getPiece(x, y);
-                        if (p != null && p != edge && (p.bitRep & goalmask) != 0){
+                        if (p != null && p != EDGE && (p.bitRep & goalmask) != 0){
                             pb.mark(x,y);
                             c3++;
                         }
@@ -3121,7 +3121,7 @@ public class Board{
                 for (int x = 0; x<8; x++){
                     for (int y = 0; y<8; y++){
                         p2 = getPiece(x,y);
-                        if (p2 != null && p2 != edge && (p2.bitRep & goalmask2)!=0){
+                        if (p2 != null && p2 != EDGE && (p2.bitRep & goalmask2)!=0){
                             pb.mark(x,y);
                             c4++;
                         }
@@ -3299,8 +3299,8 @@ public class Board{
 
             case "piececount": case "numpieces":
                 messages.add("piece count:");
-                messages.add("white: "+(ourColor==white? ourPieceCount: opponentPieceCount));
-                messages.add("black: "+(ourColor==black? ourPieceCount: opponentPieceCount));
+                messages.add("white: "+(ourColor==WHITE? ourPieceCount: opponentPieceCount));
+                messages.add("black: "+(ourColor==BLACK? ourPieceCount: opponentPieceCount));
                 break;
             case "evaluate": case "eval":case "score": case "s":
                 messages.add("(" +colorStr(ourColor)+ ") board score: " + score());
@@ -3329,20 +3329,20 @@ public class Board{
                                        //=> games can also be run from the
                                        //MachinePlayer class
                 clearBoard();
-                MachinePlayer player1 = new MachinePlayer(white);
-                MachinePlayer player2 = new MachinePlayer(black);
+                MachinePlayer player1 = new MachinePlayer(WHITE);
+                MachinePlayer player2 = new MachinePlayer(BLACK);
                 Move m1, m2;
                 while (true){
                     m1 =  player1.chooseMove();
                     history.add(m1);
                     player2.opponentMove(m1);
-                    move(m1,white);
+                    move(m1,WHITE);
 
                     pb = toPrintBoard();
                     System.out.println(pb.toString());
                     System.out.println("white moved: " + m1);
 
-                    if (player1.board.hasNetwork(white,pb)){
+                    if (player1.board.hasNetwork(WHITE,pb)){
                         messages.add("white wins");
                         break;
                     }
@@ -3350,13 +3350,13 @@ public class Board{
                     m2 =  player2.chooseMove();
                     history.add(m2);
                     player1.opponentMove(m2);
-                    move(m2, black);
+                    move(m2, BLACK);
 
                     pb = toPrintBoard();
                     System.out.println(pb.toString());
                     System.out.println("black moved: " + m2);
 
-                    if (player1.board.hasNetwork(black, pb)){
+                    if (player1.board.hasNetwork(BLACK, pb)){
                         messages.add("black wins");
                         break;
                     }
@@ -3572,18 +3572,18 @@ public class Board{
         //in this round with 'runtests'
         test.boardString = toBoardString();
         test.board = toBoardString(true);
-        test.whiteBB = (ourColor == white? ourBitBoard : opponentBitBoard);
-        test.blackBB = (ourColor == black? ourBitBoard : opponentBitBoard);
-        test.whiteClustersBB = clustersBB(white);
-        test.blackClustersBB = clustersBB(black);
-        test.whiteLegalMovesBB = legalMovesBB(white);
-        test.blackLegalMovesBB = legalMovesBB(black);
-        test.whiteConnectedPieces = connectedPiecesBB(white);
-        test.blackConnectedPieces = connectedPiecesBB(black);
-        test.whiteNetwork = hasNetwork(white);
-        test.blackNetwork = hasNetwork(black);
-        test.whiteNumPieces = ourColor == white? ourPieceCount: opponentPieceCount;
-        test.blackNumPieces = ourColor == black? ourPieceCount: opponentPieceCount;
+        test.whiteBB = (ourColor == WHITE? ourBitBoard : opponentBitBoard);
+        test.blackBB = (ourColor == BLACK? ourBitBoard : opponentBitBoard);
+        test.whiteClustersBB = clustersBB(WHITE);
+        test.blackClustersBB = clustersBB(BLACK);
+        test.whiteLegalMovesBB = legalMovesBB(WHITE);
+        test.blackLegalMovesBB = legalMovesBB(BLACK);
+        test.whiteConnectedPieces = connectedPiecesBB(WHITE);
+        test.blackConnectedPieces = connectedPiecesBB(BLACK);
+        test.whiteNetwork = hasNetwork(WHITE);
+        test.blackNetwork = hasNetwork(BLACK);
+        test.whiteNumPieces = ourColor == WHITE? ourPieceCount: opponentPieceCount;
+        test.blackNumPieces = ourColor == BLACK? ourPieceCount: opponentPieceCount;
         test.passedBitBoardTests = verifyBitBoards();
         test.passedGoalTests = verifyGoals();
         test.passedPieceCountTests = verifyPieceCount();
@@ -3624,26 +3624,26 @@ public class Board{
         boolean ok = true;
         AList<String> errors  = new AList<String>(10);
 
-        if (test.whiteBB != (ourColor == white ? ourBitBoard : opponentBitBoard)){
+        if (test.whiteBB != (ourColor == WHITE ? ourBitBoard : opponentBitBoard)){
             errors.add("white bitBoard does not match");
         }
-        if (test.blackBB != (ourColor == black ? ourBitBoard : opponentBitBoard)){
+        if (test.blackBB != (ourColor == BLACK ? ourBitBoard : opponentBitBoard)){
             errors.add("black bitBoard does not match");
         }
-        if (test.whiteClustersBB != clustersBB(white)){
+        if (test.whiteClustersBB != clustersBB(WHITE)){
             errors.add("white clusters does not match");
         }
-        if (test.blackClustersBB != clustersBB(black)){
+        if (test.blackClustersBB != clustersBB(BLACK)){
             errors.add("black clusters does not match");
         }
-        if (test.whiteLegalMovesBB != legalMovesBB(white)){
+        if (test.whiteLegalMovesBB != legalMovesBB(WHITE)){
             errors.add("white legal moves does not match");
         }
-        if (test.blackLegalMovesBB != legalMovesBB(black)){
+        if (test.blackLegalMovesBB != legalMovesBB(BLACK)){
             errors.add("black legal moves does not match");
         }
-        long[] wcp = connectedPiecesBB(white);
-        long[] bcp = connectedPiecesBB(black);
+        long[] wcp = connectedPiecesBB(WHITE);
+        long[] bcp = connectedPiecesBB(BLACK);
 
         for (int i = 0; i < 8; i++){
             if (test.whiteConnectedPieces[i] != wcp[i]){
@@ -3653,18 +3653,18 @@ public class Board{
                 errors.add("black Connected pieces don't match (level " + i +")");
             }
         }
-        if (test.whiteNetwork != hasNetwork(white)){
+        if (test.whiteNetwork != hasNetwork(WHITE)){
             errors.add("hasNetwork(white) does not match");
         }
-        if (test.blackNetwork != hasNetwork(black)){
+        if (test.blackNetwork != hasNetwork(BLACK)){
             errors.add("hasNetwork(black) does not match");
         }
         if (test.whiteNumPieces
-            != (ourColor == white ? ourPieceCount: opponentPieceCount)){
+            != (ourColor == WHITE ? ourPieceCount: opponentPieceCount)){
             errors.add("white piece count does not match");
         }
         if (test.blackNumPieces
-            != (ourColor == black ? ourPieceCount: opponentPieceCount)){
+            != (ourColor == BLACK ? ourPieceCount: opponentPieceCount)){
             errors.add("blackpiece count does not match");
         }
         if (test.passedBitBoardTests != verifyBitBoards()){
@@ -3692,7 +3692,7 @@ public class Board{
         if (test.version != 1){
             System.out.println("Warning: unknown test version");
         }
-        Board testBoard = new Board(white, test.board);
+        Board testBoard = new Board(WHITE, test.board);
         return testBoard.compareToTest(test);
     }
 
@@ -4183,7 +4183,7 @@ public class Board{
     }
 
     public static void main(String[] args){
-        Board b = new Board(black,
+        Board b = new Board(BLACK,
                             "     x  " +
                             "o xxo   " +
                             "    o o " +
