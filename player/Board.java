@@ -1040,6 +1040,7 @@ public class Board{
             return false;
         }
         long bitBoard, goalA, goalB;
+        int direction;
 
         if (color == ourColor){
             bitBoard = ourBitBoard;
@@ -1050,6 +1051,11 @@ public class Board{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
         }
+        if (color == white){
+            direction = DOWN;
+        }else{
+            direction = RIGHT;
+        }
 
         if (((bitBoard & goalA) != 0) && ((bitBoard & goalB) != 0)){
             Piece goalPiece = getStartGoalList(color);
@@ -1057,11 +1063,7 @@ public class Board{
                 if (hasNetwork(goalPiece, bitBoard, goalB, goalA, 11, 60,1)){ //11x+60: just an impossible line
                     return true;
                 }
-                if (color == white){
-                    goalPiece = goalPiece.connected[DOWN];
-                }else{
-                    goalPiece = goalPiece.connected[RIGHT];
-                }
+                goalPiece = goalPiece.connected[direction];
             }
         }
         return false; //does not have at lease one piece in each goal
@@ -1396,6 +1398,7 @@ public class Board{
         int newM, newB;
         int len= 0;
         long members = memberPieces[0];
+
 
         for (Piece piece : currentPiece.connected){
             if (piece == null || piece.color != currentPiece.color){
@@ -2404,7 +2407,6 @@ public class Board{
             return false;
         }
         long bitBoard, goalA, goalB;
-
         if (color == ourColor){
             bitBoard = ourBitBoard;
             goalA = ourGoalMaskA;
