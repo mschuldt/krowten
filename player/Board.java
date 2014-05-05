@@ -1488,6 +1488,7 @@ public class Board{
         //give points for partial networks
 
         long goalA, goalB;
+        int direction;
         if (color == ourColor){
             goalA = ourGoalMaskA;
             goalB = ourGoalMaskB;
@@ -1495,15 +1496,29 @@ public class Board{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
         }
+        if (color == white){
+            direction = DOWN;
+        }else{
+            direction = RIGHT;
+        }
+
         long br = 0;
         long[] memberPieces = {goalA};
-        PieceList goalPieces = getStartGoalPieces(color);
+        Piece goalPiece = getStartGoalList(color);
         //sum the run lengths from the goals
-        if (goalPieces.length() > 0){
-            for (Piece p: goalPieces){
-                sum+=5*runLength(p, memberPieces);
-            }
+
+        while (goalPiece != null){
+            sum+=5*runLength(goalPiece, memberPieces);
+            goalPiece = goalPiece.connected[direction];
         }
+
+        goalPiece = getEndGoalList(color);
+
+        while (goalPiece != null){
+            sum+=5*runLength(goalPiece, memberPieces);
+            goalPiece = goalPiece.connected[direction];
+        }
+
 
         //sum the the other partial networks
         for (Piece p : getPieces(color)){
