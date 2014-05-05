@@ -73,6 +73,9 @@ public class MachinePlayer extends Player {
     }
 
     private Move copyMove(Move move){
+        if (move == null){
+            return null;
+        }
         Move ret = new Move();
         ret.moveKind = move.moveKind;
         ret.x1 = move.x1;
@@ -154,7 +157,11 @@ public class MachinePlayer extends Player {
         System.out.println("searched to depth " + depth);
 
 
-        if (bestMove.move == null){ //this happens sometimes...why?
+        if (bestMove == null){
+            System.out.println("bestMove == null. exiting");
+            return null;
+        }
+        else if (bestMove.move == null){ //this happens sometimes...why?
             MoveList validmoves = new MoveList();
             board.validMoves(ourColor, validmoves);
             if (validmoves.length() == 0){
