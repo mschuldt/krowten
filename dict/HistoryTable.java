@@ -105,6 +105,12 @@ public class HistoryTable {
         array[index] = score;
     }
 
+    /** increment the score mapped to MOVE my AMOUNT
+     */
+    public void increment(Move move, long amount) {
+        array[compFunction(hashMove(move))] += amount;
+    }
+
     /**
      *  Search for an entry with the specified key.  If such an entry is found,
      *  return it; otherwise return null.
