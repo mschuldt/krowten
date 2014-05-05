@@ -45,6 +45,15 @@ public class AList<T> implements Iterable<T>{
         System.out.println("Error -- AList.get: Invalid index: "+index);
         return null;
     }
+
+    public void set(int index, T value){
+        if (index >= 0 && index < maxSize){
+            array[index] = value;
+        }else{
+            //TODO: throw invalid index error
+            System.out.println("Error -- AList.get: Invalid index: "+index);
+        }
+    }
     //remove the last item added and return it
     public T pop(){
         len--;
