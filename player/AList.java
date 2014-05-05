@@ -64,4 +64,15 @@ public class AList<T> implements Iterable<T>{
     public void clear(){
         len=0;
     }
+
+    public String toString(){
+        if (len == 0){
+            return "<Empty AList>";
+        }
+        String ret = "<AList: " + array[0];
+        for (int i = 1; i < len; i++){
+            ret +=  (", " + array[i]);
+        }
+        return ret + ">";
+    }
 }
