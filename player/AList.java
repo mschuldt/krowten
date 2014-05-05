@@ -75,4 +75,52 @@ public class AList<T> implements Iterable<T>{
         }
         return ret + ">";
     }
+    //order this list by sorting the numbers in VALUES
+    public void sorted(long[] values){
+        sortMoves(values, 0, len-1);
+    }
+
+    private void sortMoves(long[] moveScores, int low, int high){
+        if (low < high) {
+            int pivotIndex = low; //TODO: choose better pivot
+            long pivot = moveScores[pivotIndex];
+            T mPivot = array[pivotIndex];
+            moveScores[pivotIndex] = moveScores[high];
+            array[pivotIndex] = array[high];
+            moveScores[high] = pivot;
+            array[high] = mPivot;
+
+            int i = low - 1;
+            int j = high;
+            long tmp;
+            T mTmp;
+            do{
+                do {
+                    i++;
+                }while (moveScores[i] < pivot);
+                do {
+                    j--;
+                } while ((moveScores[j] > pivot) && (j > low));
+
+                if (i < j){
+                    tmp = moveScores[i];
+                    mTmp = array[i];
+                    moveScores[i] = moveScores[j];
+                    array[i] = array[j];
+                    moveScores[j] = tmp;
+                    array[j] = mTmp;
+                }
+            } while (i < j);
+
+            array[high] = array[i];
+            moveScores[high] = moveScores[i];
+
+            array[i] = mPivot;
+            moveScores[i] = pivot;
+            sortMoves(moveScores, low, i - 1);
+            sortMoves(moveScores, i + 1, high);
+        }
+    }
+
+
 }
