@@ -384,7 +384,7 @@ public class MachinePlayer extends Player {
                          "        " +
                          "        "
                      );
-        System.out.println("choosing move via iterate deepening(empty)");
+        System.out.println("choosing move via iterative deepening(empty)");
         p.chooseMoveIterativelyDeepening();
 
         for (int depth = 2; depth < 7; depth++){
@@ -419,7 +419,7 @@ public class MachinePlayer extends Player {
                       " x  oxo " +
                       " x      "
                       );
-        System.out.println("choosing move via iterate deepening(full)");
+        System.out.println("choosing move via iterative deepening(full)");
         p2.chooseMoveIterativelyDeepening();
         for (int depth = 2; depth < 7; depth++){
             p2 = new MachinePlayer(white, depth);
