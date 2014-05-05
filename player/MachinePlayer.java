@@ -4,6 +4,7 @@
 package player;
 import dict.HashTable;
 import dict.Entry;
+import dict.HistoryTable;
 
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
@@ -39,6 +40,9 @@ public class MachinePlayer extends Player {
     private static final int ENTRY_GENERATION = 3;
     private static final int ENTRY_EVALED_BOARDS = 4;
     private static final int ENTRY_DEPTH = 5;
+
+    HistoryTable moveHistory = new HistoryTable();
+    long[] moveScores = new long[488];
 
     // Creates a machine player with the given color.  Color is either 0 (black)
     // or 1 (white).  (White has the first move.)
@@ -211,10 +215,27 @@ public class MachinePlayer extends Player {
         }
         MoveList allValidMoves = movesLists[depth];
         board.validMoves(side, allValidMoves);
+
+        //sort valid moves according to score (history heuristic)
+        int len = allValidMoves.length();
+
+        assert len <= 488;
+        for (int i = 0; i < len;  i++){
+            moveScores[i] = moveHistory.find(allValidMoves.get(i));
+        }
+        allValidMoves.sorted(moveScores);
+        assert len == allValidMoves.length();
+
         myBest.move = copyMove(allValidMoves.get(0));
 
         int score=0;
-        for (Move m : allValidMoves){
+
+        Move m;
+        len = allValidMoves.length();
+        //for (Move m : allValidMoves){
+        for (int i = (len-1); i >= 0; i--){
+            m = allValidMoves.get(i);
+
             board.move(m, side);
 
             ///***  memoization code
@@ -243,6 +264,7 @@ public class MachinePlayer extends Player {
             if (score == OUT_OF_TIME){
                 myBest.score = OUT_OF_TIME;
                 myBest.evaledBoards = evaledBoards;
+                //moveHistory.increment(myBest.move, 2^depth);
                 return myBest;
             }
             if ((side == ourColor) && (score > myBest.score)){
@@ -256,12 +278,16 @@ public class MachinePlayer extends Player {
             }
             if (alpha >= beta){
                 myBest.evaledBoards = evaledBoards;
+                moveHistory.increment(myBest.move, 2^depth);
                 return myBest;
             }
         }
         myBest.evaledBoards = evaledBoards;
+        moveHistory.increment(myBest.move, 2^depth);
         return myBest;
     }
+
+
 
 
     // If the Move m is legal, records the move as a move by the opponent
@@ -463,8 +489,8 @@ public class MachinePlayer extends Player {
                      "  o  x  " +
                      " x  oxo " +
                      " x      ");
-        runGame();
+        //runGame();
         //p.interactiveDebug();
-        //benchMark();
+        benchMark();
     }
 }
