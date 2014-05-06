@@ -2629,9 +2629,19 @@ public class Board{
             System.out.println("   "+colorStr(color) + "  global count: " + globalSum + ", counted: "+ totalPieceListSum);
 
         }
-        if (!ok){ //mbs
-            System.out.println(toPrintBoard());
+
+        if (whiteIllegalRunCount < 0){
+            ok = false;
+            System.out.println("Error: whiteIllegalRunCount is negative ("  + whiteIllegalRunCount  + ")" );
         }
+        if (blackIllegalRunCount < 0){
+            ok = false;
+            System.out.println("Error: blackIllegalRunCount is negative ("  + blackIllegalRunCount  + ")" );
+        }
+
+        // if (!ok){
+        //     System.out.println(toPrintBoard());
+        // }
 
         return ok;
     }
