@@ -674,6 +674,7 @@ public class Board{
         int newGlobalConnections = 0;
 
         int othersConnections = 0;
+        int bad = 0;
 
         int color = p.color;
 
@@ -704,7 +705,6 @@ public class Board{
 
             if (curr.connected[RIGHT] != null){
                 curr.connected[RIGHT].connected[LEFT] = p;
-                //TODO: increase illigal runs here
 
                 switch ((curr.color == color ? 1 : 0)
                         +  (curr.connected[RIGHT].color == color ? 10 : 0)){
@@ -726,6 +726,7 @@ public class Board{
                 case 11: // both are the same color
                     pieceConnections+=2;
                     newGlobalConnections+=2;
+                    bad++;
                 }
             }else{
                 if (curr.color == color){
@@ -783,6 +784,7 @@ public class Board{
                 case 11: // both are the same color
                     pieceConnections+=2;
                     newGlobalConnections+=2;
+                    bad++;
                 }
 
             }else{
@@ -841,6 +843,7 @@ public class Board{
                 case 11: // both are the same color
                     pieceConnections+=2;
                     newGlobalConnections+=2;
+                    bad++;
                 }
 
             }else{
@@ -900,6 +903,7 @@ public class Board{
                 case 11: // both are the same color
                     pieceConnections+=2;
                     newGlobalConnections+=2;
+                    bad++;
                 }
 
             }else{
@@ -920,11 +924,12 @@ public class Board{
         if (p.color == WHITE){
             whiteConnections += newGlobalConnections;
             blackConnections += othersConnections;
+            whiteIllegalRunCount += bad;
         }else{
             blackConnections += newGlobalConnections;
             whiteConnections += othersConnections;
+            blackIllegalRunCount += bad;
         }
-
     }
 
     //remove a piece from the linked matrix
@@ -937,6 +942,7 @@ public class Board{
 
         boolean otherSide = false;
         int color = p.color;
+        int bad = 0;
 
         //remove from row
         if (connect[LEFT] == null){
@@ -970,7 +976,9 @@ public class Board{
                         connect[LEFT].numConnected--;
                         globalDecrease++;
                         break;
-                    }
+                case 11: //both are the same color
+                    bad++;
+                }
 
             }else{
                 //removing a piece from the beginning
@@ -1020,6 +1028,8 @@ public class Board{
                         connect[UP].numConnected--;
                         globalDecrease++;
                         break;
+                case 11: //both are the same color
+                    bad++;
                     }
 
             }else{
@@ -1070,6 +1080,8 @@ public class Board{
                         connect[RIGHTUP].numConnected--;
                         globalDecrease++;
                         break;
+                case 11: //both are the same color
+                    bad++;
                     }
 
             }else{
@@ -1121,6 +1133,8 @@ public class Board{
                         connect[LEFTUP].numConnected--;
                         globalDecrease++;
                         break;
+                case 11: //both are the same color
+                    bad++;
                     }
 
             }else{
@@ -1151,9 +1165,11 @@ public class Board{
         if (p.color == WHITE){
             whiteConnections -= globalDecrease;
             blackConnections -= othersDecrease;
+            blackIllegalRunCount -= bad;
         }else{
             blackConnections -= globalDecrease;
             whiteConnections -= othersDecrease;
+            blackIllegalRunCount -= bad;
         }
         p.numConnected = 0;
     }
