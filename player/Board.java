@@ -642,6 +642,10 @@ public class Board{
 
     // }
 
+    private void decConnectedCount(Piece p){
+
+    }
+
     private void addToMatrix(Piece p){
         Piece curr = null;
         Piece[] connect = p.connected;
