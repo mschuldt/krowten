@@ -643,6 +643,7 @@ public class Board{
 
     private void addToMatrix(Piece p){
         Piece curr = null;
+        Piece[] connect = p.connected;
         int x = p.x;
         int y = p.y;
         //correct: left, up
@@ -652,7 +653,7 @@ public class Board{
         if (curr == null){
             rows[y] = p;
         }else if(curr.x > p.x){ //add to front
-            p.connected[RIGHT] = curr;
+            connect[RIGHT] = curr;
             curr.connected[LEFT] = p;
             rows[y] = p;
         }
@@ -662,8 +663,8 @@ public class Board{
             }
             assert curr.connected[RIGHT] == null || curr.connected[RIGHT].x != x
                 : "a piece already exists in the matrix (row)";
-            p.connected[LEFT] = curr;
-            p.connected[RIGHT] = curr.connected[RIGHT];
+            connect[LEFT] = curr;
+            connect[RIGHT] = curr.connected[RIGHT];
             if (curr.connected[RIGHT] != null){
                 curr.connected[RIGHT].connected[LEFT] = p;
             }
@@ -675,7 +676,7 @@ public class Board{
         if (curr == null){
             columns[x] = p;
         }else if(curr.y >  p.y){
-            p.connected[DOWN] = curr;
+            connect[DOWN] = curr;
             curr.connected[UP] = p;
             columns[x] = p;
         }else{
@@ -684,8 +685,8 @@ public class Board{
             }
             assert curr.connected[DOWN] == null || curr.connected[DOWN].y != y
                 : "a piece already exists in the matrix (column)";
-            p.connected[UP] = curr;
-            p.connected[DOWN] = curr.connected[DOWN];
+            connect[UP] = curr;
+            connect[DOWN] = curr.connected[DOWN];
             if (curr.connected[DOWN] != null){
                 curr.connected[DOWN].connected[UP] = p;
             }
@@ -697,7 +698,7 @@ public class Board{
         if (curr == null){
             fDiagonals[x+y] = p;
         }else if(curr.y >  p.y){
-            p.connected[LEFTDOWN] = curr;
+            connect[LEFTDOWN] = curr;
             curr.connected[RIGHTUP] = p;
             fDiagonals[x+y] = p;
         }else{
@@ -706,8 +707,8 @@ public class Board{
             }
             assert curr.connected[LEFTDOWN] == null || curr.connected[LEFTDOWN].x != x
                 : "a piece already exists in the matrix (forward diagonal)";
-            p.connected[RIGHTUP] = curr;
-            p.connected[LEFTDOWN] = curr.connected[LEFTDOWN];
+            connect[RIGHTUP] = curr;
+            connect[LEFTDOWN] = curr.connected[LEFTDOWN];
             if (curr.connected[LEFTDOWN] != null){
                 curr.connected[LEFTDOWN].connected[RIGHTUP] = p;
             }
@@ -719,7 +720,7 @@ public class Board{
         if (curr == null){
             bDiagonals[y-x+6] = p;
         }else if(curr.y >  p.y){
-            p.connected[RIGHTDOWN] = curr;
+            connect[RIGHTDOWN] = curr;
             curr.connected[LEFTUP] = p;
             bDiagonals[y-x+6] = p;
         }else{
@@ -728,8 +729,8 @@ public class Board{
             }
             assert curr.connected[RIGHTDOWN] == null || curr.connected[RIGHTDOWN].x != x
                 : "a piece already exists in the matrix (backward diagonal)";
-            p.connected[LEFTUP] = curr;
-            p.connected[RIGHTDOWN] = curr.connected[RIGHTDOWN];
+            connect[LEFTUP] = curr;
+            connect[RIGHTDOWN] = curr.connected[RIGHTDOWN];
             if (curr.connected[RIGHTDOWN] != null){
                 curr.connected[RIGHTDOWN].connected[LEFTUP] = p;
             }
@@ -740,46 +741,48 @@ public class Board{
     //remove a piece from the linked matrix
     private void removeFromMatrix(Piece p){
         //remove from row
-        if (p.connected[LEFT] == null){
-            rows[p.y] = p.connected[RIGHT]; //removing first piece
+        Piece[] connect = p.connected;
+
+        if (connect[LEFT] == null){
+            rows[p.y] = connect[RIGHT]; //removing first piece
         }else{
-            p.connected[LEFT].connected[RIGHT] = p.connected[RIGHT];
+            connect[LEFT].connected[RIGHT] = connect[RIGHT];
         }
-        if (p.connected[RIGHT] != null){
-            p.connected[RIGHT].connected[LEFT] = p.connected[LEFT];
+        if (connect[RIGHT] != null){
+            connect[RIGHT].connected[LEFT] = connect[LEFT];
         }
         //remove from column
-        if (p.connected[UP] == null){
-            columns[p.x] = p.connected[DOWN];
+        if (connect[UP] == null){
+            columns[p.x] = connect[DOWN];
         }else{
-            p.connected[UP].connected[DOWN] = p.connected[DOWN];
+            connect[UP].connected[DOWN] = connect[DOWN];
         }
-        if (p.connected[DOWN] != null){
-            p.connected[DOWN].connected[UP] = p.connected[UP];
+        if (connect[DOWN] != null){
+            connect[DOWN].connected[UP] = connect[UP];
         }
 
         //remove from forward diagonal
-        if (p.connected[RIGHTUP] == null){
-            fDiagonals[p.y+p.x] = p.connected[LEFTDOWN];
+        if (connect[RIGHTUP] == null){
+            fDiagonals[p.y+p.x] = connect[LEFTDOWN];
         }else{
-            p.connected[RIGHTUP].connected[LEFTDOWN] = p.connected[LEFTDOWN];
+            connect[RIGHTUP].connected[LEFTDOWN] = connect[LEFTDOWN];
         }
-        if (p.connected[LEFTDOWN] != null){
-            p.connected[LEFTDOWN].connected[RIGHTUP] = p.connected[RIGHTUP];
+        if (connect[LEFTDOWN] != null){
+            connect[LEFTDOWN].connected[RIGHTUP] = connect[RIGHTUP];
         }
         //remove from backward diagonal
-        if (p.connected[LEFTUP] == null){
-            bDiagonals[p.y-p.x+6] = p.connected[RIGHTDOWN];
+        if (connect[LEFTUP] == null){
+            bDiagonals[p.y-p.x+6] = connect[RIGHTDOWN];
 
         }else{
-            p.connected[LEFTUP].connected[RIGHTDOWN] = p.connected[RIGHTDOWN];
+            connect[LEFTUP].connected[RIGHTDOWN] = connect[RIGHTDOWN];
         }
-        if (p.connected[RIGHTDOWN] != null){
-            p.connected[RIGHTDOWN].connected[LEFTUP] = p.connected[LEFTUP];
+        if (connect[RIGHTDOWN] != null){
+            connect[RIGHTDOWN].connected[LEFTUP] = connect[LEFTUP];
         }
 
-        p.connected[LEFT] = p.connected[RIGHT] = p.connected[UP] = p.connected[DOWN] = null;
-        p.connected[LEFTUP] = p.connected[LEFTDOWN] = p.connected[RIGHTUP] = p.connected[RIGHTDOWN] = null;
+        connect[LEFT] = connect[RIGHT] = connect[UP] = connect[DOWN] = null;
+        connect[LEFTUP] = connect[LEFTDOWN] = connect[RIGHTUP] = connect[RIGHTDOWN] = null;
 
         assert verifyNotInMatrix(p) : "failed to remove " + p + "from matrix";
     }
