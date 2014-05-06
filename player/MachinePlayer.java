@@ -282,7 +282,7 @@ public class MachinePlayer extends Player {
             if (score == OUT_OF_TIME){
                 myBest.score = OUT_OF_TIME;
                 myBest.evaledBoards = evaledBoards;
-                //moveHistory.increment(myBest.move, 2^depth);
+                moveHistory.increment(myBest.move, 2^depth);
                 return myBest;
             }
             if ((side == ourColor) && (score > myBest.score)){
