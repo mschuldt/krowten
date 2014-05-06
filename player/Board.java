@@ -1461,29 +1461,18 @@ public class Board{
         assert ! hasNetwork(color): "Board.score: board has a network";
 
         int sum=squareScoreSum(color);
-        PieceList pieces = getPieces(color);
-        PieceList adjacent;
-        for (Piece p: pieces){
-            //sum the total connections
-            //  sum += connectedPiecesSlow(p).length();
-
-            //give points for pieces with no other adjacent pieces
-            adjacent = adjacentPieces(p, color);
-            if (adjacent.length() ==0){
-                sum+=5;
-            }
-        }
-
-        //give points for partial networks
 
         long goalA, goalB;
         int direction;
+        long board;
         if (color == ourColor){
             goalA = ourGoalMaskA;
             goalB = ourGoalMaskB;
+            board = ourBitBoard;
         }else{
             goalA = opponentGoalMaskA;
             goalB = opponentGoalMaskB;
+            board = opponentBitBoard;
         }
         if (color == WHITE){
             direction = DOWN;
@@ -1491,11 +1480,23 @@ public class Board{
             direction = RIGHT;
         }
 
+        //give points for pieces with no other adjacent pieces
+        PieceList pieces = getPieces(color);
+        long adj = 0;
+
+        for (Piece p : pieces){
+            if ((getAdjMask(p.bitRep) & board) == 0){
+                sum+=10;
+            }
+        }
+
+        //give points for partial networks
+
         long br = 0;
         long[] memberPieces = {goalA};
         Piece goalPiece = getStartGoalList(color);
-        //sum the run lengths from the goals
 
+        //sum the run lengths from the goals
         while (goalPiece != null){
             sum+=5*runLength(goalPiece, memberPieces);
             goalPiece = goalPiece.connected[direction];
