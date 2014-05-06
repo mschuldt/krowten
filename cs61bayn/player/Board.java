@@ -49,8 +49,8 @@ public class Board{
     int whiteConnections;
     int blackConnections;
     //count the number of pieces that are connected in opposing directions
-    int WhiteIlligalRunCount;
-    int BlackIlligalRunCount;
+    int whiteIllegalRunCount;
+    int blackIllegalRunCount;
 
     int whiteSquareScore;
     int blackSquareScore;
@@ -173,7 +173,7 @@ public class Board{
         opponentGoalMask = (opponentGoalMaskA | opponentGoalMaskB);
 
         whiteConnections = blackConnections = 0;
-        WhiteIlligalRunCount =  BlackIlligalRunCount = 0;
+        whiteIllegalRunCount =  blackIllegalRunCount = 0;
         whiteSquareScore =  blackSquareScore = 0;
     }
 
@@ -3128,7 +3128,7 @@ public class Board{
         oppClusters_1 =  oppClusters_2 =  oppClusters_3 = oppClusters_4 = 0;
 
         whiteConnections = blackConnections = 0;
-        WhiteIlligalRunCount =  BlackIlligalRunCount = 0;
+        whiteIllegalRunCount =  blackIllegalRunCount = 0;
         whiteSquareScore =  blackSquareScore = 0;
 
         ourPieces.clear();
