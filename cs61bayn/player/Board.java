@@ -2594,6 +2594,61 @@ public class Board{
         return ok;
     }
 
+
+    public boolean verifyPieceConnectionCount(int color){
+
+        long adj = 0;
+
+        Piece[] connections = null;
+
+        int c = 0;
+        int c2 = 0;
+
+        int totalPieceSum = 0;
+        int pieceSum= 0;
+        int totalPieceListSum = 0;
+        int pieceListSum = 0;
+
+        int globalSum = (color == WHITE ? whiteConnections : blackConnections);
+
+        boolean ok = true;
+
+        for (Piece p : getPieces(color)){
+            //System.out.println(color == WHITE ? "w" : "b");
+            totalPieceSum += p.numConnected;
+
+            pieceListSum = 0;
+            for (int i = 0; i <8; i++){
+                if ((p.connected[i] != null) && (p.connected[i].color == p.color)){
+                    totalPieceListSum++;
+                    pieceListSum++;
+                }
+            }
+            if (pieceListSum != p.numConnected){
+                ok = false;
+                System.out.println("Error: piece connection count corrupted.");
+                System.out.println("   expected connection count of piece " + p + " is " + pieceListSum +
+                                   ". but internal tracker says " + p.numConnected);
+            }
+        }
+        if (globalSum != totalPieceListSum){
+            ok = false;
+
+            System.out.println("Error: piece connection count corrupted.");
+            System.out.println("   "+colorStr(color) + "  global count: " + globalSum + ", counted: "+ totalPieceListSum);
+
+        }
+        if (!ok){ //mbs
+            System.out.println(toPrintBoard());
+        }
+
+        return ok;
+    }
+
+    public boolean verifyPieceConnectionCount(){
+        return verifyPieceConnectionCount(WHITE) && verifyPieceConnectionCount(BLACK);
+    }
+
     //verify that all internal state is valid
     public boolean verify(){
         boolean ok = true;
@@ -2610,6 +2665,8 @@ public class Board{
         //this cannot be used when `verifyAll' is true because
         //it is mutually recursive with Board.move
         //ok = verifyClusterBoards() && ok;
+
+        ok = verifyPieceConnectionCount() && ok;
 
         if (!ok){
             System.out.println("board is corrupted.");
