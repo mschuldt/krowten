@@ -1500,31 +1500,46 @@ public class Board{
 
         //give points for partial networks
 
-        long br = 0;
-        long[] memberPieces = {goalA};
-        Piece goalPiece = getStartGoalList(color);
+        // long br = 0;
+        // long[] memberPieces = {goalA};
+        // Piece goalPiece = getStartGoalList(color);
 
-        //sum the run lengths from the goals
-        while (goalPiece != null){
-            sum+=5*runLength(goalPiece, memberPieces);
-            goalPiece = goalPiece.connected[direction];
-        }
+        // //sum the run lengths from the goals
+        // while (goalPiece != null){
+        //     sum+=runLength(goalPiece, memberPieces);
+        //     goalPiece = goalPiece.connected[direction];
+        // }
 
-        goalPiece = getEndGoalList(color);
-        memberPieces[0] |= goalB;
+        // goalPiece = getEndGoalList(color);
+        // memberPieces[0] |= goalB;
 
-        while (goalPiece != null){
-            sum+=5*runLength(goalPiece, memberPieces);
-            goalPiece = goalPiece.connected[direction];
-        }
+        // while (goalPiece != null){
+        //     sum+=runLength(goalPiece, memberPieces);
+        //     goalPiece = goalPiece.connected[direction];
+        // }
 
 
-        //sum the the other partial networks
-        for (Piece p : getPieces(color)){
-            br = p.bitRep;
-            if ((memberPieces[0] & br) == 0){
-                memberPieces[0]= (memberPieces[0] | br);
-                sum+= 3*runLength(p, memberPieces);
+        // //sum the other partial networks
+        // for (Piece p : getPieces(color)){
+        //     br = p.bitRep;
+        //     if ((memberPieces[0] & br) == 0){
+        //         memberPieces[0]= (memberPieces[0] | br);
+        //         sum+= 3*runLength(p, memberPieces);
+        //     }
+        // }
+
+
+        // //sum piece connections
+        PieceList pieces = getPieces(color);
+        long adj = 0;
+
+        Piece[] connections = null;
+        for (Piece p : pieces){
+            connections = p.connected;
+            for (int i = 0; i <8; i++){
+                if (connections[i] != null){
+                    sum++;
+                }
             }
         }
 
