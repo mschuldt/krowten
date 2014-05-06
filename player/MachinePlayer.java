@@ -122,6 +122,9 @@ public class MachinePlayer extends Player {
 
         //make the move here instead of calling this.forceMove if we know that the move is valid
         board.move(bestMove.move, ourColor);
+
+        //decrease relevance of past moves
+        moveHistory.decay();
         return bestMove.move;
     }
 
@@ -182,6 +185,9 @@ public class MachinePlayer extends Player {
 
         //make the move here instead of calling this.forceMove if we know that the move is valid
         board.move(bestMove.move, ourColor);
+
+        //decrease relevance of past moves
+        moveHistory.decay();
         System.out.println("move time: " + timeSince(chooseMoveStart));
         return bestMove.move;
     }
