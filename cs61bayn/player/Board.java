@@ -661,12 +661,21 @@ public class Board{
 
     }
 
+    //add piece to matrix and update internal connection variables
     private void addToMatrix(Piece p){
         Piece curr = null;
         Piece[] connect = p.connected;
         int x = p.x;
         int y = p.y;
         //correct: left, up
+
+        //the number of pieces connected to P after insertion
+        int pieceConnections = 0;
+        int newGlobalConnections = 0;
+
+        int othersConnections = 0;
+
+        int color = p.color;
 
         //add to row
         curr = rows[y];
@@ -676,18 +685,56 @@ public class Board{
             connect[RIGHT] = curr;
             curr.connected[LEFT] = p;
             rows[y] = p;
+
+            if (curr.color == color){
+                pieceConnections++;
+                curr.numConnected++;
+                newGlobalConnections += 2;
+            }
         }
         else{ //add to middle or end
             while (curr.connected[RIGHT] != null && curr.connected[RIGHT].x < x){
                 curr = curr.connected[RIGHT];
             }
+            //inserting after 'curr'
             assert curr.connected[RIGHT] == null || curr.connected[RIGHT].x != x
                 : "a piece already exists in the matrix (row)";
             connect[LEFT] = curr;
             connect[RIGHT] = curr.connected[RIGHT];
+
             if (curr.connected[RIGHT] != null){
                 curr.connected[RIGHT].connected[LEFT] = p;
+                //TODO: increase illigal runs here
+
+                switch ((curr.color == color ? 1 : 0)
+                        +  (curr.connected[RIGHT].color == color ? 10 : 0)){
+                case 0: //both are a different color
+                    curr.numConnected -= 1;
+                    curr.connected[RIGHT].numConnected -= 1;
+                    othersConnections -= 2;
+                    break;
+                case 1: // left is the same color
+                    curr.numConnected++;
+                    pieceConnections++;
+                    newGlobalConnections+=2;
+                    break;
+                case 10: //right is the same color
+                    pieceConnections++;
+                    curr.connected[RIGHT].numConnected++;
+                    newGlobalConnections+=2;
+                    break;
+                case 11: // both are the same color
+                    pieceConnections+=2;
+                    newGlobalConnections+=2;
+                }
+            }else{
+                if (curr.color == color){
+                    curr.numConnected++;
+                    pieceConnections += 1;
+                    newGlobalConnections += 2;
+                }
             }
+
             curr.connected[RIGHT] = p;
         }
 
@@ -699,6 +746,12 @@ public class Board{
             connect[DOWN] = curr;
             curr.connected[UP] = p;
             columns[x] = p;
+
+            if (curr.color == color){
+                pieceConnections++;
+                curr.numConnected++;
+                newGlobalConnections += 2;
+            }
         }else{
             while (curr.connected[DOWN] != null && curr.connected[DOWN].y < y){
                 curr = curr.connected[DOWN];
@@ -709,7 +762,37 @@ public class Board{
             connect[DOWN] = curr.connected[DOWN];
             if (curr.connected[DOWN] != null){
                 curr.connected[DOWN].connected[UP] = p;
+
+                switch ((curr.color == color ? 1 : 0)
+                        +  (curr.connected[DOWN].color == color ? 10 : 0)){
+                case 0: //both are a different color
+                    curr.numConnected -= 1;
+                    curr.connected[DOWN].numConnected -= 1;
+                    othersConnections -= 2;
+                    break;
+                case 1: // left is the same color
+                    curr.numConnected++;
+                    pieceConnections++;
+                    newGlobalConnections+=2;
+                    break;
+                case 10: //right is the same color
+                    pieceConnections++;
+                    curr.connected[DOWN].numConnected++;
+                    newGlobalConnections+=2;
+                    break;
+                case 11: // both are the same color
+                    pieceConnections+=2;
+                    newGlobalConnections+=2;
+                }
+
+            }else{
+                if (curr.color == color){
+                    curr.numConnected++;
+                    pieceConnections += 1;
+                    newGlobalConnections += 2;
+                }
             }
+
             curr.connected[DOWN] = p;
         }
 
@@ -721,6 +804,12 @@ public class Board{
             connect[LEFTDOWN] = curr;
             curr.connected[RIGHTUP] = p;
             fDiagonals[x+y] = p;
+
+            if (curr.color == color){
+                pieceConnections++;
+                curr.numConnected++;
+                newGlobalConnections += 2;
+            }
         }else{
             while (curr.connected[LEFTDOWN] != null && curr.connected[LEFTDOWN].x > x){
                 curr = curr.connected[LEFTDOWN];
@@ -731,7 +820,37 @@ public class Board{
             connect[LEFTDOWN] = curr.connected[LEFTDOWN];
             if (curr.connected[LEFTDOWN] != null){
                 curr.connected[LEFTDOWN].connected[RIGHTUP] = p;
+
+                switch ((curr.color == color ? 1 : 0)
+                        +  (curr.connected[LEFTDOWN].color == color ? 10 : 0)){
+                case 0: //both are a different color
+                    curr.numConnected -= 1;
+                    curr.connected[LEFTDOWN].numConnected -= 1;
+                    othersConnections -= 2;
+                    break;
+                case 1: // left is the same color
+                    curr.numConnected++;
+                    pieceConnections++;
+                    newGlobalConnections+=2;
+                    break;
+                case 10: //right is the same color
+                    pieceConnections++;
+                    curr.connected[LEFTDOWN].numConnected++;
+                    newGlobalConnections+=2;
+                    break;
+                case 11: // both are the same color
+                    pieceConnections+=2;
+                    newGlobalConnections+=2;
+                }
+
+            }else{
+                if (curr.color == color){
+                    curr.numConnected++;
+                    pieceConnections += 1;
+                    newGlobalConnections += 2;
+                }
             }
+
             curr.connected[LEFTDOWN] = p;
         }
 
@@ -739,10 +858,17 @@ public class Board{
         curr = bDiagonals[y-x+6];
         if (curr == null){
             bDiagonals[y-x+6] = p;
+
         }else if(curr.y >  p.y){
             connect[RIGHTDOWN] = curr;
             curr.connected[LEFTUP] = p;
             bDiagonals[y-x+6] = p;
+
+            if (curr.color == color){
+                pieceConnections++;
+                curr.numConnected++;
+                newGlobalConnections += 2;
+            }
         }else{
             while (curr.connected[RIGHTDOWN] != null && curr.connected[RIGHTDOWN].x < x){
                 curr = curr.connected[RIGHTDOWN];
@@ -753,58 +879,283 @@ public class Board{
             connect[RIGHTDOWN] = curr.connected[RIGHTDOWN];
             if (curr.connected[RIGHTDOWN] != null){
                 curr.connected[RIGHTDOWN].connected[LEFTUP] = p;
+
+                switch ((curr.color == color ? 1 : 0)
+                        +  (curr.connected[RIGHTDOWN].color == color ? 10 : 0)){
+                case 0: //both are a different color
+                    curr.numConnected -= 1;
+                    curr.connected[RIGHTDOWN].numConnected -= 1;
+                    othersConnections -= 2;
+                    break;
+                case 1: // left is the same color
+                    curr.numConnected++;
+                    pieceConnections++;
+                    newGlobalConnections+=2;
+                    break;
+                case 10: //right is the same color
+                    pieceConnections++;
+                    curr.connected[RIGHTDOWN].numConnected++;
+                    newGlobalConnections+=2;
+                    break;
+                case 11: // both are the same color
+                    pieceConnections+=2;
+                    newGlobalConnections+=2;
+                }
+
+            }else{
+                if (curr.color == color){
+                    curr.numConnected++;
+                    pieceConnections += 1;
+                    newGlobalConnections += 2;
+                }
             }
+
             curr.connected[RIGHTDOWN] = p;
         }
+
+        //update piece connections
+        p.numConnected = pieceConnections;
+
+        //update global connections
+        if (p.color == WHITE){
+            whiteConnections += newGlobalConnections;
+            blackConnections += othersConnections;
+        }else{
+            blackConnections += newGlobalConnections;
+            whiteConnections += othersConnections;
+        }
+
     }
 
     //remove a piece from the linked matrix
+    //and update internal connection variables
     private void removeFromMatrix(Piece p){
-        //remove from row
         Piece[] connect = p.connected;
 
+        int globalDecrease = 0;
+        int othersDecrease = 0;
+
+        boolean otherSide = false;
+        int color = p.color;
+
+        //remove from row
         if (connect[LEFT] == null){
             rows[p.y] = connect[RIGHT]; //removing first piece
+            otherSide = false;
         }else{
             connect[LEFT].connected[RIGHT] = connect[RIGHT];
+            otherSide = true;
         }
         if (connect[RIGHT] != null){
             connect[RIGHT].connected[LEFT] = connect[LEFT];
+            if (otherSide){
+                //removing a piece from the middle
+                //TODO: decrease illegal runs here
+
+                //if the two adjacent pieces are the other color
+                //then removing this piece connects them
+                switch ((connect[RIGHT].color == color ? 1 : 0)
+                        +  (connect[LEFT].color == color ? 10 : 0)){
+                    case 0://both are a different color
+                        connect[RIGHT].numConnected++;
+                        connect[LEFT].numConnected++;
+                        othersDecrease -= 2;
+                        break;
+
+                    case 1:// right is the same color
+                        connect[RIGHT].numConnected--;
+                        globalDecrease++;
+                        break;
+                    case 10://left is the same color
+                        connect[LEFT].numConnected--;
+                        globalDecrease++;
+                        break;
+                    }
+
+            }else{
+                //removing a piece from the beginning
+                if (connect[RIGHT].color == color){
+                    connect[RIGHT].numConnected--;
+                    globalDecrease++;
+                }
+            }
+        }else{
+            if (otherSide){
+                //removing a piece from the end
+                if (connect[LEFT].color == color){
+                    connect[LEFT].numConnected--;
+                    globalDecrease++;
+                }
+            }
         }
+
+
         //remove from column
         if (connect[UP] == null){
             columns[p.x] = connect[DOWN];
+
+            otherSide = false;
         }else{
             connect[UP].connected[DOWN] = connect[DOWN];
+            otherSide = true;
         }
         if (connect[DOWN] != null){
             connect[DOWN].connected[UP] = connect[UP];
+            if (otherSide){
+                //removing a piece from the middle
+                //TODO: decrease illegal runs here
+                switch ((connect[DOWN].color == color ? 1 : 0)
+                        +  (connect[UP].color == color ? 10 : 0)){
+                    case 0://both are a different color
+                        connect[DOWN].numConnected++;
+                        connect[UP].numConnected++;
+                        othersDecrease -= 2;
+                        break;
+
+                    case 1:// right is the same color
+                        connect[DOWN].numConnected--;
+                        globalDecrease++;
+                        break;
+                    case 10://left is the same color
+                        connect[UP].numConnected--;
+                        globalDecrease++;
+                        break;
+                    }
+
+            }else{
+                //removing a piece from the beginning
+                if (connect[DOWN].color == color){
+                    connect[DOWN].numConnected--;
+                    globalDecrease++;
+                }
+            }
+        }else{
+            if (otherSide){
+                //removing a piece from the end
+                if (connect[UP].color == color){
+                    connect[UP].numConnected--;
+                    globalDecrease++;
+                }
+            }
         }
+
 
         //remove from forward diagonal
         if (connect[RIGHTUP] == null){
             fDiagonals[p.y+p.x] = connect[LEFTDOWN];
+            otherSide = false;
         }else{
             connect[RIGHTUP].connected[LEFTDOWN] = connect[LEFTDOWN];
+            otherSide = true;
         }
         if (connect[LEFTDOWN] != null){
             connect[LEFTDOWN].connected[RIGHTUP] = connect[RIGHTUP];
+            if (otherSide){
+                //removing a piece from the middle
+                //TODO: decrease illegal runs here
+
+                switch ((connect[LEFTDOWN].color == color ? 1 : 0)
+                        +  (connect[RIGHTUP].color == color ? 10 : 0)){
+                    case 0://both are a different color
+                        connect[LEFTDOWN].numConnected++;
+                        connect[RIGHTUP].numConnected++;
+                        othersDecrease -= 2;
+                        break;
+
+                    case 1:// right is the same color
+                        connect[LEFTDOWN].numConnected--;
+                        globalDecrease++;
+                        break;
+                    case 10://left is the same color
+                        connect[RIGHTUP].numConnected--;
+                        globalDecrease++;
+                        break;
+                    }
+
+            }else{
+                //removing a piece from the beginning
+                if (connect[LEFTDOWN].color == color){
+                    connect[LEFTDOWN].numConnected--;
+                    globalDecrease++;
+                }
+            }
+        }else{
+            if (otherSide){
+                //removing a piece from the end
+                if (connect[RIGHTUP].color == color){
+                    connect[RIGHTUP].numConnected--;
+                    globalDecrease++;
+                }
+            }
         }
+
+
         //remove from backward diagonal
         if (connect[LEFTUP] == null){
             bDiagonals[p.y-p.x+6] = connect[RIGHTDOWN];
 
+            otherSide = false;
         }else{
             connect[LEFTUP].connected[RIGHTDOWN] = connect[RIGHTDOWN];
+            otherSide = true;
         }
         if (connect[RIGHTDOWN] != null){
             connect[RIGHTDOWN].connected[LEFTUP] = connect[LEFTUP];
+            if (otherSide){
+                //removing a piece from the middle
+                //TODO: decrease illegal runs here
+
+                switch ((connect[RIGHTDOWN].color == color ? 1 : 0)
+                        +  (connect[LEFTUP].color == color ? 10 : 0)){
+                    case 0://both are a different color
+                        connect[RIGHTDOWN].numConnected++;
+                        connect[LEFTUP].numConnected++;
+                        othersDecrease -= 2;
+                        break;
+
+                    case 1:// right is the same color
+                        connect[RIGHTDOWN].numConnected--;
+                        globalDecrease++;
+                        break;
+                    case 10://left is the same color
+                        connect[LEFTUP].numConnected--;
+                        globalDecrease++;
+                        break;
+                    }
+
+            }else{
+                //removing a piece from the beginning
+                if (connect[RIGHTDOWN].color == color){
+                    connect[RIGHTDOWN].numConnected--;
+                    globalDecrease++;
+                }
+            }
+        }else{
+            if (otherSide){
+                //removing a piece from the end
+                if (connect[LEFTUP].color == color){
+                    connect[LEFTUP].numConnected--;
+                    globalDecrease++;
+                }
+            }
         }
 
         connect[LEFT] = connect[RIGHT] = connect[UP] = connect[DOWN] = null;
         connect[LEFTUP] = connect[LEFTDOWN] = connect[RIGHTUP] = connect[RIGHTDOWN] = null;
 
         assert verifyNotInMatrix(p) : "failed to remove " + p + "from matrix";
+
+        globalDecrease += p.numConnected;
+
+        //update global connections
+        if (p.color == WHITE){
+            whiteConnections -= globalDecrease;
+            blackConnections -= othersDecrease;
+        }else{
+            blackConnections -= globalDecrease;
+            whiteConnections -= othersDecrease;
+        }
+        p.numConnected = 0;
     }
 
     private boolean verifyNotInMatrix(Piece p){
@@ -1549,18 +1900,34 @@ public class Board{
         // }
 
 
-        // //sum piece connections
-        PieceList pieces = getPieces(color);
-        long adj = 0;
 
-        Piece[] connections = null;
-        for (Piece p : pieces){
-            connections = p.connected;
-            for (int i = 0; i <8; i++){
-                if (connections[i] != null){
-                    sum++;
-                }
-            }
+
+        // //sum piece connections
+        // PieceList pieces = getPieces(color);
+        // long adj = 0;
+
+        // Piece[] connections = null;
+
+        // int c = 0;
+        // int c2 = 0;
+
+        // for (Piece p : pieces){
+        //     c2 += p.numConnected;
+        //     connections = p.connected;
+        //     for (int i = 0; i <8; i++){
+        //         if (connections[i] != null){
+        //             sum++;
+        //             c++;
+        //         }
+        //     }
+        // }
+
+        //verifyPieceConnectionCount();
+
+        if (color == WHITE){
+            sum += whiteConnections;
+        }else{
+            sum += blackConnections;
         }
 
         return sum;
