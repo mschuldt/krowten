@@ -1850,29 +1850,29 @@ public class Board{
     private int score(int color){
         assert ! hasNetwork(color): "Board.score: board has a network";
 
-        int sum = 0;
-        long goalA, goalB;
-        int direction;
-        long board;
+        // int sum = 0;
+        // long goalA, goalB;
+        // int direction;
+        // long board;
 
-        if (getNumPieces(color) < 5){
-            sum = squareScoreSum(color);
-        }
+        // if (getNumPieces(color) < 5){
+        //     sum = squareScoreSum(color);
+        // }
 
-        if (color == ourColor){
-            goalA = ourGoalMaskA;
-            goalB = ourGoalMaskB;
-            board = ourBitBoard;
-        }else{
-            goalA = opponentGoalMaskA;
-            goalB = opponentGoalMaskB;
-            board = opponentBitBoard;
-        }
-        if (color == WHITE){
-            direction = DOWN;
-        }else{
-            direction = RIGHT;
-        }
+        // if (color == ourColor){
+        //     goalA = ourGoalMaskA;
+        //     goalB = ourGoalMaskB;
+        //     board = ourBitBoard;
+        // }else{
+        //     goalA = opponentGoalMaskA;
+        //     goalB = opponentGoalMaskB;
+        //     board = opponentBitBoard;
+        // }
+        // if (color == WHITE){
+        //     direction = DOWN;
+        // }else{
+        //     direction = RIGHT;
+        //}
 
         // //give points for pieces with no other adjacent pieces
         // PieceList pieces = getPieces(color);
@@ -1915,38 +1915,13 @@ public class Board{
         //     }
         // }
 
-
-
-
-        // //sum piece connections
-        // PieceList pieces = getPieces(color);
-        // long adj = 0;
-
-        // Piece[] connections = null;
-
-        // int c = 0;
-        // int c2 = 0;
-
-        // for (Piece p : pieces){
-        //     c2 += p.numConnected;
-        //     connections = p.connected;
-        //     for (int i = 0; i <8; i++){
-        //         if (connections[i] != null){
-        //             sum++;
-        //             c++;
-        //         }
-        //     }
-        // }
-
         //verifyPieceConnectionCount();
 
         if (color == WHITE){
-            sum += whiteConnections;
+            return squareScoreSum(color) + whiteConnections - 3*whiteIllegalRunCount;
         }else{
-            sum += blackConnections;
+            return squareScoreSum(color) + blackConnections - 3*blackIllegalRunCount;
         }
-
-        return sum;
     }
 
     /** Board.score() returns value that represents how favorable 'this'
