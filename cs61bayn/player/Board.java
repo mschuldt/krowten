@@ -45,6 +45,18 @@ public class Board{
     long[] adjacencyMasksHT;
     Piece[] piecesHT;
 
+    //Variables used for scoring the board
+    int whiteConnections;
+    int blackConnections;
+    //count the number of pieces that are connected in opposing directions
+    int WhiteIlligalRunCount;
+    int BlackIlligalRunCount;
+
+    int whiteSquareScore;
+    int blackSquareScore;
+
+
+
     /* Python code template used for generating bitmasks
        hex(int("""
        00000000
@@ -160,6 +172,9 @@ public class Board{
         ourGoalMask = (ourGoalMaskA | ourGoalMaskB);
         opponentGoalMask = (opponentGoalMaskA | opponentGoalMaskB);
 
+        whiteConnections = blackConnections = 0;
+        WhiteIlligalRunCount =  BlackIlligalRunCount = 0;
+        whiteSquareScore =  blackSquareScore = 0;
     }
 
     private long[] genBitReps(){
@@ -2687,6 +2702,11 @@ public class Board{
         oppField_1 = oppField_2 = oppField_3 = oppField_4 = 0;
         ourClusters_1 =  ourClusters_2 =  ourClusters_3 = ourClusters_4 = 0;
         oppClusters_1 =  oppClusters_2 =  oppClusters_3 = oppClusters_4 = 0;
+
+        whiteConnections = blackConnections = 0;
+        WhiteIlligalRunCount =  BlackIlligalRunCount = 0;
+        whiteSquareScore =  blackSquareScore = 0;
+
         ourPieces.clear();
         opponentPieces.clear();
         pieceArray = new Piece[10][10];//the easy way
