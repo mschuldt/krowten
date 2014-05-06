@@ -1,0 +1,9 @@
+_*
+player/*.class
+cs61bayn/player/*.class
+cs61bayn/dict/*.class
+cs61bayn/list/*.class
+
+cs61bayn/player/list
+
+java.prof.*
