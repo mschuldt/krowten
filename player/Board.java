@@ -1511,6 +1511,7 @@ public class Board{
         }
 
         goalPiece = getEndGoalList(color);
+        memberPieces[0] |= goalB;
 
         while (goalPiece != null){
             sum+=5*runLength(goalPiece, memberPieces);
