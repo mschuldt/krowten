@@ -962,20 +962,20 @@ public class Board{
                 //then removing this piece connects them
                 switch ((connect[RIGHT].color == color ? 1 : 0)
                         +  (connect[LEFT].color == color ? 10 : 0)){
-                    case 0://both are a different color
-                        connect[RIGHT].numConnected++;
-                        connect[LEFT].numConnected++;
-                        othersDecrease -= 2;
-                        break;
+                case 0://both are a different color
+                    connect[RIGHT].numConnected++;
+                    connect[LEFT].numConnected++;
+                    othersDecrease -= 2;
+                    break;
 
-                    case 1:// right is the same color
-                        connect[RIGHT].numConnected--;
-                        globalDecrease++;
-                        break;
-                    case 10://left is the same color
-                        connect[LEFT].numConnected--;
-                        globalDecrease++;
-                        break;
+                case 1:// right is the same color
+                    connect[RIGHT].numConnected--;
+                    globalDecrease++;
+                    break;
+                case 10://left is the same color
+                    connect[LEFT].numConnected--;
+                    globalDecrease++;
+                    break;
                 case 11: //both are the same color
                     bad++;
                 }
@@ -1014,23 +1014,23 @@ public class Board{
                 //TODO: decrease illegal runs here
                 switch ((connect[DOWN].color == color ? 1 : 0)
                         +  (connect[UP].color == color ? 10 : 0)){
-                    case 0://both are a different color
-                        connect[DOWN].numConnected++;
-                        connect[UP].numConnected++;
-                        othersDecrease -= 2;
-                        break;
+                case 0://both are a different color
+                    connect[DOWN].numConnected++;
+                    connect[UP].numConnected++;
+                    othersDecrease -= 2;
+                    break;
 
-                    case 1:// right is the same color
-                        connect[DOWN].numConnected--;
-                        globalDecrease++;
-                        break;
-                    case 10://left is the same color
-                        connect[UP].numConnected--;
-                        globalDecrease++;
-                        break;
+                case 1:// right is the same color
+                    connect[DOWN].numConnected--;
+                    globalDecrease++;
+                    break;
+                case 10://left is the same color
+                    connect[UP].numConnected--;
+                    globalDecrease++;
+                    break;
                 case 11: //both are the same color
                     bad++;
-                    }
+                }
 
             }else{
                 //removing a piece from the beginning
@@ -1066,23 +1066,23 @@ public class Board{
 
                 switch ((connect[LEFTDOWN].color == color ? 1 : 0)
                         +  (connect[RIGHTUP].color == color ? 10 : 0)){
-                    case 0://both are a different color
-                        connect[LEFTDOWN].numConnected++;
-                        connect[RIGHTUP].numConnected++;
-                        othersDecrease -= 2;
-                        break;
+                case 0://both are a different color
+                    connect[LEFTDOWN].numConnected++;
+                    connect[RIGHTUP].numConnected++;
+                    othersDecrease -= 2;
+                    break;
 
-                    case 1:// right is the same color
-                        connect[LEFTDOWN].numConnected--;
-                        globalDecrease++;
-                        break;
-                    case 10://left is the same color
-                        connect[RIGHTUP].numConnected--;
-                        globalDecrease++;
-                        break;
+                case 1:// right is the same color
+                    connect[LEFTDOWN].numConnected--;
+                    globalDecrease++;
+                    break;
+                case 10://left is the same color
+                    connect[RIGHTUP].numConnected--;
+                    globalDecrease++;
+                    break;
                 case 11: //both are the same color
                     bad++;
-                    }
+                }
 
             }else{
                 //removing a piece from the beginning
@@ -1119,23 +1119,23 @@ public class Board{
 
                 switch ((connect[RIGHTDOWN].color == color ? 1 : 0)
                         +  (connect[LEFTUP].color == color ? 10 : 0)){
-                    case 0://both are a different color
-                        connect[RIGHTDOWN].numConnected++;
-                        connect[LEFTUP].numConnected++;
-                        othersDecrease -= 2;
-                        break;
+                case 0://both are a different color
+                    connect[RIGHTDOWN].numConnected++;
+                    connect[LEFTUP].numConnected++;
+                    othersDecrease -= 2;
+                    break;
 
-                    case 1:// right is the same color
-                        connect[RIGHTDOWN].numConnected--;
-                        globalDecrease++;
-                        break;
-                    case 10://left is the same color
-                        connect[LEFTUP].numConnected--;
-                        globalDecrease++;
-                        break;
+                case 1:// right is the same color
+                    connect[RIGHTDOWN].numConnected--;
+                    globalDecrease++;
+                    break;
+                case 10://left is the same color
+                    connect[LEFTUP].numConnected--;
+                    globalDecrease++;
+                    break;
                 case 11: //both are the same color
                     bad++;
-                    }
+                }
 
             }else{
                 //removing a piece from the beginning
@@ -1364,7 +1364,7 @@ public class Board{
         return rows[0];
     }
 
-        private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
+    private boolean hasNetwork(Piece currentPiece, long bitBoard, long memberPieces,long goalmask,
                                int m, int b, int depth){
         int newM, newB;
 
