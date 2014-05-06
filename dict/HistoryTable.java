@@ -210,5 +210,47 @@ public class HistoryTable {
         HistoryTable ht = new HistoryTable();
         ht.fill();
         System.out.println("collisions = " + ht.collisions);
+
+        Move a = new Move(1,2);
+        Move b = new Move(7,7);
+        Move c = new Move(2,1);
+        Move d = new Move(5,0);
+        Move e = new Move(2,1, 1, 6);
+        Move f = new Move(5,0, 3, 7);
+        Move g = new Move(5,0, 4, 3);
+
+        ht.insert(a,20);
+        ht.insert(b,40);
+        ht.insert(c,80);
+        ht.insert(d,100);
+        ht.insert(e,300);
+        ht.insert(f,200);
+        ht.insert(g,50);
+
+        System.out.println("before decay ========== ");
+        System.out.println(ht.find(a));
+        System.out.println(ht.find(b));
+        System.out.println(ht.find(c));
+        System.out.println(ht.find(d));
+        System.out.println(ht.find(e));
+        System.out.println(ht.find(f));
+        System.out.println(ht.find(g));
+
+        double startTime = System.currentTimeMillis();
+        ht.decay();
+        double endTime = System.currentTimeMillis();
+
+        System.out.println("after decay ========== ");
+        System.out.println(ht.find(a));
+        System.out.println(ht.find(b));
+        System.out.println(ht.find(c));
+        System.out.println(ht.find(d));
+        System.out.println(ht.find(e));
+        System.out.println(ht.find(f));
+        System.out.println(ht.find(g));
+
+        System.out.println("  decay time: "
+                           + (endTime - startTime)/1000.0);
+
     }
 }
