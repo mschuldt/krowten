@@ -1463,11 +1463,15 @@ public class Board{
     private int score(int color){
         assert ! hasNetwork(color): "Board.score: board has a network";
 
-        int sum=squareScoreSum(color);
-
+        int sum = 0;
         long goalA, goalB;
         int direction;
         long board;
+
+        if (getNumPieces(color) < 5){
+            sum = squareScoreSum(color);
+        }
+
         if (color == ourColor){
             goalA = ourGoalMaskA;
             goalB = ourGoalMaskB;
