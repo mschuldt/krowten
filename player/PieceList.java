@@ -1,4 +1,4 @@
-package player;
+package cs61bayn.player;
 
 public class PieceList extends AList<Piece>{
     //add a piece to the back of this list if it is not null and not an edge piece

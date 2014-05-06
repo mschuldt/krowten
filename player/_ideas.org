@@ -1,0 +1,226 @@
+fb:
+I'm going to be changing the internal board representation soon - 
+getting rid of pieceArray. In preparation for that I've replaced
+many of the direct accesses to pieceArray with getPiece(). 
+I've removed the method Board.hasNetwork(), it had no real purpose.
+We now only have Board.hasNetwork(int color). Michelle, I had to
+change your call to hasNetwork in MachinePlayer.minimax() because
+of this change so that it would compile. It needed to take the color
+anyways. The minimax method takes a boolean `side' parameter,
+would it not be easier to just pass the color? It would eliminate
+an unnecessary test, the recursive call could just be minimax(1-color, ...).
+I've written a shitty evaluation function that we can use while we
+test everything else.
+
+
+Helen, in validMoves, it looked like you forgot to assign 'pieces'
+a value, it was only declared.
+It was causing the program to crash when calculating step moves.
+
+Michelle, I modified formsIllegalCluster so that it would not make/unmake moves
+(it should be much faster). I think I only changed 1 line, and deleted
+a few others.
+
+
+
+We must change formsIllegalCluster so that it does not add another piece
+as it is now it does not work with assertions on becuase if there are
+already 10 pieces on the board then the 11th that formsIllegalCluster
+adds with cause the program to crash
+==> validMoves will still crash
+====> but this only seems to happen with 'runtests'
+
+
+
+
+pieceArray
+how to suppress java's GC?
+
+doing: change connectedPieces and ajacentPieces to only detect the same color
+
+* connected piece detection
+
+linked matrix whose nodes only keep track of their indexes
+each node is also placed into a 2d-array for fast indexing
+* cluster
+mask all the pieces around another
+if no bits => not cluster
+<<determine if there is more then one bit in the string>>
+ if yes ==> cluster
+ if no
+   mask all bits around that piece - excluding orgional bit
+   if no bits => not cluster
+   else => cluster
+ 
+OR -- YES YES YES YES YES
+
+maintain a board of legal moves
+ when a piece is placed on the board:
+  if there is any piece around it: (must check on the actual board, not the clusterBoard - or surrounding cluster pieces will confuse it)
+    mark all the squares around either one of them as unavailable
+ when a piece is removed:
+ note that at most two pieces may be next to each other on the cluster board
+ call the two piecs A and B, we will remove A
+  get B by ANDing A's adjacency mask with the normal bitboard
+  clusterBoard AND (NOT (A-adjacency OR B-adjacency)) to remove all influence of A or B on cluster board
+  clusterBoard OR B to add B back to the board alone
+
+==> THIS ONLY WORKS FOR BUILT CLUSTERS, CLUSTERS FORMED BY JOINING TWO PIECES WITH A THIRD IS NOT DETECTED
+    
+==> ANOTHER PROBLEM:
+    when two clusters have one overlaping square:
+    if B is removed, the space between B and C will be falsely set back to zero
+    
+        
+ |   |   |   |   |   |   |   |   |
+ |---+---+---+---+---+---+---+---|
+ | . | . | . | . | . | . |   |   |
+ |---+---+---+---+---+---+---+---|
+ | A | B | . | C | D | . |   |   |
+ |---+---+---+---+---+---+---+---|
+ | . | . | . | . | . | . |   |   |
+ |---+---+---+---+---+---+---+---|
+ |   |   |   |   |   |   |   |   |
+
+when a piece is placed, it first ORs its adjacency mask with the clusterBoard
+ and saves the result in friendlyBoard
+ 
+the friendlyBoard contains squares that will form a cluster by joining two other singles (or more)
+ and squares that are part of clusters that must be restored when one of the cluster members is removed
+
+when generating an invalidMoves board, OR the clusterBoard with the friendly board
+
+NOTE: up to 4 pieces can overlap on the same spot
+
+when removing a piece:
+ if it is part of a cluster, restore the missing piece on the clusterBoard 
+  with ((B-adjacency AND friendlyBoard) AND (NOT A-adjacengy)) OR clusterBoard
+  - not A-adj because A and B overlap themselves and that overlap must be removed 
+(a cluster member operation could and the ajacency mask with the clusterBoard)
+
+=> PROBLEM, more then one single piece can overlap to form a friendly square,
+            how do we know if we should remove the friendly square when removing a piece
+ 
+* network
+** getting the goal pieces
+when a piece is added to goalA, save it in a seporate list for quick access
+when calculating the network
+
+==> if the linked-matrix is implemented, the goal will be just another row
+
+OR just iterate through the goal pieces ANDing them will the goal mask
+
+** accessing the linked-matrix
+
+each node in the linked-matrix is also stored
+in an array with the index equal to the bitRep%<ThatPrime> 
+ (hash table)
+
+* memoization
+AList like structure that will allocate a single array when initialized.
+every element is stored with the same tag. when the list is cleared,
+that tag changes. when a new element is added, and there is an element
+already present, it will be replaced if that elements tag differers from
+the current one.
+* valid moves data structure
+pass the reference to an AList to the move generation method to get filled,
+this prevents having to allocate the array every time.
+
+* board evaluation
+good
+sum of piece connections
+length of runs (in pieces and distance) - moving in goal direction  - or at least traversing the board - not just zig-zag in a corner
+
+more then one way to get to a piece
+ - try to build multiple paths that can be joined with a single piece
+   leading to a forced win
+   ==> not fully possible with only 10 pieces
+not connected in an illegal manor (3 in a row)
+
+large, even distribution across the board
+evaluate from our and opponents position, then take the difference
+
+Always prevent adding a piece that forms a line of 3
+ except when its the only alternative to preventing an opponent network
+
+when scanning for networks, leave breadcrumbs so that when scanning for
+ other goal pieces/branches, they know how many other networks it is part of.
+
+levels of badness that are assigned a value that will outweigh all below
+
+??maybe having pieces close togther is better -- they can't be blocked (zigzag)
+   but then less pieces are available for blocking opponent
+   - will have to break it up to block, nullifying the effect
+
+
+bad
+3 pieces in a row
+
+|---+---+---+---+---+---+---+---|
+|   | o |   |   |   |   |   |   |
+|---+---+---+---+---+---+---+---|
+| x |   |   |   | x |   |   |   |
+|---+---+---+---+---+---+---+---|
+|   |   |   |   | x |   |   |   |
+|---+---+---+---+---+---+---+---|
+|   |   |   |   | o |   |   |   |
+|---+---+---+---+---+---+---+---|
+|   |   |   |   |   |   |   | x |
+|---+---+---+---+---+---+---+---|
+|   |   | o |   |   |   |   |   |
+|---+---+---+---+---+---+---+---|
+|   |   |   |   |   | x |   |   |
+|---+---+---+---+---+---+---+---|
+|   |   | o |   |   |   |   |   |
+|---+---+---+---+---+---+---+---|
+|   |   |   |   |   |   |   |   |
+|---+---+---+---+---+---+---+---|
+
+
+
+* other optimization
+option to call formsIllegalCluster with (x,y) coordinates
+ Have valid moves do this so that it does not have to create a move unless
+ it is a valid move
+ 
+
+* testing
+
+case "inspect"
+//prints all the info that would be tested 
+case "runtests"
+case "inspecttest <num>"
+
+	    case "maketest":
+		//bitboard: which squares would form illegal clusters
+		//check that the output of all the individual tests are the same
+		//
+
+		break;
+test(String board,
+long whiteBB
+long blackBB,
+long whiteClustersBB,
+long blackClustersBB,
+long whiteLegalMovesBB,
+long blackLegalMovesBB,
+long[] whiteConnectedPieces,
+long[] blackConnectedPieces,
+boolean blackNetwork,
+boolean whiteNetwork,
+int blackNumPieces,
+int whiteNumPieces,
+boolean passedBitBoardTests,
+boolean passedGoalTests,
+boolean passedPieceCountTests,
+boolean passedClusterTests,
+
+
+
+empty
+full -network
+5 piece no network
+6 piece no network
+6 piece network
+10 piece no network
+10 piece with network

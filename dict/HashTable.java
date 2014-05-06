@@ -1,6 +1,6 @@
 /* HashTable.java */
 //383
-package dict;
+package cs61bayn.dict;
 
 public class HashTable {
     private long [][] array;

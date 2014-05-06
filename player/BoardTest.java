@@ -1,4 +1,4 @@
-package player;
+package cs61bayn.player;
 
 public class BoardTest{
     //version of this test (in case new fields/tests are added later)

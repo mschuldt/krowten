@@ -1,0 +1,2 @@
+adjacency level bitboards
+keep connected pieces in an array in each pieces instead of using fields

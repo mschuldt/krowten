@@ -1,4 +1,4 @@
-package dict;
+package cs61bayn.dict;
 
 import player.Move;
 

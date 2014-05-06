@@ -1,6 +1,6 @@
 // player/Cell.java
 
-package player;
+package cs61bayn.player;
 
 public class Cell{
     int x;
@@ -35,9 +35,9 @@ public class Cell{
         if (isEdge){
             mark = showIndex = false;
         }
-        
+
         row3 = buildStr(7, defaultChar);
-        
+
         if (mark){
             String s = defaultChar + defaultChar;
             String m = (defaultChar==" " ? emptyMarkChar : markChar);

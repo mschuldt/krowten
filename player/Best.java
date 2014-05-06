@@ -1,4 +1,5 @@
-package player;
+package cs61bayn.player;
+import player.Move;
 
 public class Best{
     public int score;

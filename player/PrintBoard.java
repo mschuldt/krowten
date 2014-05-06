@@ -1,8 +1,9 @@
 // player/PrintBoard.java
 
-package player;
+package cs61bayn.player;
 
 import java.util.Iterator;
+import player.Move;
 
 public class PrintBoard{
     Cell[][] cells;

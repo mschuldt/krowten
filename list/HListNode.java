@@ -1,6 +1,6 @@
 /* HListNode.java */
-package list;
-import dict.Entry;
+package cs61bayn.list;
+import cs61bayn.dict.Entry;
 /**
  *  A HListNode is a node in a HList (doubly-linked list).
  */

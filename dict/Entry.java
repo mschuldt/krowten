@@ -1,6 +1,6 @@
 /* Entry.java */
 
-package dict;
+package cs61bayn.dict;
 
 public class Entry {
 

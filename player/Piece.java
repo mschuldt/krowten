@@ -1,4 +1,4 @@
-package player;
+package cs61bayn.player;
 
 public class Piece{
     public int color, x, y;

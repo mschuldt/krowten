@@ -1,10 +1,14 @@
 /* MachinePlayer.java */
 // javac -g -cp ../ ../player/*.java ../list/*.java
 
-package player;
-import dict.HashTable;
-import dict.Entry;
-import dict.HistoryTable;
+package cs61bayn.player;
+
+import cs61bayn.dict.HashTable;
+import cs61bayn.dict.Entry;
+import cs61bayn.dict.HistoryTable;
+import player.Player;
+import player.Move;
+
 
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves

@@ -1,8 +1,9 @@
 // player/Board.java
 
-package player;
+package cs61bayn.player;
 
 import java.io.*;
+import player.Move;
 
 public class Board{
     private Piece[][] pieceArray;

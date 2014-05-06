@@ -1,4 +1,5 @@
-package player;
+package cs61bayn.player;
+import player.Move;
 
 //At instantiation, this list will fill itself with Move objects
 //whose fields will be set when MoveList.add is called with
