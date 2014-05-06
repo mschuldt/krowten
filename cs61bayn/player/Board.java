@@ -56,7 +56,6 @@ public class Board{
     int blackSquareScore;
 
 
-
     /* Python code template used for generating bitmasks
        hex(int("""
        00000000
@@ -3779,6 +3778,10 @@ public class Board{
                 break;
             case "evaluate": case "eval":case "score": case "s":
                 messages.add("(" +colorStr(ourColor)+ ") board score: " + score());
+                messages.add("  squareScoreSum = " + squareScoreSum(color));
+                messages.add("  connections = " + (color == WHITE ? whiteConnections : blackConnections));
+                messages.add("  number of 3-runs = " + (color == WHITE ? whiteIllegalRunCount : blackIllegalRunCount));
+
                 break;
             case "choosemove": case "cm":
                 if (player == null){
