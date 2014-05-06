@@ -1487,15 +1487,16 @@ public class Board{
             direction = RIGHT;
         }
 
-        //give points for pieces with no other adjacent pieces
-        PieceList pieces = getPieces(color);
-        long adj = 0;
+        // //give points for pieces with no other adjacent pieces
+        // PieceList pieces = getPieces(color);
+        // long adj = 0;
 
-        for (Piece p : pieces){
-            if ((getAdjMask(p.bitRep) & board) == 0){
-                sum+=10;
-            }
-        }
+        // for (Piece p : pieces){
+        //     if ((getAdjMask(p.bitRep) & board) == 0){
+        //         sum+=10;
+        //     }
+        // }
+
 
         //give points for partial networks
 
