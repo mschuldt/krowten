@@ -132,6 +132,26 @@ public class HistoryTable {
         return 0;
     }
 
+    // divide the all the values in this table by 2
+    public void decay (){
+        //ADD moves
+        for (int x = 0; x < 8; x ++){
+            for (int y = 0; y < 8; y ++){
+                array[compFunction(((x+1) << 60) | ((y+1) << 56))] /= 2;
+            }
+        }
+        //STEP moves
+        for (int x = 0; x < 8; x ++){
+            for (int y = 0; y < 8; y ++){
+                for (int x2 = 0; x2 < 8; x2 ++){
+                    for (int y2 = 0; y2 < 8; y2 ++){
+                        array[((x+1) <<12) | ((y+1) << 8) | ((x2+1) << 4) | y2] /= 2;
+                    }
+                }
+            }
+        }
+    }
+
     public void fill (){
         int score = 0;
         Move m;
