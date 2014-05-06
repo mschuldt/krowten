@@ -19,8 +19,13 @@ public class MachinePlayer extends Player {
     public static final int black = 0;
     private static final int VAR_DEPTH = -1;
     //minimum depths to search to
-    private static final int ADD_DEPTH = 4;
-    private static final int STEP_DEPTH = 3;
+    // private static final int ADD_DEPTH = 4;
+    // private static final int STEP_DEPTH = 3;
+
+    // must decrease for java '-prof' profiler option
+    private static final int ADD_DEPTH = 2;
+    private static final int STEP_DEPTH = 1;
+
     private static final int MAX_DEPTH = 20; //should be impossibly large
 
     private static final int OUT_OF_TIME = 99999999;//should be > then any score
