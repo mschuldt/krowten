@@ -1165,7 +1165,7 @@ public class Board{
         if (p.color == WHITE){
             whiteConnections -= globalDecrease;
             blackConnections -= othersDecrease;
-            blackIllegalRunCount -= bad;
+            whiteIllegalRunCount -= bad;
         }else{
             blackConnections -= globalDecrease;
             whiteConnections -= othersDecrease;
